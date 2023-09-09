@@ -1,18 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import routes from './routes';
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 
-export default function router() {
-  return (
-    <BrowserRouter>
-      <Routes>
-      {/* <Route path="*" element={<Erro />} /> */}
-      </Routes>
-    </BrowserRouter>
-  );
-}
+const router = createBrowserRouter(routes)
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <RouterProvider router={router}/>
+  </React.StrictMode>
+)
