@@ -1,4 +1,5 @@
 import App from "./App";
+import NovoProjeto from "./pages/NovoProjeto";
 
 const router = [
     {
@@ -9,7 +10,8 @@ const router = [
         element: <App />,
         children: [
             {
-            
+                path: "/novoProjeto",
+                element: <NovoProjeto/>
             }
         ]
     }
