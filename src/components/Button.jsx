@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { IconContext } from 'react-icons';
 
-function Button({texto, onClick, tipo, iconeOpcional, iconeCor, iconeTamanho, botaoClassname}){
+function Button({texto, onClick, tipo, iconeOpcional, iconeCor, iconeTamanho, className}){
 
     const ComponenteIcone = iconeOpcional;
 
     return (
-        <button className={botaoClassname} onClick={onClick} type={tipo}>
+        <button className={className} onClick={onClick} type={tipo}>
             {texto}
             <IconContext.Provider value={{color: iconeCor, size: iconeTamanho}}>
                 {iconeOpcional && <ComponenteIcone/>}
@@ -17,7 +17,7 @@ function Button({texto, onClick, tipo, iconeOpcional, iconeCor, iconeTamanho, bo
 }
 
 Button.propTypes = {
-    texto: PropTypes.string.isRequired,
+    texto: PropTypes.string,
     onClick: PropTypes.func,
     tipo: PropTypes.string.isRequired,
     iconeOpcional: PropTypes.elementType,
