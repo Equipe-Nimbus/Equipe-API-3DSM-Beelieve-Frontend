@@ -6,7 +6,7 @@ import relatorio from '../images/relatorio.png'
 import projeto from '../images/projeto.png'
 import usuario from '../images/usuario.png'
 import logout from '../images/logout.png'
-import api from '../services/api';
+import api from '../services/axios.js'
 
 function NavBar() {
     const [logado, setLogado] = useState(Boolean)

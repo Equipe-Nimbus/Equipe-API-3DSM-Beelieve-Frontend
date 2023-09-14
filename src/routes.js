@@ -1,5 +1,7 @@
 import App from "./App";
 import NovoProjeto from "./pages/NovoProjeto";
+import NavBar from "./components/navBar"
+import ListaProjeto from "./components/ListaProjeto";
 
 const router = [
     {
@@ -11,8 +13,16 @@ const router = [
         children: [
             {
                 path: "/novoProjeto",
-                element: <NovoProjeto/>
+                element: <NovoProjeto/>,
+            },
+            {path: "/listaProjeto",
+            element: <ListaProjeto/>
+            },
+            {
+                path: "/navbar",
+                element: <NavBar/>
             }
+            
         ]
     }
 ]
