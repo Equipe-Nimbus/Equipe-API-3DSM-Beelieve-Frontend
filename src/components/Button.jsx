@@ -23,7 +23,7 @@ Button.propTypes = {
     iconeOpcional: PropTypes.elementType,
     iconeCor: PropTypes.string,
     iconeTamanho: PropTypes.string,
-    botaoClassname: PropTypes.string.isRequired
+    className: PropTypes.string.isRequired
 
 }
 

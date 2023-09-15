@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../components/Button";
+import Breadcrumbs from "../components/Breadcrumbs";
 import FormCadastroProjeto from "../components/FormCadastroProjeto/FormCadastroProjeto";
 
 import { HiOutlineArrowUpCircle } from "react-icons/hi2";
@@ -7,6 +8,10 @@ import { HiOutlineArrowUpCircle } from "react-icons/hi2";
 function NovoProjeto() {
   return (
     <>
+      <div className="bg-bg100 m-5 rounded-md p-4 drop-shadow-md">
+        <Breadcrumbs/>
+      </div>
+
       <div className="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
         <Button
           texto="Subir arquivo"
