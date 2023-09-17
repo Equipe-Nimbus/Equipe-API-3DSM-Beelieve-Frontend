@@ -1,6 +1,6 @@
 import App from "./App";
+import ListaProjeto from "./components/ListaProjeto";
 import NovoProjeto from "./pages/NovoProjeto";
-//import { Link } from "react-router-dom";
 
 const router = [
     {
@@ -12,11 +12,14 @@ const router = [
         element: <App />,
         handle: {title: 'Projetos'},
         children: [
+            {   path: "/projetos/todos",
+                element: <ListaProjeto/>,
+            },
             {
                 path: "/projetos/novo-projeto",
                 element: <NovoProjeto/>,
                 handle: {title: "Novo projeto"}
-            }
+            },
         ]
     }
 ]
