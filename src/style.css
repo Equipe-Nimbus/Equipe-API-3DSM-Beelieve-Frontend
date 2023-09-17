@@ -1,0 +1,121 @@
+*{
+    justify-content: space-between;
+}
+
+.navBar2{
+    position: absolute; /* elemento não se move na tela */
+    width: 300px;
+    left: -20px;
+    top: -20px;
+    height: 127%;
+    background-color: #0E1420;
+    padding: 6px 14px 6px 4px;
+    transition: all 0.5s ease; /* transição com início e final lentos */
+}
+
+.sideBar{
+    color: white;
+    background-color: #132531;
+    border-radius: 5px;
+    margin-top: 3%;
+    margin-left: 2%;
+    height: 80%;
+    padding: 8px;
+}
+
+.navBar2 .logo{
+    background-color: #132531;
+    border-radius: 5px;
+    align-items: center;
+    padding: 8px;
+}
+
+.navBar2 .fotoLogo{
+    margin-left: 35%;
+}
+
+.sideBar .nomeUsuario{
+    color: white;
+    font-weight: bold;
+    margin-left: 21%;
+}
+
+.sideBar .fotoUsuario{
+    margin-left: 2%;
+    margin-top: 100%;
+}
+
+.sideBar .navegadores{
+    margin-left: 19%;
+}
+
+.sideBar .navegadores ul li .navegador{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 4%;
+}
+
+.sideBar .navegadores ul li .navegador:hover{
+    background-color: #FFD501;
+    color: #191919;
+}
+
+.sideBar .navegadores ul li .navegador .fotoProjeto{
+    margin-left: -12%;
+    top: 2%;
+}
+
+.sideBar .navegadores ul li .navegador .fotoRecurso{
+    margin-left: -12%;
+    top: 2%;
+}
+
+.sideBar .navegadores ul li .navegador .fotoRelatorio{
+    margin-left: -12%;
+    top: 2%;
+}
+
+.loggoutButton{
+    background-color: #132531;
+    border-radius: 5px;
+    margin-left: 3%;
+}
+
+.sideBar .funcaoUsuario{
+    color: white;
+    font-weight: bold;
+    margin-left: 21%;
+}
+
+.sideBar .informacaoUsuario{
+    margin-left: 8%;
+}
+
+#toogle:checked .trace:nth-child(1){
+    transform: rotate(45deg);
+    top: 47px;
+}
+
+.loggoutButton{
+    color: white;
+    font-weight: bold;
+    margin-top: 3%;
+    margin-left: 3%;
+}
+
+.loggout{
+    margin-left: 12%;
+}
+
+.loggoutButton .loggoutFoto{
+    margin-left: -12%;
+    top: 2%;
+}
+
+.loggoutButton button:hover{
+    background-color: #FFD501;
+    color: #191919;
+    width: 40%;
+    border-radius: 5%;
+}
