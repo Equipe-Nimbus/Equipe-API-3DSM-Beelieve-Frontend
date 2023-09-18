@@ -26,7 +26,7 @@ function Login() {
                                 <h3 className='login-text'>Senha:</h3>
                                 <input type="password" required />
                                 <p></p>
-                                <input type="submit" className="login_button" placeholder='Entre' />
+                                <input type="submit" className="login_button" value='Entrar' />
                             </form>
                         </div>
                     </div>
