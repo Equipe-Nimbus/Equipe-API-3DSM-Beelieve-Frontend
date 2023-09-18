@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs.jsx';
 import Button from '../components/Button.jsx';
 import CardProjeto from '../components/CardProjeto.jsx';
@@ -27,7 +27,17 @@ function ListaProjeto(){
                 iconeTamanho="20px" 
                 className="bg-primary50 text-on-primary mb-5  flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"/>
                 <hr className="border-n90"></hr>
-                <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                <div className='flex flex-row flex-wrap gap-10 mx-10'>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas" estadoProjeto={false}/>
+                   {/*  <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
+                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/> */}
+                </div>
             </div>
             
             {/* {projeto.map((projeto, index) => (
