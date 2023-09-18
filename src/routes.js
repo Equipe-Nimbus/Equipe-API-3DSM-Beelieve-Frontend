@@ -1,5 +1,5 @@
 import App from "./App";
-import ListaProjeto from "./components/ListaProjeto";
+import ListaProjeto from "./pages/ListaProjeto";
 import NovoProjeto from "./pages/NovoProjeto";
 
 const router = [

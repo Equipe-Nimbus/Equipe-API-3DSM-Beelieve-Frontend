@@ -8,10 +8,7 @@ import { HiOutlineArrowUpCircle } from "react-icons/hi2";
 function NovoProjeto() {
   return (
     <>
-      <div className="bg-bg100 m-5 rounded-md p-4 drop-shadow-md">
-        <Breadcrumbs/>
-      </div>
-
+      <Breadcrumbs/>
       <div className="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
         <Button
           texto="Subir arquivo"

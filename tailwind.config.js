@@ -6,6 +6,7 @@ module.exports = {
 
       'primary50': '#FFD501',  /* Amarelo principal */
       'primary98': '#FFF6CC',
+      'complementary-20': '#001268', /* Azul complementar */
       'error' : '#F73131',
 
       /* Cores de background */
