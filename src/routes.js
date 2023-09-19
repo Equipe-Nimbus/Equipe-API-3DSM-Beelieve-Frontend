@@ -2,6 +2,7 @@ import App from "./App";
 import NovoProjeto from "./pages/NovoProjeto";
 import NavBar from "./components/navBar"
 import ListaProjeto from "./components/ListaProjeto";
+import Atividades from "./components/FormCadastroAtividade/Atividade";
 
 const router = [
     {
@@ -21,6 +22,10 @@ const router = [
             {
                 path: "/navbar",
                 element: <NavBar/>
+            },
+            {
+                path: "/atividades",
+                element: <Atividades/>
             }
             
         ]
