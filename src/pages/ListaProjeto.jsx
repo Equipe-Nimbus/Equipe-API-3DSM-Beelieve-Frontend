@@ -29,14 +29,6 @@ function ListaProjeto(){
                 <hr className="border-n90"></hr>
                 <div className='flex flex-row flex-wrap gap-10 mx-10'>
                     <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas" estadoProjeto={false}/>
-                   {/*  <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas"/> */}
                 </div>
             </div>
             

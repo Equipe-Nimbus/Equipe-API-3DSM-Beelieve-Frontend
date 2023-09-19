@@ -261,9 +261,9 @@ function FormCadastroProjeto() {
         <table id="wbsTable" className="mt-5 w-1/3 text-left text-on-light">
           <thead className="bg-primary98 text-base uppercase">
             <tr>
-              <th className="w-1/5 px-4 py-2">Nível</th>
-              <th className="w-3/5 px-4 py-2">Descrição</th>
-              <th className="w-1/5">Ação</th>
+              <th className="w-1/6 px-4 py-2">Nível</th>
+              <th className="w-3/6 px-4 py-2">Descrição</th>
+              <th className="w-2/6">Ação</th>
             </tr>
           </thead>
           <tbody className="text-lg">

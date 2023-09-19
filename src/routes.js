@@ -8,12 +8,12 @@ const router = [
         element: <App/>
     },
     {   
-        path: "/projetos",
+        path: "",
         element: <App />,
-        handle: {title: 'Projetos'},
         children: [
-            {   path: "/projetos/todos",
+            {   path: "/projetos",
                 element: <ListaProjeto/>,
+                handle: {title: 'Projetos'}
             },
             {
                 path: "/projetos/novo-projeto",

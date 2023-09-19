@@ -2,7 +2,7 @@ import React, { useState } from "react";
  
 function CardProjeto({titulo, descricao, estadoProjeto}) {
     
-    const [projetoIniciado, setProjetoIniciado] = useState(estadoProjeto)
+    const [projetoIniciado] = useState(estadoProjeto)
 
     return(
         <>

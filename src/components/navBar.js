@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import React from "react"
+import { Link } from "react-router-dom"
 
-import style from '../style.css'
-import beelieveLogo from '../images/beelieveLogo.png'
-import recurso from '../images/recurso.png'
-import relatorio from '../images/relatorio.png'
-import projeto from '../images/projeto.png'
-import usuario from '../images/usuario.png'
-import logout from '../images/logout.png'
+import Beelieve from "../assets/images/Beelieve.png"
+import { PiProjectorScreenChart } from "react-icons/pi"
+import { LiaUserTieSolid } from "react-icons/lia"
+import { BiLogOut } from "react-icons/bi"
 
 function NavBar() {
-    const [logado, setLogado] = useState(Boolean)
-    const [nome, setNome] = useState('')
-    const [funcao, setFuncao] = useState('')
-    const navigate = useNavigate()
-    return (
-        <>
-            <nav className="navBar2">
-                <div className='logo'>
-                    <img className="fotoLogo" src={beelieveLogo} alt="logo" />
-                </div>
-                <div className="sideBar">
-                    <div className='navegadores'>
-                        <ul>
-                            <li>
-                                <a href='' className='navegador'><img className="fotoProjeto" src={projeto} alt="projetos" />Projetos</a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <a href='' className='navegador'><img className="fotoRecurso" src={recurso} alt="" />Recurso</a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <a href='' className='navegador'><img className="fotoRelatorio" src={relatorio} alt="" />Relatório</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className='informacaoUsuario'>
-                        <img className="fotoUsuario" src={usuario} alt="" /> <h1 className="nomeUsuario">{`${sessionStorage.getItem('nomeUsuario')}`}</h1>
-                        <span className="funcaoUsuario">{`${sessionStorage.getItem('funcaoUsuario')}`}</span>
-                    </div>
-                </div>
-                <div className="loggoutButton">
-                    <button className='loggout'><img className="loggoutFoto" src={logout} alt="" />Sair</button>
-                </div>
-            </nav>
-        </>
-    )
+  return (
+    <>
+      <aside className="fixed m-0 flex h-screen w-64 flex-col gap-3 bg-bg15 p-2">
+        <div className="rounded bg-bg22 p-8">
+          <img
+            alt="Logo da Beelieve"
+            src={Beelieve}
+            className="cursor-pointer"
+          />
+        </div>
+        <div className="flex h-full flex-col rounded bg-bg22 px-5">
+          <div className="h-full">
+            <ul className="my-10 flex flex-col gap-3">
+              <li className="hover:bg-hover-bg22 flex cursor-pointer flex-row items-center gap-1 p-1.5 text-xl font-medium text-on-bg22 duration-200 hover:rounded">
+                <PiProjectorScreenChart
+                  color="#DADDE6"
+                  size={24}
+                  className="hover:fill-primary50"
+                />
+                <Link to="/projetos/todos">Projetos</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="mb-5 flex gap-2">
+            <div className="flex h-[45px] w-[45px] content-center justify-center rounded-md border-2 border-on-bg22">
+              <LiaUserTieSolid color="#DADDE6" size={45} />
+            </div>
+            <div className="flex h-[50px] flex-col">
+              <p className="text-base font-semibold text-on-bg22">
+                Nome do usuário
+              </p>
+              <p className="font-regular text-sm text-on-bg22">Cargo</p>
+            </div>
+          </div>
+        </div>
+        <div className="hover:bg-hover-bg22 flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded">
+          <BiLogOut color="#DADDE6" size={24} />
+          <p>Sair</p>
+        </div>
+      </aside>
+    </>
+  )
 }
 
 export default NavBar
