@@ -1,0 +1,55 @@
+.login-body{
+    background: linear-gradient(#FFFDF2, #FFF5C2);
+    height: 100%;
+}
+
+.state{
+    background: linear-gradient(#FFFFFF, #F5F5FD);
+    border-radius: 5px;
+    box-shadow: 5px;
+    border: 5px;
+    width: 80%;
+    margin-left: 8%;
+}
+
+.login_button{
+    background-color: #FED400;
+    width: 14%;
+    border-radius: 4px;
+    padding: 9px;
+    border: none;
+    cursor: pointer;
+    margin-left: 73%;
+    font-weight: bold;
+    margin-top: 1%;
+}
+
+.loginTitle{
+    margin-left: 75%;
+    margin-top: -43%;
+}
+
+.loginText .loginInput{
+    width: 60%;
+    padding: 7px;
+}
+
+.senhaText{
+    margin-left: 70%;
+    color: #B3B3B3;
+}
+
+.senhaText .senhaInput{
+    width: 60%;
+    padding: 7px;
+}
+
+.loginText{
+    margin-left: 70%;
+    margin-top: 4%;
+    color: #B3B3B3;
+}
+
+.login_button:hover{
+    background-color: #d0be61;
+}
