@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 
@@ -26,6 +27,8 @@ function FormCadastroProjeto() {
       descricao: "Objetivo Final",
     },
   ])
+
+  const navigate = useNavigate()
 
   const adicionarSubnivel = (nivelPai) => {
     if (nivelPai.split(".").length >= 3) {
@@ -309,6 +312,7 @@ function FormCadastroProjeto() {
           texto="Cancelar"
           tipo="button"
           className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
+          onClick={() => navigate("/projetos")}
         />
         <Button
           texto="Confirmar"

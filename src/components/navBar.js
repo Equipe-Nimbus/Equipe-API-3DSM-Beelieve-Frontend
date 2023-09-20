@@ -26,7 +26,7 @@ function NavBar() {
                   size={24}
                   className="hover:fill-primary50"
                 />
-                <Link to="/projetos/todos">Projetos</Link>
+                <Link to="/projetos">Projetos</Link>
               </li>
             </ul>
           </div>

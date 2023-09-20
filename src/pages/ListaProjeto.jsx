@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs.jsx';
 import Button from '../components/Button.jsx';
 import CardProjeto from '../components/CardProjeto.jsx';
@@ -6,6 +7,8 @@ import CardProjeto from '../components/CardProjeto.jsx';
 import { BsPlusCircle } from "react-icons/bs"
 
 function ListaProjeto(){
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         getProjeto();
@@ -25,7 +28,8 @@ function ListaProjeto(){
                 <Button texto="Novo" 
                 iconeOpcional={BsPlusCircle}
                 iconeTamanho="20px" 
-                className="bg-primary50 text-on-primary mb-5  flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"/>
+                className="bg-primary50 text-on-primary mb-5  flex items-center gap-1 rounded-[10px] p-2 text-lg font-semibold"
+                onClick={() => navigate("/projetos/novo-projeto")}/>
                 <hr className="border-n90"></hr>
                 <div className='flex flex-row flex-wrap gap-10 mx-10'>
                     <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas" estadoProjeto={false}/>

@@ -5,8 +5,6 @@ import { Link } from "react-router-dom"
 function Breadcrumbs() {
   let matches = useMatches()
 
-  console.log(matches)
-
   return (
     <>
     <div className="bg-bg100 m-5 rounded-md p-4 drop-shadow-md">

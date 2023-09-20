@@ -1,6 +1,7 @@
 import App from "./App";
 import ListaProjeto from "./pages/ListaProjeto";
 import NovoProjeto from "./pages/NovoProjeto";
+import DetalhesProjeto from './pages/DetalhesProjeto'
 
 const router = [
     {
@@ -8,17 +9,19 @@ const router = [
         element: <App/>
     },
     {   
-        path: "",
+        path: "/projetos",
         element: <App />,
         children: [
-            {   path: "/projetos",
+            {   path: "",
                 element: <ListaProjeto/>,
-                handle: {title: 'Projetos'}
             },
             {
-                path: "/projetos/novo-projeto",
+                path: "novo-projeto",
                 element: <NovoProjeto/>,
-                handle: {title: "Novo projeto"}
+            },
+            {
+                path: ":id",
+                element: <DetalhesProjeto/>,
             },
         ]
     }
