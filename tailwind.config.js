@@ -5,6 +5,8 @@ module.exports = {
     colors: {
       primary50: "#FFD501" /* Amarelo principal */,
       primary98: "#FFF6CC",
+      primary91: "#FFF6CF",
+      primary20: "#675600",
       "complementary-20": "#001268" /* Azul complementar */,
       error: "#F73131",
 

@@ -11,16 +11,18 @@ function NavBar() {
     <>
       <aside className="fixed m-0 flex h-screen w-64 flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
-          <img
-            alt="Logo da Beelieve"
-            src={Beelieve}
-            className="cursor-pointer"
-          />
+          <Link to="/projetos"> 
+            <img
+              alt="Logo da Beelieve"
+              src={Beelieve}
+              className="cursor-pointer"
+            />
+          </Link>
         </div>
         <div className="flex h-full flex-col rounded bg-bg22 px-5">
           <div className="h-full">
             <ul className="my-10 flex flex-col gap-3">
-              <li className="hover:bg-hover-bg22 flex cursor-pointer flex-row items-center gap-1 p-1.5 text-xl font-medium text-on-bg22 duration-200 hover:rounded">
+              <li className="flex cursor-pointer flex-row items-center gap-1 p-1.5 text-xl font-medium text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
                 <PiProjectorScreenChart
                   color="#DADDE6"
                   size={24}
@@ -42,7 +44,7 @@ function NavBar() {
             </div>
           </div>
         </div>
-        <div className="hover:bg-hover-bg22 flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded">
+        <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
           <BiLogOut color="#DADDE6" size={24} />
           <p>Sair</p>
         </div>

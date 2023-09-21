@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 
 function MenuSelecao({ opcoes, secaoAtual, mudarSecao }) {
 
