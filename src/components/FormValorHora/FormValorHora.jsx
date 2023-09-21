@@ -42,7 +42,42 @@ function FormValorHora() {
             "progresso_sub_projeto": 10,
             "hora_humano_sub_projeto": 10,
             "orcamento_sub_projeto": 10
-          }
+          },
+          {
+            "ordem_sub_projeto": "1.2",
+            "nome_sub_projeto": "dale",
+            "nivel_sub_projetos": [
+              {
+                "ordem_nivel_sub_projeto": "1.2.1",
+                "nome_nivel_sub_projeto": "dole",
+                "tarefas": [
+                  {
+                    "descricao_atividade_tarefa": "Levantamento de preços",
+                    "resultado_esperado_tarefa": "Material a ser usado",
+                    "peso_tarefa": 1,
+                    "status_tarefa": 1,
+                    "prazo_tarefa": "2023-09-19"
+                  },
+                  {
+                    "descricao_atividade_tarefa": "Levantamento de fornecedores",
+                    "resultado_esperado_tarefa": "Fornecedor que compraremos o material",
+                    "peso_tarefa": 1,
+                    "status_tarefa": 1,
+                    "prazo_tarefa": "2023-09-19"
+                  }
+                ],
+                "prazo_nivel_sub_projeto": "2023-09-19",
+                "hora_humano_nivel_sub_projeto": 10,
+                "progresso_nivel_sub_projeto": 10,
+                "orcamento_nivel_sub_projeto": 1000
+              }
+            ],
+            "chefe_sub_projeto": "Pedro Otário",
+            "prazo_sub_projeto": "2023-09-19",
+            "progresso_sub_projeto": 10,
+            "hora_humano_sub_projeto": 10,
+            "orcamento_sub_projeto": 10
+          },
         ],
         "progresso_projeto": 100,
         "prazo_projeto": "2023-09-19",
@@ -55,25 +90,34 @@ function FormValorHora() {
       
       const ordem_projeto = jsonData.ordem_projeto;
       const nome_projeto = jsonData.nome_projeto;
-      const ordem_sub_projeto = jsonData.sub_projeto[0].ordem_sub_projeto;
-      const nome_sub_projeto = jsonData.sub_projeto[0].nome_sub_projeto;
-      const ordem_nivel_sub_projeto = jsonData.sub_projeto[0].nivel_sub_projetos[0].ordem_nivel_sub_projeto;
-      const nome_nivel_sub_projeto = jsonData.sub_projeto[0].nivel_sub_projetos[0].nome_nivel_sub_projeto;
-      
 
       const Projeto = [
         {id: 1, "ordem_projeto": ordem_projeto, "nome_projeto": nome_projeto}
       ]
 
-      const subProjeto = [
-        {id: 1, "ordem_sub_projeto": ordem_sub_projeto, "nome_sub_projeto": nome_sub_projeto}
-      ]
+      const subProjeto = [];
 
-      const subNivel = [
-        {id: 1, "ordem_nivel_sub_projeto": ordem_nivel_sub_projeto, "nome_nivel_sub_projeto": nome_nivel_sub_projeto}
-      ]
+      jsonData.sub_projeto.forEach((item) => {
+        const ordem_sub_projeto = item.ordem_sub_projeto;
+        const nome_sub_projeto = item.nome_sub_projeto;
+        subProjeto.push (
+          {id: item.id, "ordem_sub_projeto": ordem_sub_projeto, "nome_sub_projeto": nome_sub_projeto});
+      })
 
-      // console.log(projeto)
+
+      
+      const subNivel = [];
+
+      jsonData.sub_projeto.forEach((sub_Projeto) => {
+        sub_Projeto.nivel_sub_projetos.forEach((item) => {
+        const ordem_nivel_sub_projeto = item.ordem_nivel_sub_projeto;
+        const nome_nivel_sub_projeto = item.nome_nivel_sub_projeto;
+        subNivel.push (
+          {id: item.id, "ordem_nivel_sub_projeto": ordem_nivel_sub_projeto, "nome_nivel_sub_projeto": nome_nivel_sub_projeto});
+      })})
+
+
+      // const lista = 
 
     return(
         <div class="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
