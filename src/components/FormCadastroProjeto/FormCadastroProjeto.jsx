@@ -69,7 +69,7 @@ function FormCadastroProjeto() {
     const projeto = gerarJsonProjeto(data)
 
     //console.log(projeto)
-    await axios.post("/cadastrar/projeto", projeto)
+    await axios.post("/projeto/cadastrar", projeto).then(() => {navigate("/projetos")})
   }
 
   return (
