@@ -92,7 +92,7 @@ function FormValorHora() {
       const nome_projeto = jsonData.nome_projeto;
 
       const Projeto = [
-        {id: 1, "ordem_projeto": ordem_projeto, "nome_projeto": nome_projeto}
+        {"ordem_projeto": ordem_projeto, "nome_projeto": nome_projeto}
       ]
 
       const subProjeto = [];
@@ -101,8 +101,13 @@ function FormValorHora() {
         const ordem_sub_projeto = item.ordem_sub_projeto;
         const nome_sub_projeto = item.nome_sub_projeto;
         subProjeto.push (
-          {id: item.id, "ordem_sub_projeto": ordem_sub_projeto, "nome_sub_projeto": nome_sub_projeto});
+          {"ordem_sub_projeto": ordem_sub_projeto, "nome_sub_projeto": nome_sub_projeto});
       })
+
+      for (let i = 0; i < subProjeto.length; i++) {
+        const ordem = parseFloat(subProjeto[i].ordem_sub_projeto);
+        subProjeto[i].id = ordem
+      }
 
 
       
@@ -113,11 +118,32 @@ function FormValorHora() {
         const ordem_nivel_sub_projeto = item.ordem_nivel_sub_projeto;
         const nome_nivel_sub_projeto = item.nome_nivel_sub_projeto;
         subNivel.push (
-          {id: item.id, "ordem_nivel_sub_projeto": ordem_nivel_sub_projeto, "nome_nivel_sub_projeto": nome_nivel_sub_projeto});
+          {"ordem_nivel_sub_projeto": ordem_nivel_sub_projeto, "nome_nivel_sub_projeto": nome_nivel_sub_projeto});
       })})
 
+      for (let i = 0; i < subNivel.length; i++) {
+        const ordem = subNivel[i].ordem_nivel_sub_projeto;
+        const numeros = ordem.split('.');
+        subNivel[i].id = parseFloat(`${numeros[0]}.${numeros[1]}${numeros[2]}`);
+      }
 
-      // const lista = 
+
+
+    const listaJunta= subProjeto.concat(subNivel)
+
+      const lista = listaJunta
+      .sort((a, b) => a.id - b.id)
+      .map(obj => {
+        const ordem = obj.ordem_nivel_sub_projeto || obj.ordem_sub_projeto;
+        const nome = obj.nome_nivel_sub_projeto || obj.nome_sub_projeto;
+        return {id: obj.id, ordem, nome };
+      })
+
+
+      // console.log(Projeto)
+      // console.log(subProjeto)
+      // console.log(subNivel)
+      // console.log(lista)
 
     return(
         <div class="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
@@ -141,19 +167,10 @@ function FormValorHora() {
                       <td class="border px-1 break-all">{}</td>
                   </tr>
           ))}
-          {subProjeto.map((item) => (                
+          {lista.map((item) => (                
                   <tr key={item.id}>
-                      <td class="border px-1 break-all">{item.ordem_sub_projeto}</td>
-                      <td class="border px-1 break-all">{item.nome_sub_projeto}</td>
-                      <td class="border px-1 break-all">{}</td>
-                      <td class="border px-1 break-all"><form><input type="text" id="hora" name="hora" /></form></td>
-                      <td class="border px-1 break-all">{}</td>
-                  </tr>
-          ))}
-          {subNivel.map((item) => (                
-                  <tr key={item.id}>
-                      <td class="border px-1 break-all">{item.ordem_nivel_sub_projeto}</td>
-                      <td class="border px-1 break-all">{item.nome_nivel_sub_projeto}</td>
+                      <td class="border px-1 break-all">{item.ordem}</td>
+                      <td class="border px-1 break-all">{item.nome}</td>
                       <td class="border px-1 break-all">{}</td>
                       <td class="border px-1 break-all"><form><input type="text" id="hora" name="hora" /></form></td>
                       <td class="border px-1 break-all">{}</td>
