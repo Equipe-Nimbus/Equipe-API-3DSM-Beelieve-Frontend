@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs.jsx';
 import Button from '../components/Button.jsx';
 import CardProjeto from '../components/CardProjeto.jsx';
@@ -7,8 +6,7 @@ import CardProjeto from '../components/CardProjeto.jsx';
 import { BsPlusCircle } from "react-icons/bs"
 
 function ListaProjeto(){
-
-    const navigate = useNavigate()
+    const [projetos,setProjetos] = useState([])
 
     useEffect(() => {
         getProjeto();
@@ -16,6 +14,7 @@ function ListaProjeto(){
 
     async function getProjeto() {
         try{
+            await axios.get("/projeto/listagem").then((resposta)=> setProjetos(resposta.projetos))
         }
         catch(erro){
         }
@@ -28,26 +27,19 @@ function ListaProjeto(){
                 <Button texto="Novo" 
                 iconeOpcional={BsPlusCircle}
                 iconeTamanho="20px" 
-                className="bg-primary50 text-on-primary mb-5  flex items-center gap-1 rounded-[10px] p-2 text-lg font-semibold"
-                onClick={() => navigate("/projetos/novo-projeto")}/>
+                className="bg-primary50 text-on-primary mb-5  flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"/>
                 <hr className="border-n90"></hr>
                 <div className='flex flex-row flex-wrap gap-10 mx-10'>
-                    <CardProjeto titulo="Projeto X" descricao="Míssel spaghetti joga molho de tomate em 50m e desmaia 50 pessoas" estadoProjeto={false}/>
+                    {projetos.map((projeto,index) => (
+                         <CardProjeto titulo={projeto.nome} descricao={projeto.descricao} estadoProjeto={false} onClick={() => navegate(`/projeto/${projeto.id}`)}/> 
+                         
+                    ))}
                 </div>
             </div>
             
-            {/* {projeto.map((projeto, index) => (
-                <div key={index} onClick={() => navegate(`/projeto/${projeto.id}`)}>
-                    <h1>{projeto.nome} - {projeto.valor}</h1>
-                    <div>
-                        <p>Horas homem: {projeto.horaHomem}</p>
-                        <p>Valor total: {projeto.valor}</p>
-                        <p>Status do projeto: {projeto.status}</p>
-                    </div>
-                </div>
-            ))} */}
         </div>
     );
 }
 
 export default ListaProjeto;
+
