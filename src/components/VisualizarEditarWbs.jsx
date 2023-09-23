@@ -1,9 +1,13 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import TabelaWbs from "./TabelaWbs"
 
-import { PiLeaf, PiGridNineFill } from "react-icons/pi"
+import Button from "./Button"
 
-function VisualizarEditarWbs() {
+import { PiLeaf, PiGridNineFill } from "react-icons/pi"
+import { formatarEstrutura } from "../utils/formatarEstrutura"
+import axios from '../services/axios'
+
+function VisualizarEditarWbs({ projeto, setProjeto, tabela }) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
 
   const mudarVisualizacao = (valor) => {
@@ -11,13 +15,27 @@ function VisualizarEditarWbs() {
     setVisualizacaoAtual(view)
   }
 
-  const [tabelaWBS, setTabelaWBS] = useState([
-    {
-      id: 1,
-      nivel: "1",
-      descricao: "Objetivo Final",
-    },
-  ])
+  const [tabelaWBS, setTabelaWBS] = useState(tabela)
+  useEffect(() => {
+    setTabelaWBS(tabela)
+  }, [tabela])
+
+  const atualizarEstruturaProjeto = async (e) => {
+    e.preventDefault()
+
+    const novaEstrutura = formatarEstrutura(tabelaWBS)
+
+    projeto.sub_projetos = novaEstrutura
+    //console.log('nova estrutura: ', projeto)
+
+    try {
+      await axios.put("/projeto/atualizar/estrutura", projeto).then((response) => {
+        console.log('resposta: ', response)
+        setProjeto(projeto)})
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
@@ -29,7 +47,7 @@ function VisualizarEditarWbs() {
           <div
             className={
               visualizacaoAtual === "Árvore"
-                ? "text-primary20 bg-primary91 flex items-center gap-1 rounded-l-lg border-2 border-n90 p-2 font-semibold"
+                ? "flex items-center gap-1 rounded-l-lg border-2 border-n90 bg-primary91 p-2 font-semibold text-primary20"
                 : "flex items-center gap-1 rounded-l-lg border-2 border-n90 p-2 text-n40"
             }
             onClick={(e) => mudarVisualizacao("Árvore")}
@@ -45,7 +63,7 @@ function VisualizarEditarWbs() {
           <div
             className={
               visualizacaoAtual === "Tabela"
-                ? "text-primary20 bg-primary91 flex items-center gap-1 rounded-r-lg border-2 border-n90 p-2 font-semibold"
+                ? "flex items-center gap-1 rounded-r-lg border-2 border-n90 bg-primary91 p-2 font-semibold text-primary20"
                 : "flex items-center gap-1 rounded-r-lg border-2 border-n90 p-2 text-n40"
             }
             onClick={(e) => mudarVisualizacao("Tabela")}
@@ -62,7 +80,14 @@ function VisualizarEditarWbs() {
       <hr className="border-n90" />
       <div className="mx-5">
         {visualizacaoAtual === "Tabela" && (
-          <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} />
+          <form className="flex flex-col" onSubmit={(e) => atualizarEstruturaProjeto(e)}>
+            <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} />
+            <Button texto="Salvar" tipo="submit" className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary place-self-end"/>
+          </form>
+        )}
+        {visualizacaoAtual === "Árvore" && (
+          <div>
+          </div>
         )}
       </div>
     </div>

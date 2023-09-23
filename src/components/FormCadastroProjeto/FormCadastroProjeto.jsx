@@ -7,6 +7,7 @@ import schemaProjetoInicial from "./validation"
 import TabelaWbs from "../TabelaWbs"
 import Button from "../Button"
 import axios from "../../services/axios"
+import { formatarEstrutura } from "../../utils/formatarEstrutura"
 
 function FormCadastroProjeto() {
   const {
@@ -36,31 +37,8 @@ function FormCadastroProjeto() {
       sub_projetos: [],
     }
 
-    const wbsProjeto = tabelaWBS
-
-    let nivelSubProjeto = ""
-    wbsProjeto.forEach((linha) => {
-      if (linha.nivel.length === 3) {
-        projeto.sub_projetos.push({
-          ordem_sub_projetos: linha.nivel,
-          nome_sub_projeto: linha.descricao,
-          nivel_sub_projeto: [],
-        })
-
-        nivelSubProjeto = linha.nivel
-      }
-
-      if (linha.nivel.length > 3 && linha.nivel.startsWith(nivelSubProjeto)) {
-        const indexSubProjeto = projeto.sub_projetos.findIndex(
-          (subprojeto) => subprojeto.ordem_sub_projetos === nivelSubProjeto,
-        )
-
-        projeto.sub_projetos[indexSubProjeto].nivel_sub_projeto.push({
-          ordem_nivel_sub_projeto: linha.nivel,
-          nome_nivel_sub_projeto: linha.descricao,
-        })
-      }
-    })
+    const estrutura = formatarEstrutura(tabelaWBS)
+    projeto.sub_projetos = estrutura
 
     return projeto
   }
@@ -69,7 +47,9 @@ function FormCadastroProjeto() {
     const projeto = gerarJsonProjeto(data)
 
     //console.log(projeto)
-    await axios.post("/projeto/cadastrar", projeto).then(() => {navigate("/projetos")})
+    await axios.post("/projeto/cadastrar", projeto).then(() => {
+      navigate("/projetos")
+    })
   }
 
   return (
@@ -138,7 +118,7 @@ function FormCadastroProjeto() {
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
-        <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS}/>
+        <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} />
       </div>
       <div className="mt-5 flex justify-end gap-5">
         <Button

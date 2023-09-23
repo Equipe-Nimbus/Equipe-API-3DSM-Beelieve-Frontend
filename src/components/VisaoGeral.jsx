@@ -44,7 +44,7 @@ function VisaoGeral({nomeProjeto, descricaoProjeto, liderProjeto}) {
 
 VisaoGeral.propTypes = {
   nomeProjeto: PropTypes.string.isRequired,
-  descricaoProjeto: PropTypes.string.isRequired,
+  descricaoProjeto: PropTypes.string,
   liderProjeto: PropTypes.string
 }
 
