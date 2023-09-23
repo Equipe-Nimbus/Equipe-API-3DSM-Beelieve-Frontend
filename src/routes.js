@@ -2,7 +2,7 @@ import App from "./App";
 import NovoProjeto from "./pages/NovoProjeto";
 import NavBar from "./components/navBar"
 import ListaProjeto from "./components/ListaProjeto";
-import Atividades from "./components/FormCadastroAtividade/Atividade";
+import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 
 const router = [
     {
@@ -24,8 +24,8 @@ const router = [
                 element: <NavBar/>
             },
             {
-                path: "/atividades",
-                element: <Atividades/>
+                path: "/tarefas",
+                element: <NovaTarefa/>
             }
             
         ]
