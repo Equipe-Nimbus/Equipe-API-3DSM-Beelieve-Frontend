@@ -50,10 +50,10 @@ function FormCadastroProjeto() {
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
 
-    console.log(projeto)
-    /* await axios.post("/projeto/cadastrar", projeto).then(() => {
+    //console.log(projeto)
+    await axios.post("/projeto/cadastrar", projeto).then(() => {
       navigate("/projetos")
-    }) */
+    })
   }
 
   const handleInputDinheiro = (event, value, maskedValue) => {

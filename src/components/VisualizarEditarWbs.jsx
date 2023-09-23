@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react"
-import TabelaWbs from "./TabelaWbs"
+import { useNavigate } from "react-router"
 
+import TabelaWbs from "./TabelaWbs"
 import Button from "./Button"
 
 import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from '../services/axios'
 
-function VisualizarEditarWbs({ projeto, setProjeto, tabela }) {
+function VisualizarEditarWbs({ projeto, setProjeto, tabela, atualizar, setAtualizar}) {
+  const navigate = useNavigate()
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
 
   const mudarVisualizacao = (valor) => {
@@ -31,7 +33,8 @@ function VisualizarEditarWbs({ projeto, setProjeto, tabela }) {
     try {
       await axios.put("/projeto/atualizar/estrutura", projeto).then((response) => {
         console.log('resposta: ', response)
-        setProjeto(projeto)})
+        setAtualizar(true)
+        })
     } catch (error) {
       
     }
