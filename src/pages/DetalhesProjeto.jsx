@@ -7,6 +7,7 @@ import MenuSelecao from "../components/MenuSelecao"
 import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 
 function DetalhesProjeto() {
+  const [atualizar, setAtualizar] = useState(false)
   const [projeto, setProjeto] = useState({})
   const [tabela, setTabela] = useState([])
   const [secaoAtual, setSecaoAtual] = useState("ESTRUTURA")
@@ -50,16 +51,23 @@ function DetalhesProjeto() {
     return tabela
   }
 
+  console.log("Renderizou")
+
   useEffect(() => {
     getProjeto()
-  }, [])
+
+    if(atualizar) {
+      getProjeto()
+      setAtualizar(false)
+    }
+  }, [atualizar])
 
   useEffect(() => {
     if (Object.keys(projeto).length > 0) {
       const novaTabela = gerarTabela()
       setTabela(novaTabela)
     }
-  }, [projeto])
+  }, [projeto, atualizar])
 
   return (
     <>
@@ -74,7 +82,15 @@ function DetalhesProjeto() {
         mudarSecao={mudarSecao}
       />
 
-      {secaoAtual === "ESTRUTURA" && <VisualizarEditarWbs projeto={projeto} stProjeto={setProjeto} tabela={tabela}/>}
+      {secaoAtual === "ESTRUTURA" && (
+        <VisualizarEditarWbs
+          projeto={projeto}
+          stProjeto={setProjeto}
+          tabela={tabela}
+          atualizar={atualizar}
+          setAtualizar={setAtualizar}
+        />
+      )}
     </>
   )
 }

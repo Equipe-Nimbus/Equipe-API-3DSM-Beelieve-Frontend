@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import IntlCurrencyInput from "react-intl-currency-input"
 
 import schemaProjetoInicial from "./validation"
 import TabelaWbs from "../TabelaWbs"
 import Button from "../Button"
+
 import axios from "../../services/axios"
 import { formatarEstrutura } from "../../utils/formatarEstrutura"
+import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 
 function FormCadastroProjeto() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -61,6 +65,11 @@ function FormCadastroProjeto() {
 	  tabela[0].descricao = evento.target.value
 	  setTabelaWBS(tabela)
 	  setRender(render + 1)
+  }
+
+  const handleInputDinheiro = (event, value, maskedValue) => {
+    event.preventDefault()
+    setValue("valorHora", value)
   }
 
   return (
@@ -116,11 +125,13 @@ function FormCadastroProjeto() {
         >
           Valor/Hora de trabalho
         </label>
-        <input
-          type="number"
-          step="any"
-          className="w-1/2 rounded-md border border-n70 p-1"
+        <IntlCurrencyInput
+          type="text"
           {...register("valorHora")}
+          className="w-1/2 rounded-md border border-n70 p-1"
+          currency="BRL"
+          config={formatacaoDinheiro}
+          onChange={handleInputDinheiro}
         />
         {errors?.valorHora && (
           <label htmlFor="valorHora" className="text-sm font-light text-error">

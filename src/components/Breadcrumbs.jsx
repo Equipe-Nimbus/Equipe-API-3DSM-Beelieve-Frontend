@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 
 function Breadcrumbs() {
   let location = useLocation()
-  console.log(location)
 
   let linkAtual = ""
   const crumbs = location.pathname
@@ -17,7 +16,7 @@ function Breadcrumbs() {
       crumbFormatado = crumbFormatado[0] + ' ' + crumbFormatado.slice(1)
 
       return(
-        <li className="after:content-['-'] last:after:content-[''] text-lg font-semibold text-n20 hover:text-on-light">
+        <li key={crumb} className="after:content-['-'] last:after:content-[''] text-lg font-semibold text-n20 hover:text-on-light">
           <Link to={linkAtual} className="inline-block px-2">{crumbFormatado}</Link>
         </li>
       )
