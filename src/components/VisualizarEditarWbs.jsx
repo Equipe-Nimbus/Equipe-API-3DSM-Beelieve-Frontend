@@ -84,7 +84,7 @@ function VisualizarEditarWbs({ projeto, setProjeto, tabela, atualizar, setAtuali
       <div className="mx-5">
         {visualizacaoAtual === "Tabela" && (
           <form className="flex flex-col" onSubmit={(e) => atualizarEstruturaProjeto(e)}>
-            <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} />
+            <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS}  edicaoNivel1={true}/>
             <Button texto="Salvar" tipo="submit" className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary place-self-end"/>
           </form>
         )}

@@ -27,6 +27,7 @@ function FormCadastroProjeto() {
   const navigate = useNavigate()
 
   const [render, setRender] = useState(0);
+  const [nivel1Edicao, setNivel1Edicao] = useState(false);
 
   const [tabelaWBS, setTabelaWBS] = useState([
     {
@@ -141,7 +142,7 @@ function FormCadastroProjeto() {
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
-        <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} />
+        <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} edicaoNivel1={false}/>
       </div>
       <div className="mt-5 flex justify-end gap-5">
         <Button
