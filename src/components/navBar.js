@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 
-import Beelieve from "../assets/images/Beelieve.png"
+import Beelieve from "../assets/images/Beelieve-yellow.png"
 import { PiProjectorScreenChart } from "react-icons/pi"
 import { LiaUserTieSolid } from "react-icons/lia"
 import { BiLogOut } from "react-icons/bi"
