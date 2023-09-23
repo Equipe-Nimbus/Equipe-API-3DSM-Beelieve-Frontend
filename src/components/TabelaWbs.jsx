@@ -1,9 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Button from "./Button"
 
 import { FiPlus, FiMinus } from "react-icons/fi"
 
-function TabelaWbs({ tabelaWBS, setTabelaWBS }) {
+function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
+	
+	
   const gerarTabela = (tabelaWBS) => {
     return (
       <table id="wbsTable" className="mt-5 w-1/3 text-left text-on-light">
@@ -19,12 +21,22 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS }) {
             <tr key={index}>
               <td className="w-1/4 px-4 py-1.5 font-semibold">{linha.nivel}</td>
               <td className="w-1/4 px-4 py-1.5">
+              {!edicaoNivel1 && linha.nivel === "1" ?
+              	<input
+                  type="text"
+                  className="w-full"
+                  value={tabelaWBS[index].descricao}
+                  onChange={(e) => handleDescricaoSubProjeto(e, index)}
+                  disabled
+                /> :
                 <input
                   type="text"
                   className="w-full"
                   value={tabelaWBS[index].descricao}
                   onChange={(e) => handleDescricaoSubProjeto(e, index)}
+                  
                 />
+              }
               </td>
               {linha.nivel.toLocaleString().split(".").length < 3 && (
                 <Button
