@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 //import schemaInsercaoAtividade from './validationAtividade';
-import axios from 'axios';
+import axios from "../../services/axios"
 
 const TabFormTarefas = () => {
     const [ tarefa, setTarefa ] = useState( [ { id: '', descricao: '', resultadoEsperado: '', status: '', peso: '', prazo: '' } ] );
@@ -53,7 +53,18 @@ const TabFormTarefas = () => {
 
         const geraJsonTarefas = listaTarefas();
 
-     //await axios.put('/tarefa/atualizar', geraJsonTarefas);
+        await axios.put("/tarefa/atualizar", geraJsonTarefas).then((response) => {
+            if (response.status === 200) {
+                console.log('Deu certo POHA');
+              }
+        })
+        .catch((error) => {
+            if (error.response.status === 404) {
+                console.error('Recurso não encontrado.');
+              } else {
+                console.error('Erro:', error);
+              }
+        });
 
         /*schemaInsercaoAtividade.validate( tarefa )
             .then( tarefa => {
@@ -67,16 +78,22 @@ const TabFormTarefas = () => {
     };
 
     const listaTarefa = async () => {
-        try {
-            const response = await axios.get( '/tarefa/listar' );
-            setTarefa( response.tarefa );
-            console.log( 'Dados Listados:', tarefa );
-        } catch ( error ) {
-            console.error( 'Erro ao listar dados:', error );
-        }
+
+        await axios.get("/tarefa/listar").then((response) => {
+            if (response.status === 200) {
+                console.log('Deu certo POHA');
+              }
+        })
+        .catch((error) => {
+            if (error.response.status === 404) {
+                console.error('Erro ao listar dados:', error);
+              } else {
+                console.error('Erro:', error);
+              }
+        });
     };
 
-    const deleteRow = ( index ) => {
+    const deleteRow = async ( index ) => {
         /*axios.put( `/tarefa/atualizar/${ id }` ).then( response => setTarefa( updatedtarefa ) );*/
 
         const tarefasExistentes = [...tarefa]
@@ -85,6 +102,19 @@ const TabFormTarefas = () => {
 
         setTarefa(tarefasExistentes)
 
+        await axios.put(`/tarefa/atualizar/${index}`).then((response) => {
+            if (response.status === 200) {
+                console.log('Deu certo POHA');
+              }
+        })
+        .catch((error) => {
+            if (error.response.status === 404) {
+                console.error('Recurso não encontrado.');
+              } else {
+                console.error('Erro:', error);
+              }
+        });
+
         console.log(tarefasExistentes)
     };
 
@@ -92,7 +122,7 @@ function listaTarefas() {
 
     const listaTarefas = {
         tipo_pai:"subprojeto",
-        id_pai:"2",
+        id_pai:"1",
         lista_tarefas:[]
     }
 
