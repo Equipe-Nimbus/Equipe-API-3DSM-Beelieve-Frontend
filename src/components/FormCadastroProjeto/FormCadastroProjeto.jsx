@@ -27,7 +27,7 @@ function FormCadastroProjeto() {
   const navigate = useNavigate()
 
   const [render, setRender] = useState(0);
-  const [nivel1Edicao, setNivel1Edicao] = useState(false);
+
 
   const [tabelaWBS, setTabelaWBS] = useState([
     {

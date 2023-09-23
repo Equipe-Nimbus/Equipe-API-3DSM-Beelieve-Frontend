@@ -16,18 +16,23 @@ function VisualizarEditarWbs({ projeto, setProjeto, tabela, atualizar, setAtuali
     const view = valor
     setVisualizacaoAtual(view)
   }
+  
+  const [render, setRender] = useState(0)
 
   const [tabelaWBS, setTabelaWBS] = useState(tabela)
   useEffect(() => {
     setTabelaWBS(tabela)
-  }, [tabela])
+    console.log(projeto)
+
+  }, [tabela, render])
 
   const atualizarEstruturaProjeto = async (e) => {
+   	setRender(render + 1)
     e.preventDefault()
-
     const novaEstrutura = formatarEstrutura(tabelaWBS)
-
     projeto.sub_projetos = novaEstrutura
+    projeto.nome_projeto = tabelaWBS[0].descricao
+
     //console.log('nova estrutura: ', projeto)
 
     try {
