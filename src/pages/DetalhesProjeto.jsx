@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import axios from "../services/axios"
 
-import Breadcrumbs from "../components/Breadcrumbs"
 import VisaoGeral from "../components/VisaoGeral"
 import MenuSelecao from "../components/MenuSelecao"
 import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
@@ -64,7 +63,6 @@ function DetalhesProjeto() {
 
   return (
     <>
-      <Breadcrumbs />
       <VisaoGeral
         nomeProjeto={projeto.nome_projeto}
         descricaoProjeto={projeto.descricao_projeto}

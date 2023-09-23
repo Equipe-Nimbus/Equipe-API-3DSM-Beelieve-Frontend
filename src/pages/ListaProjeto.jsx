@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "../services/axios"
 
-import Breadcrumbs from "../components/Breadcrumbs.jsx"
 import Button from "../components/Button.jsx"
 import CardProjeto from "../components/CardProjeto.jsx"
 
@@ -27,7 +26,6 @@ function ListaProjeto() {
 
   return (
     <div>
-      <Breadcrumbs />
       <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
         <Button
           texto="Novo"

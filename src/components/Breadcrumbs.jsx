@@ -1,27 +1,32 @@
 import React from "react"
-import { useMatches } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
 
 function Breadcrumbs() {
-  let matches = useMatches()
+  let location = useLocation()
+  console.log(location)
+
+  let linkAtual = ""
+  const crumbs = location.pathname
+    .split("/")
+    .filter((crumb) => crumb !== "")
+    .map((crumb) => {
+      linkAtual += `/${crumb}`
+      const crumbCapitalizado = crumb[0].toUpperCase() + crumb.slice(1)
+      let crumbFormatado = crumbCapitalizado.split('-')
+      crumbFormatado = crumbFormatado[0] + ' ' + crumbFormatado.slice(1)
+
+      return(
+        <li className="after:content-['-'] last:after:content-[''] text-lg font-semibold text-n20 hover:text-on-light">
+          <Link to={linkAtual} className="inline-block px-2">{crumbFormatado}</Link>
+        </li>
+      )
+    })
 
   return (
     <>
-    <div className="bg-bg100 m-5 rounded-md p-4 drop-shadow-md">
-      <ol className="flex flex-row gap-1 text-lg font-semibold text-on-light">
-        {matches.map((match, index) => (
-          <li key={index} className={matches.length > 1 && match !== matches[matches.length - 1] ? 'hover:border-b-2 text-n40 hover:text-on-light' : ''}>
-            {matches.length > 1 && match !== matches[matches.length - 1] ? (
-              <Link to={match.pathname}>
-                {match.handle?.title}
-                {" >"}
-              </Link>
-            ) : (
-              match.handle?.title
-            )}
-          </li>
-        ))}
-      </ol>
+      <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
+        <ol className="flex flex-row gap-1 ">{crumbs}</ol>
       </div>
     </>
   )
