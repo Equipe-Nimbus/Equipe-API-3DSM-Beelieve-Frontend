@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -22,12 +22,16 @@ function FormCadastroProjeto() {
   })
   const navigate = useNavigate()
 
+  const [render, setRender] = useState(0);
+
   const [tabelaWBS, setTabelaWBS] = useState([
     {
       nivel: "1",
       descricao: "Objetivo Final",
     },
   ])
+  
+  useEffect(() => {}, [render]);
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
@@ -51,6 +55,13 @@ function FormCadastroProjeto() {
       navigate("/projetos")
     })
   }
+  
+  const handlerBlur = (evento) => {
+	  let tabela = tabelaWBS
+	  tabela[0].descricao = evento.target.value
+	  setTabelaWBS(tabela)
+	  setRender(render + 1)
+  }
 
   return (
     <form onSubmit={handleSubmit(cadastrarProjeto)}>
@@ -66,6 +77,7 @@ function FormCadastroProjeto() {
           id="nomeProjeto"
           className="w-1/2 rounded-md border border-n70 p-1"
           {...register("nomeProjeto")}
+          onBlur={(e)=>{handlerBlur(e)}}
         />
         {errors?.nomeProjeto && (
           <label
