@@ -1,0 +1,109 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import axios from "../services/axios"
+
+import VisaoGeral from "../components/VisaoGeral"
+import MenuSelecao from "../components/MenuSelecao"
+import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
+import FormValorHora from "../components/FormValorHora/FormValorHora"
+
+function DetalhesProjeto() {
+  const [atualizar, setAtualizar] = useState(false)
+  const [projeto, setProjeto] = useState({})
+  const [tabela, setTabela] = useState([])
+  const [secaoAtual, setSecaoAtual] = useState("ESTRUTURA")
+  const mudarSecao = (secao) => {
+    setSecaoAtual(secao)
+  }
+
+  const { id } = useParams()
+  const getProjeto = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data
+        setProjeto(dados)
+      })
+    } catch (error) {}
+  }
+
+  const gerarTabela = () => {
+    const tabela = []
+    tabela.push({
+      id: 0,
+      nivel: "1",
+      descricao: projeto.nome_projeto,
+    })
+
+    projeto.sub_projetos?.forEach((subprojeto) => {
+      tabela.push({
+        id: subprojeto.id_sub_projeto,
+        nivel: subprojeto.ordem_sub_projeto,
+        descricao: subprojeto.nome_sub_projeto,
+      })
+
+      subprojeto.nivel_sub_projeto?.forEach((nivel) => {
+        tabela.push({
+          id: nivel.id_nivel_sub_projeto,
+          nivel: nivel.ordem_nivel_sub_projeto,
+          descricao: nivel.nome_nivel_sub_projeto,
+        })
+      })
+    })
+    return tabela
+  }
+
+  //console.log("Renderizou")
+
+  useEffect(() => {
+    getProjeto()
+
+    if (atualizar) {
+      getProjeto()
+      setAtualizar(false)
+    }
+  }, [atualizar])
+
+  useEffect(() => {
+    if (Object.keys(projeto).length > 0) {
+      const novaTabela = gerarTabela()
+      setTabela(novaTabela)
+    }
+  }, [projeto, atualizar])
+
+  return (
+    <>
+      <VisaoGeral
+        nomeProjeto={projeto.nome_projeto}
+        descricaoProjeto={projeto.descricao_projeto}
+        liderProjeto={projeto.chefe_projeto}
+      />
+      <MenuSelecao
+        opcoes={["ESTRUTURA", "PACOTES"]}
+        secaoAtual={secaoAtual}
+        mudarSecao={mudarSecao}
+      />
+
+      {secaoAtual === "ESTRUTURA" && (
+        <VisualizarEditarWbs
+          projeto={projeto}
+          tabela={tabela}
+          atualizar={atualizar}
+          setAtualizar={setAtualizar}
+        />
+      )}
+
+      {secaoAtual === "PACOTES" && (
+        <div class="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <FormValorHora
+            tabela={tabela}
+            projeto={projeto}
+            setAtualizar={setAtualizar}
+          />
+        </div>
+      )}
+    </>
+  )
+}
+
+export default DetalhesProjeto

@@ -1,25 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import NavBar from "./components/navBar"
+import { Outlet } from "react-router-dom"
+import Breadcrumbs from "./components/Breadcrumbs"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex">
+      <NavBar />
+      <div className="w-full ml-64">
+        <Breadcrumbs/>
+        <Outlet />
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
