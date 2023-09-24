@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react"
+import { BiTrash } from "react-icons/bi"
+
 //import schemaInsercaoAtividade from './validationAtividade';
 import axios from "../../services/axios"
 
@@ -83,18 +85,17 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
   }
 
   const saveTarefa = async () => {
+
     const geraJsonTarefas = listaTarefas()
 
     await axios
       .put("/tarefa/atualizar", geraJsonTarefas)
       .then((response) => {
         if (response.status === 200) {
-          window.alert("Tarefas atualizadas com sucesso!")
         }
       })
       .catch((error) => {
         if (error.response.status === 404) {
-          window.alert("Erro ao atualizar as tarefas")
           console.error("Recurso não encontrado.")
         } else {
           console.error("Erro:", error)
@@ -143,28 +144,37 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
   return (
     <div>
       <button onClick={() => window.history.back()}>Voltar</button>
-      <h1>Titulo do Projeto</h1>
+      <h1>Pacote de trabalho: { }</h1>
       <hr className="border-n90" />
+
       <div>
-        <button onClick={addRow}>Nova Tarefa</button>
-        <tr></tr>
-        <table>
-          <thead>
-            <tr>
-              <th>Tarefa</th>
-              <th>Descrição</th>
-              <th>Resultado Esperado</th>
-              <th>Execução</th>
-              <th>Peso</th>
-              <th>Previsão</th>
-              <th></th>
+        <div className="ps-48">
+          <button onClick={addRow}
+            className="mt-9 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary">
+            Adicionar tarefa
+          </button>
+        </div>
+
+
+        <table class="mx-auto mt-5 w-2/3">
+          <thead className="bg-primary98 p-10 text-base uppercase">
+            <tr >
+              <th class="border">Tarefa</th>
+              <th class="border">Descrição</th>
+              <th class="border">Resultado Esperado</th>
+              <th class="border">Execução</th>
+              <th class="border">Peso</th>
+              <th class="border">Previsão</th>
             </tr>
           </thead>
+
           <tbody>
             {tarefa.map((item, index) => (
               <tr key={index}>
-                <td className="font-semibold">{index + 1}</td>
-                <td className="w-1/4 px-4 py-1.5">
+                <td class="border px-4 py-1.5 text-lg font-semibold">
+                  {index + 1}
+                </td>
+                <td class="border px-4">
                   <input
                     type="text"
                     className="w-full"
@@ -172,7 +182,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
                     onChange={(e) => handleDescricao(e, index)}
                   />
                 </td>
-                <td className="w-1/4 px-4 py-1.5">
+                <td class="border px-4">
                   <input
                     type="text"
                     className="w-full"
@@ -180,7 +190,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
                     onChange={(e) => handleResultadoEsperado(e, index)}
                   />
                 </td>
-                <td className="w-1/4 px-4 py-1.5">
+                <td class="border px-4">
                   <input
                     type="checkbox"
                     checked={tarefa[index].status === 1}
@@ -189,7 +199,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
                     onChange={(e) => handleStatus(e, index)}
                   />
                 </td>
-                <td className="w-1/4 px-4 py-1.5">
+                <td class="border px-4">
                   <input
                     type="number"
                     className="w-full"
@@ -197,7 +207,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
                     onChange={(e) => handlePeso(e, index)}
                   />
                 </td>
-                <td className="w-1/4 px-4 py-1.5">
+                <td class="border px-4">
                   <input
                     type="date"
                     className="w-full"
@@ -206,14 +216,27 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
                   />
                 </td>
                 <td>
-                  <button onClick={() => deleteRow(index)}>Excluir</button>
+                  <button onClick={() => deleteRow(index)}><BiTrash
+                    color="#000000"
+                    size={24}
+                    className="hover:fill-primary50"
+                  /></button>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
-        <button onClick={saveTarefa}>Salvar</button>
+
+        </table><br /><br />
+
+        <div className="absolute right-[15rem] bottom-0">
+          <button onClick={saveTarefa}
+            className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary">
+            Salvar
+          </button>
+        </div>
+
       </div>
+
     </div>
   )
 }
