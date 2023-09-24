@@ -53,7 +53,7 @@ function DetalhesProjeto() {
     return tabela
   }
 
-  console.log("Renderizou")
+  //console.log("Renderizou")
 
   useEffect(() => {
     getProjeto()

@@ -26,7 +26,7 @@ const router = [
                 element: <DetalhesProjeto/>,
             },
             {
-                path: "/tarefas",
+                path: "tarefas/:idTarefa",
                 element: <NovaTarefa/>
             }
         ]
