@@ -92,6 +92,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
       .put("/tarefa/atualizar", geraJsonTarefas)
       .then((response) => {
         if (response.status === 200) {
+          window.alert("Tarefas atualizadas com sucesso!")
         }
       })
       .catch((error) => {
