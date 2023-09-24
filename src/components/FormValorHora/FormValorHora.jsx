@@ -1,185 +1,125 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from "react"
+import { useForm, useFieldArray } from "react-hook-form"
 
-function FormValorHora() {
-    const jsonData =
-    {
-        "ordem_projeto": "1",
-        "nome_projeto": "Missil Espaguete",
-        "chefe_projeto": "Ernesto Neto",
-        "sub_projeto": [
-          {
-            "ordem_sub_projeto": "1.1",
-            "nome_sub_projeto": "Propulsor",
-            "nivel_sub_projetos": [
-              {
-                "ordem_nivel_sub_projeto": "1.1.1",
-                "nome_nivel_sub_projeto": "Seleção de materiais",
-                "tarefas": [
-                  {
-                    "descricao_atividade_tarefa": "Levantamento de preços",
-                    "resultado_esperado_tarefa": "Material a ser usado",
-                    "peso_tarefa": 1,
-                    "status_tarefa": 1,
-                    "prazo_tarefa": "2023-09-19"
-                  },
-                  {
-                    "descricao_atividade_tarefa": "Levantamento de fornecedores",
-                    "resultado_esperado_tarefa": "Fornecedor que compraremos o material",
-                    "peso_tarefa": 1,
-                    "status_tarefa": 1,
-                    "prazo_tarefa": "2023-09-19"
-                  }
-                ],
-                "prazo_nivel_sub_projeto": "2023-09-19",
-                "hora_humano_nivel_sub_projeto": 10,
-                "progresso_nivel_sub_projeto": 10,
-                "orcamento_nivel_sub_projeto": 1000
-              }
-            ],
-            "chefe_sub_projeto": "Pedro Otário",
-            "prazo_sub_projeto": "2023-09-19",
-            "progresso_sub_projeto": 10,
-            "hora_humano_sub_projeto": 10,
-            "orcamento_sub_projeto": 10
-          },
-          {
-            "ordem_sub_projeto": "1.2",
-            "nome_sub_projeto": "dale",
-            "nivel_sub_projetos": [
-              {
-                "ordem_nivel_sub_projeto": "1.2.1",
-                "nome_nivel_sub_projeto": "dole",
-                "tarefas": [
-                  {
-                    "descricao_atividade_tarefa": "Levantamento de preços",
-                    "resultado_esperado_tarefa": "Material a ser usado",
-                    "peso_tarefa": 1,
-                    "status_tarefa": 1,
-                    "prazo_tarefa": "2023-09-19"
-                  },
-                  {
-                    "descricao_atividade_tarefa": "Levantamento de fornecedores",
-                    "resultado_esperado_tarefa": "Fornecedor que compraremos o material",
-                    "peso_tarefa": 1,
-                    "status_tarefa": 1,
-                    "prazo_tarefa": "2023-09-19"
-                  }
-                ],
-                "prazo_nivel_sub_projeto": "2023-09-19",
-                "hora_humano_nivel_sub_projeto": 10,
-                "progresso_nivel_sub_projeto": 10,
-                "orcamento_nivel_sub_projeto": 1000
-              }
-            ],
-            "chefe_sub_projeto": "Pedro Otário",
-            "prazo_sub_projeto": "2023-09-19",
-            "progresso_sub_projeto": 10,
-            "hora_humano_sub_projeto": 10,
-            "orcamento_sub_projeto": 10
-          },
-        ],
-        "progresso_projeto": 100,
-        "prazo_projeto": "2023-09-19",
-        "descricao_projeto": "Míssil de espaguete de 50 metros de espaguete para 50 espaguete",
-        "hora_valor_projeto": 10,
-        "data_inicio_projeto": "2023-09-19",
-        "orcamento_projeto": 10,
-        "hora_humano_total": 10
-      };
-      
-      const ordem_projeto = jsonData.ordem_projeto;
-      const nome_projeto = jsonData.nome_projeto;
+import Button from "../Button"
+import IntlCurrencyInput from "react-intl-currency-input"
 
-      const Projeto = [
-        {"ordem_projeto": ordem_projeto, "nome_projeto": nome_projeto}
-      ]
+import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
+import { formatarEstrutura } from "../../utils/formatarEstrutura"
+import axios from "../../services/axios"
 
-      const subProjeto = [];
+function FormValorHora({ tabela, projeto, setAtualizar }) {
+  const estruturaDetalhes = tabela.map((linha) => {
+    return {
+      id: linha.id,
+      nivel: linha.nivel,
+      descricao: linha.descricao,
+      orcamento: 0,
+      hora_homem: 0,
+    }
+  })
 
-      jsonData.sub_projeto.forEach((item) => {
-        const ordem_sub_projeto = item.ordem_sub_projeto;
-        const nome_sub_projeto = item.nome_sub_projeto;
-        subProjeto.push (
-          {"ordem_sub_projeto": ordem_sub_projeto, "nome_sub_projeto": nome_sub_projeto});
-      })
+  const { register, handleSubmit, control, setValue } = useForm({
+    defaultValues: {
+      estruturaDetalhes: estruturaDetalhes,
+    },
+  })
 
-      for (let i = 0; i < subProjeto.length; i++) {
-        const ordem = parseFloat(subProjeto[i].ordem_sub_projeto);
-        subProjeto[i].id = ordem
-      }
+  const { fields } = useFieldArray({
+    control,
+    name: "estruturaDetalhes",
+  })
 
+  const handleOrcamento = async (index, valor) => {
+    setValue(`estruturaDetalhes[${index}].orcamento`, valor)
+  }
 
-      
-      const subNivel = [];
+  const atualizarDetalhesPacotes = async (data) => {
+    const estruturaPreenchida = data.estruturaDetalhes
 
-      jsonData.sub_projeto.forEach((sub_Projeto) => {
-        sub_Projeto.nivel_sub_projetos.forEach((item) => {
-        const ordem_nivel_sub_projeto = item.ordem_nivel_sub_projeto;
-        const nome_nivel_sub_projeto = item.nome_nivel_sub_projeto;
-        subNivel.push (
-          {"ordem_nivel_sub_projeto": ordem_nivel_sub_projeto, "nome_nivel_sub_projeto": nome_nivel_sub_projeto});
-      })})
+    const novaEstrutura = formatarEstrutura(estruturaPreenchida)
 
-      for (let i = 0; i < subNivel.length; i++) {
-        const ordem = subNivel[i].ordem_nivel_sub_projeto;
-        const numeros = ordem.split('.');
-        subNivel[i].id = parseFloat(`${numeros[0]}.${numeros[1]}${numeros[2]}`);
-      }
+    projeto.orcamento_projeto = estruturaPreenchida[0].orcamento
+    projeto.hora_humano_total = parseFloat(estruturaPreenchida[0].hora_homem)
+    projeto.sub_projetos = novaEstrutura
 
+    const dadoOrcamentoProjeto = projeto
 
+    try {
+      await axios
+        .put("/projeto/atualizar/orcamento", dadoOrcamentoProjeto)
+        .then((response) => {
+          console.log("resposta: ", response)
+          setAtualizar(true)
+        })
+    } catch (error) {
 
-    const listaJunta= subProjeto.concat(subNivel)
+    }
+  }
 
-      const lista = listaJunta
-      .sort((a, b) => a.id - b.id)
-      .map(obj => {
-        const ordem = obj.ordem_nivel_sub_projeto || obj.ordem_sub_projeto;
-        const nome = obj.nome_nivel_sub_projeto || obj.nome_sub_projeto;
-        return {id: obj.id, ordem, nome };
-      })
-
-
-      // console.log(Projeto)
-      // console.log(subProjeto)
-      // console.log(subNivel)
-      // console.log(lista)
-
-    return(
-        <div class="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
-        <table class="table-fixed mt-5 w-2/3 text-center">
-            <thead class="bg-primary98 text-base uppercase ">
-                <tr>
-                    <th class="border">Nível</th>
-                    <th class="border">Descrição</th>
-                    <th class="border">Orçamento</th>
-                    <th class="border">Hora Homem</th>
-                    <th class="border">Atribuição</th>
-                </tr>
-            </thead>
-            <tbody class="text-lg">
-               {Projeto.map((item) => (                
-                  <tr key={item.id}>
-                      <td class="border px-1 break-all">{item.ordem_projeto}</td>
-                      <td class="border px-1 break-all">{item.nome_projeto}</td>
-                      <td class="border px-1 break-all">{}</td>
-                      <td class="border px-1 break-all"><form><input type="text" id="hora" name="hora" /></form></td>
-                      <td class="border px-1 break-all">{}</td>
-                  </tr>
-          ))}
-          {lista.map((item) => (                
-                  <tr key={item.id}>
-                      <td class="border px-1 break-all">{item.ordem}</td>
-                      <td class="border px-1 break-all">{item.nome}</td>
-                      <td class="border px-1 break-all">{}</td>
-                      <td class="border px-1 break-all"><form><input type="text" id="hora" name="hora" /></form></td>
-                      <td class="border px-1 break-all">{}</td>
-                  </tr>
-          ))}
-            </tbody>
-        </table>
+    return (
+      <div>
+        <div className="mx-5 mb-2 flex items-center justify-between">
+          <h3 className="text-xl font-semibold text-on-light">
+            Detalhes dos pacotes de trabalho
+          </h3>
         </div>
-    );
-}
+        <hr className="border-n90" />
+        <form
+          onSubmit={handleSubmit(atualizarDetalhesPacotes)}
+          className="my-10 flex flex-col gap-2"
+        >
+          <table class="mx-auto mt-5 w-2/3">
+            <thead className="bg-primary98 p-10 text-base uppercase">
+              <tr>
+                <th class="border px-6 py-3">Nível</th>
+                <th class="border">Descrição</th>
+                <th class="border">Orçamento</th>
+                <th class="border">Hora Homem</th>
+                <th class="border">Atribuição</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fields.map((linha, index) => (
+                <tr key={index}>
+                  <td class="border px-4 py-1.5 text-lg font-semibold">
+                    {linha.nivel}
+                  </td>
+                  <td class="border px-4">{linha.descricao}</td>
+                  <td class="border px-4">
+                    <IntlCurrencyInput
+                      name={`estruturaDetalhes[${index}].orcamento`}
+                      {...register(`estruturaDetalhes[${index}].orcamento`)}
+                      defaultValue={linha.orcamento}
+                      type="text"
+                      currency="BRL"
+                      config={formatacaoDinheiro}
+                      onChange={(e, value) => handleOrcamento(index, value)}
+                    />
+                  </td>
+                  <td class="border px-4">
+                    <input
+                      id="hora"
+                      name={`estruturaDetalhes[${index}].hora_homem`}
+                      {...register(`estruturaDetalhes[${index}].hora_homem`)}
+                      defaultValue={linha.hora_homem}
+                      type="number"
+                    />
+                  </td>
+                  <td class="break-all border px-1">{}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Button
+            texto="Salvar"
+            tipo="submit"
+            className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+          />
+        </form>
+      </div>
+    )
+  }
 
-export default FormValorHora;
+
+export default FormValorHora

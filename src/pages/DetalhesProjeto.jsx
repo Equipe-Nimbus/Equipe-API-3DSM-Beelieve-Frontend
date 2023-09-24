@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import axios from "../services/axios"
@@ -5,6 +6,7 @@ import axios from "../services/axios"
 import VisaoGeral from "../components/VisaoGeral"
 import MenuSelecao from "../components/MenuSelecao"
 import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
+import FormValorHora from "../components/FormValorHora/FormValorHora"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
@@ -56,7 +58,7 @@ function DetalhesProjeto() {
   useEffect(() => {
     getProjeto()
 
-    if(atualizar) {
+    if (atualizar) {
       getProjeto()
       setAtualizar(false)
     }
@@ -85,11 +87,20 @@ function DetalhesProjeto() {
       {secaoAtual === "ESTRUTURA" && (
         <VisualizarEditarWbs
           projeto={projeto}
-          stProjeto={setProjeto}
           tabela={tabela}
           atualizar={atualizar}
           setAtualizar={setAtualizar}
         />
+      )}
+
+      {secaoAtual === "PACOTES" && (
+        <div class="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <FormValorHora
+            tabela={tabela}
+            projeto={projeto}
+            setAtualizar={setAtualizar}
+          />
+        </div>
       )}
     </>
   )

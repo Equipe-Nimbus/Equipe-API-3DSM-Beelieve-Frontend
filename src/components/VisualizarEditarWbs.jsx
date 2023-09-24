@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router"
 
 import TabelaWbs from "./TabelaWbs"
 import Button from "./Button"
@@ -8,8 +7,7 @@ import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from '../services/axios'
 
-function VisualizarEditarWbs({ projeto, setProjeto, tabela, atualizar, setAtualizar}) {
-  const navigate = useNavigate()
+function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar}) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
 
   const mudarVisualizacao = (valor) => {
@@ -89,7 +87,8 @@ function VisualizarEditarWbs({ projeto, setProjeto, tabela, atualizar, setAtuali
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (
-          <div>
+          <div classname="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+            
           </div>
         )}
       </div>

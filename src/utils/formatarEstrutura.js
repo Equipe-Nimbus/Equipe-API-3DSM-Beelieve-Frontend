@@ -8,6 +8,8 @@ export function formatarEstrutura(tabelaWBS){
           id_sub_projeto: linha.id,
           ordem_sub_projeto: linha.nivel,
           nome_sub_projeto: linha.descricao,
+          orcamento_sub_projeto: linha.orcamento,
+          hora_humano_sub_projeto: parseFloat(linha.hora_homem),
           nivel_sub_projeto: [],
         })
 
@@ -23,6 +25,8 @@ export function formatarEstrutura(tabelaWBS){
           id_nivel_sub_projeto: linha.id,
           ordem_nivel_sub_projeto: linha.nivel,
           nome_nivel_sub_projeto: linha.descricao,
+          orcamento_nivel_sub_projeto: linha.orcamento,
+          hora_humano_nivel_sub_projeto: parseFloat(linha.hora_homem)
         })
       }
     })
