@@ -26,8 +26,7 @@ function FormCadastroProjeto() {
   })
   const navigate = useNavigate()
 
-  const [render, setRender] = useState(0);
-
+  const [render, setRender] = useState(0)
 
   const [tabelaWBS, setTabelaWBS] = useState([
     {
@@ -35,14 +34,15 @@ function FormCadastroProjeto() {
       descricao: "Objetivo Final",
     },
   ])
-  
-  useEffect(() => {}, [render]);
+
+  useEffect(() => {}, [render])
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
       nome_projeto: data.nomeProjeto,
       descricao_projeto: data.descricaoProjeto,
       valor_hora_projeto: data.valorHora,
+      ordem_projeto: 1,
       sub_projetos: [],
     }
 
@@ -56,16 +56,22 @@ function FormCadastroProjeto() {
     const projeto = gerarJsonProjeto(data)
 
     //console.log(projeto)
-    await axios.post("/projeto/cadastrar", projeto).then(() => {
-      navigate("/projetos")
+    await axios.post("/projeto/cadastrar", projeto).then((response) => {
+      if (response.status === 200) {
+        window.alert("Cadastro realizado com sucesso!")
+        navigate("/projetos")
+      }
+      else {
+        window.alert("Erro ao realizar o cadastro :(")
+      }
     })
   }
-  
+
   const handlerBlur = (evento) => {
-	  let tabela = tabelaWBS
-	  tabela[0].descricao = evento.target.value
-	  setTabelaWBS(tabela)
-	  setRender(render + 1)
+    let tabela = tabelaWBS
+    tabela[0].descricao = evento.target.value
+    setTabelaWBS(tabela)
+    setRender(render + 1)
   }
 
   const handleInputDinheiro = (event, value, maskedValue) => {
@@ -87,7 +93,9 @@ function FormCadastroProjeto() {
           id="nomeProjeto"
           className="w-1/2 rounded-md border border-n70 p-1"
           {...register("nomeProjeto")}
-          onBlur={(e)=>{handlerBlur(e)}}
+          onBlur={(e) => {
+            handlerBlur(e)
+          }}
         />
         {errors?.nomeProjeto && (
           <label
@@ -142,7 +150,11 @@ function FormCadastroProjeto() {
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
-        <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} edicaoNivel1={false}/>
+        <TabelaWbs
+          tabelaWBS={tabelaWBS}
+          setTabelaWBS={setTabelaWBS}
+          edicaoNivel1={false}
+        />
       </div>
       <div className="mt-5 flex justify-end gap-5">
         <Button

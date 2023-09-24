@@ -83,18 +83,18 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
   }
 
   const saveTarefa = async () => {
-
     const geraJsonTarefas = listaTarefas()
 
     await axios
       .put("/tarefa/atualizar", geraJsonTarefas)
       .then((response) => {
         if (response.status === 200) {
-          console.log("Deu certo POHA")
+          window.alert("Tarefas atualizadas com sucesso!")
         }
       })
       .catch((error) => {
         if (error.response.status === 404) {
+          window.alert("Erro ao atualizar as tarefas")
           console.error("Recurso não encontrado.")
         } else {
           console.error("Erro:", error)

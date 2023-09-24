@@ -5,27 +5,26 @@ import Button from "./Button"
 
 import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
-import axios from '../services/axios'
+import axios from "../services/axios"
 
-function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar}) {
+function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar }) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
 
   const mudarVisualizacao = (valor) => {
     const view = valor
     setVisualizacaoAtual(view)
   }
-  
+
   const [render, setRender] = useState(0)
 
   const [tabelaWBS, setTabelaWBS] = useState(tabela)
   useEffect(() => {
     setTabelaWBS(tabela)
     console.log(projeto)
-
   }, [tabela, render])
 
   const atualizarEstruturaProjeto = async (e) => {
-   	setRender(render + 1)
+    setRender(render + 1)
     e.preventDefault()
     const novaEstrutura = formatarEstrutura(tabelaWBS)
     projeto.sub_projetos = novaEstrutura
@@ -34,13 +33,19 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar}) {
     //console.log('nova estrutura: ', projeto)
 
     try {
-      await axios.put("/projeto/atualizar/estrutura", projeto).then((response) => {
-        console.log('resposta: ', response)
-        setAtualizar(true)
+      await axios
+        .put("/projeto/atualizar/estrutura", projeto)
+        .then((response) => {
+          if ((response.status = 200)) {
+            console.log("resposta: ", response)
+            window.alert("Estrutura salva com sucesso!")
+            setAtualizar(true)
+          }
+          else {
+            window.alert("Ocorreu algum problema na atualização :(")
+          }
         })
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   return (
@@ -86,15 +91,24 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar}) {
       <hr className="border-n90" />
       <div className="mx-5">
         {visualizacaoAtual === "Tabela" && (
-          <form className="flex flex-col" onSubmit={(e) => atualizarEstruturaProjeto(e)}>
-            <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS}  edicaoNivel1={true}/>
-            <Button texto="Salvar" tipo="submit" className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary place-self-end"/>
+          <form
+            className="flex flex-col"
+            onSubmit={(e) => atualizarEstruturaProjeto(e)}
+          >
+            <TabelaWbs
+              tabelaWBS={tabelaWBS}
+              setTabelaWBS={setTabelaWBS}
+              edicaoNivel1={true}
+            />
+            <Button
+              texto="Salvar"
+              tipo="submit"
+              className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+            />
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (
-          <div classname="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-            
-          </div>
+          <div classname="m-5 rounded-md bg-bg100 p-7 drop-shadow-md"></div>
         )}
       </div>
     </div>

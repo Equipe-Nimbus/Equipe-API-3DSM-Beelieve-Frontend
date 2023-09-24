@@ -74,8 +74,14 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       await axios
         .put("/projeto/atualizar/orcamento", dadoOrcamentoProjeto)
         .then((response) => {
-          console.log("resposta: ", response)
-          setAtualizar(true)
+          if (response.status === 200) {
+            console.log("resposta: ", response)
+            window.alert("Detalhes dos pacotes atualizados com sucesso!")
+            setAtualizar(true)
+          }
+          else {
+            window.alert("Ocorreu algum problema na atualização :(")
+          }
         })
     } catch (error) {}
   }
@@ -117,18 +123,30 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     ) ? (
                       <Link
                         to={`/projetos/tarefas/${linha.id}`}
-                        state={{ tipo_pai: "subprojeto", tarefas: subProjetosAcessiveis.find(subprojeto => subprojeto.id_sub_projeto === linha.id)?.tarefas}}
+                        state={{
+                          tipo_pai: "subprojeto",
+                          tarefas: subProjetosAcessiveis.find(
+                            (subprojeto) =>
+                              subprojeto.id_sub_projeto === linha.id,
+                          )?.tarefas,
+                        }}
                       >
                         {linha.descricao}
                       </Link>
                     ) : (
                       <span>{linha.descricao}</span>
-                  ))}
+                    ))}
 
                   {linha.nivel.length > 3 && (
                     <Link
                       to={`/projetos/tarefas/${linha.id}`}
-                      state={{ tipo_pai: "nivelsubprojeto", tarefas: subProjetosAcessiveis.find(subprojeto => subprojeto.id_nivel_sub_projeto === linha.id)?.tarefas }}
+                      state={{
+                        tipo_pai: "nivelsubprojeto",
+                        tarefas: subProjetosAcessiveis.find(
+                          (subprojeto) =>
+                            subprojeto.id_nivel_sub_projeto === linha.id,
+                        )?.tarefas,
+                      }}
                     >
                       {linha.descricao}
                     </Link>
