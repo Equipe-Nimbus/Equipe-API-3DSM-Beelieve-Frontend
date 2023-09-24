@@ -1,7 +1,9 @@
 import App from "./App";
 import ListaProjeto from "./pages/ListaProjeto";
 import NovoProjeto from "./pages/NovoProjeto";
-import DetalhesProjeto from './pages/DetalhesProjeto'
+import DetalhesProjeto from './pages/DetalhesProjeto';
+import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
+
 
 const router = [
     {
@@ -23,6 +25,10 @@ const router = [
                 path: ":id",
                 element: <DetalhesProjeto/>,
             },
+            {
+                path: "/tarefas",
+                element: <NovaTarefa/>
+            }
         ]
     }
 ]

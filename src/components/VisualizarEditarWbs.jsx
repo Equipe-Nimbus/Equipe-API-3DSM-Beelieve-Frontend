@@ -14,18 +14,23 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar}) {
     const view = valor
     setVisualizacaoAtual(view)
   }
+  
+  const [render, setRender] = useState(0)
 
   const [tabelaWBS, setTabelaWBS] = useState(tabela)
   useEffect(() => {
     setTabelaWBS(tabela)
-  }, [tabela])
+    console.log(projeto)
+
+  }, [tabela, render])
 
   const atualizarEstruturaProjeto = async (e) => {
+   	setRender(render + 1)
     e.preventDefault()
-
     const novaEstrutura = formatarEstrutura(tabelaWBS)
-
     projeto.sub_projetos = novaEstrutura
+    projeto.nome_projeto = tabelaWBS[0].descricao
+
     //console.log('nova estrutura: ', projeto)
 
     try {
@@ -82,7 +87,7 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar}) {
       <div className="mx-5">
         {visualizacaoAtual === "Tabela" && (
           <form className="flex flex-col" onSubmit={(e) => atualizarEstruturaProjeto(e)}>
-            <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS} />
+            <TabelaWbs tabelaWBS={tabelaWBS} setTabelaWBS={setTabelaWBS}  edicaoNivel1={true}/>
             <Button texto="Salvar" tipo="submit" className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary place-self-end"/>
           </form>
         )}

@@ -12,8 +12,6 @@ const schemaProjetoInicial = yup.object().shape({
 
   valorHora: yup
     .number()
-    .required("Valor/Hora é obrigatório")
-    .positive("Valor/Hora é obrigatório")
 })
 
 export default schemaProjetoInicial
