@@ -24,9 +24,8 @@ function FormCadastroProjeto() {
     },
     resolver: yupResolver(schemaProjetoInicial),
   })
+  
   const navigate = useNavigate()
-
-  const [render, setRender] = useState(0)
 
   const [tabelaWBS, setTabelaWBS] = useState([
     {
@@ -35,7 +34,7 @@ function FormCadastroProjeto() {
     },
   ])
 
-  useEffect(() => {}, [render])
+  useEffect(() => {}, [tabelaWBS])
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
@@ -68,10 +67,9 @@ function FormCadastroProjeto() {
   }
 
   const handlerBlur = (evento) => {
-    let tabela = tabelaWBS
+    let tabela = [...tabelaWBS]
     tabela[0].descricao = evento.target.value
     setTabelaWBS(tabela)
-    setRender(render + 1)
   }
 
   const handleInputDinheiro = (event, value, maskedValue) => {

@@ -7,7 +7,7 @@ import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from "../services/axios"
 
-function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar }) {
+function VisualizarEditarWbs({ projeto, tabela, setAtualizar }) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
 
   const mudarVisualizacao = (valor) => {
@@ -15,16 +15,13 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar }) {
     setVisualizacaoAtual(view)
   }
 
-  const [render, setRender] = useState(0)
-
   const [tabelaWBS, setTabelaWBS] = useState(tabela)
+
   useEffect(() => {
     setTabelaWBS(tabela)
-    console.log(projeto)
-  }, [tabela, render])
+  }, [tabela])
 
   const atualizarEstruturaProjeto = async (e) => {
-    setRender(render + 1)
     e.preventDefault()
     const novaEstrutura = formatarEstrutura(tabelaWBS)
     projeto.sub_projetos = novaEstrutura
@@ -108,7 +105,7 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar }) {
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (
-          <div classname="m-5 rounded-md bg-bg100 p-7 drop-shadow-md"></div>
+          <></>
         )}
       </div>
     </div>

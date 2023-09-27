@@ -53,8 +53,6 @@ function DetalhesProjeto() {
     return tabela
   }
 
-  //console.log("Renderizou")
-
   useEffect(() => {
     getProjeto()
 
@@ -88,7 +86,6 @@ function DetalhesProjeto() {
         <VisualizarEditarWbs
           projeto={projeto}
           tabela={tabela}
-          atualizar={atualizar}
           setAtualizar={setAtualizar}
         />
       )}
