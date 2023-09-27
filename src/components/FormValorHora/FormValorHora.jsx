@@ -96,25 +96,25 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       <hr className="border-n90" />
       <form
         onSubmit={handleSubmit(atualizarDetalhesPacotes)}
-        className="my-10 flex flex-col gap-2"
+        className="my-10 flex flex-col"
       >
-        <table class="mx-auto mt-5 w-2/3">
+        <table className="mx-auto mt-5 w-2/3 text-left">
           <thead className="bg-primary98 p-10 text-base uppercase">
             <tr>
-              <th class="border px-6 py-3">Nível</th>
-              <th class="border">Descrição</th>
-              <th class="border">Orçamento</th>
-              <th class="border">Hora Homem</th>
-              <th class="border">Atribuição</th>
+              <th className="px-6 py-3">Nível</th>
+              <th className="">Descrição</th>
+              <th className="">Orçamento</th>
+              <th className="">Hora Homem</th>
+              <th className="">Atribuição</th>
             </tr>
           </thead>
           <tbody>
             {fields.map((linha, index) => (
-              <tr key={index}>
-                <td class="border px-4 py-1.5 text-lg font-semibold">
+              <tr key={index} className="border-b border-n90">
+                <td className="px-4 py-3 text-lg font-semibold">
                   {linha.nivel}
                 </td>
-                <td class="border px-4">
+                <td className="text-lg font-regular">
                   {linha.nivel === "1" && linha.descricao}
 
                   {linha.nivel.length === 3 &&
@@ -152,7 +152,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     </Link>
                   )}
                 </td>
-                <td class="border px-4">
+                <td>
                   <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].orcamento`}
                     {...register(`estruturaDetalhes[${index}].orcamento`)}
@@ -163,7 +163,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     onChange={(e, value) => handleOrcamento(index, value)}
                   />
                 </td>
-                <td class="border px-4">
+                <td>
                   <input
                     id="hora"
                     name={`estruturaDetalhes[${index}].hora_homem`}
@@ -172,7 +172,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     type="number"
                   />
                 </td>
-                <td class="break-all border px-1">{}</td>
+                <td></td>
               </tr>
             ))}
           </tbody>

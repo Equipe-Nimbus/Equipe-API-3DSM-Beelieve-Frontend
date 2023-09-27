@@ -18,7 +18,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
         </thead>
         <tbody className="text-lg">
           {tabelaWBS.map((linha, index) => (
-            <tr key={index}>
+            <tr key={index} className="border-b border-n90">
               <td className="w-1/4 px-4 py-1.5 font-semibold">{linha.nivel}</td>
               <td className="w-1/4 px-4 py-1.5">
               {!edicaoNivel1 && linha.nivel === "1" ?
