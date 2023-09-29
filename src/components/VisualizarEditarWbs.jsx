@@ -7,7 +7,7 @@ import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from "../services/axios"
 
-function VisualizarEditarWbs({ projeto, tabela, setAtualizar }) {
+function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
 
   const mudarVisualizacao = (valor) => {
@@ -15,26 +15,20 @@ function VisualizarEditarWbs({ projeto, tabela, setAtualizar }) {
     setVisualizacaoAtual(view)
   }
 
-  const [tabelaWBS, setTabelaWBS] = useState(tabela)
-
-  useEffect(() => {
-    setTabelaWBS(tabela)
-  }, [tabela])
-
   const atualizarEstruturaProjeto = async (e) => {
     e.preventDefault()
-    const novaEstrutura = formatarEstrutura(tabelaWBS)
+    const novaEstrutura = formatarEstrutura(tabela)
     projeto.sub_projetos = novaEstrutura
-    projeto.nome_projeto = tabelaWBS[0].descricao
+    projeto.nome_projeto = tabela[0].descricao
 
-    //console.log('nova estrutura: ', projeto)
+    //console.log('NOVO PROJETO EDITADO: ', projeto)
 
     try {
       await axios
         .put("/projeto/atualizar/estrutura", projeto)
         .then((response) => {
           if ((response.status = 200)) {
-            console.log("resposta: ", response)
+            //console.log("resposta: ", response)
             window.alert("Estrutura salva com sucesso!")
             setAtualizar(true)
           }
@@ -93,8 +87,8 @@ function VisualizarEditarWbs({ projeto, tabela, setAtualizar }) {
             onSubmit={(e) => atualizarEstruturaProjeto(e)}
           >
             <TabelaWbs
-              tabelaWBS={tabelaWBS}
-              setTabelaWBS={setTabelaWBS}
+              tabelaWBS={tabela}
+              setTabelaWBS={setTabela}
               edicaoNivel1={true}
             />
             <Button

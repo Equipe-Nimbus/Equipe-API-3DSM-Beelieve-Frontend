@@ -29,7 +29,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       }
     })
 
-    console.log(subProjetosFiltrados)
+    //console.log(subProjetosFiltrados)
     setSubProjetosAcessiveis(subProjetosFiltrados)
   }
 
@@ -38,8 +38,8 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       id: linha.id,
       nivel: linha.nivel,
       descricao: linha.descricao,
-      orcamento: 0,
-      hora_homem: 0,
+      orcamento: linha.orcamento ? linha.orcamento : 0,
+      hora_homem: linha.hora_homem ? linha.hora_homem : 0,
     }
   })
 

@@ -181,8 +181,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
         }
       })
     }
-
-    setTabelaWBS(novaTabela)
+    setTabelaWBS([...novaTabela])
   }
 
   return <>{gerarTabela(tabelaWBS)}</>

@@ -1,5 +1,7 @@
 export function formatarEstrutura(tabelaWBS){
 
+  //console.log('TABELA QUE CHEGA PRA FORMATAR: ', tabelaWBS)
+
     const estrutura = []
     let nivelSubProjeto = ""
     tabelaWBS.forEach((linha) => {
@@ -31,5 +33,8 @@ export function formatarEstrutura(tabelaWBS){
       }
     })
 
+
+
+    //console.log('ESTRUTURA QUE SAI: ', estrutura)
     return estrutura
 }
