@@ -174,12 +174,14 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                   />
                 </td>
                 <td class="border px-4">
-                  <textarea 
-                    id="materias"
+                  <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].materiais`}
                     {...register(`estruturaDetalhes[${index}].materiais`)}
-                    defaultValue={linha.materias}
+                    defaultValue={linha.materiais}
                     type="text"
+                    currency="BRL"
+                    config={formatacaoDinheiro}
+                    onChange={(e, value) => handleOrcamento(index, value)}
                   />
                 </td>
                 <td class="break-all border px-1">{ }</td>
