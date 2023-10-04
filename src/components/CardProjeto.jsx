@@ -15,6 +15,7 @@ function CardProjeto({ titulo, descricao, estadoProjeto, onClick }) {
         ) : (
           <p className="my-6 text-on-light">Não Iniciado</p>
         )}
+        <p className="text-sm text-n40">{`Responsável: ${sessionStorage.getItem('chefe_projeto')}`}</p>
       </div>
     </>
   )
