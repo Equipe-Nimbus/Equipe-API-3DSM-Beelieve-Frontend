@@ -101,11 +101,12 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         <table className="mx-auto border px-16 rounded">
           <thead className="bg-primary98 p-10 text-base uppercase">
             <tr>
-              <th class="border px-16 py-3">Nível</th>
-              <th class="border px-16 py-3">Descrição</th>
-              <th class="border px-16 py-3">Orçamento</th>
+              <th class="border px-12 py-3">Nível</th>
+              <th class="border px-12 py-3">Descrição</th>
+              <th class="border px-12 py-3">Orçamento</th>
               <th class="border px-6 py-3">Hora Homem</th>
-              <th class="border px-16 py-3">Atribuição</th>
+              <th class="">Materiais</th>
+              <th class="border px-12 py-3">Atribuição</th>
             </tr>
           </thead>
           <tbody>
@@ -172,12 +173,21 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     type="number"
                   />
                 </td>
+                <td class="border px-4">
+                  <textarea 
+                    id="materias"
+                    name={`estruturaDetalhes[${index}].materiais`}
+                    {...register(`estruturaDetalhes[${index}].materiais`)}
+                    defaultValue={linha.materias}
+                    type="text"
+                  />
+                </td>
                 <td class="break-all border px-1">{ }</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="mt-7 ml-16">
+        <div className="mt-7 ml-6">
           <input className="border px-2 py-1 rounded w-36 font-bold" type='text' value={`Hora = R$ ${sessionStorage.getItem('valor')} `} readOnly />
         </div>
         <Button
