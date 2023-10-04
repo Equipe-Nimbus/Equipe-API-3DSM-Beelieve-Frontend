@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import Button from "./Button"
 
 import { FiPlus, FiMinus } from "react-icons/fi"
