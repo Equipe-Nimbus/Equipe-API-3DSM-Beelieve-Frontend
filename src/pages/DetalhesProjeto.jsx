@@ -22,6 +22,7 @@ function DetalhesProjeto() {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data
+        //console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
@@ -33,6 +34,8 @@ function DetalhesProjeto() {
       id: 0,
       nivel: "1",
       descricao: projeto.nome_projeto,
+      orcamento: projeto.orcamento_projeto,
+      hora_homem: projeto.hora_humano_total,
     })
 
     projeto.sub_projetos?.forEach((subprojeto) => {
@@ -40,6 +43,8 @@ function DetalhesProjeto() {
         id: subprojeto.id_sub_projeto,
         nivel: subprojeto.ordem_sub_projeto,
         descricao: subprojeto.nome_sub_projeto,
+        orcamento: subprojeto.orcamento_sub_projeto,
+        hora_homem: subprojeto.hora_humano_sub_projeto,
       })
 
       subprojeto.nivel_sub_projeto?.forEach((nivel) => {
@@ -47,13 +52,13 @@ function DetalhesProjeto() {
           id: nivel.id_nivel_sub_projeto,
           nivel: nivel.ordem_nivel_sub_projeto,
           descricao: nivel.nome_nivel_sub_projeto,
+          orcamento: nivel.orcamento_nivel_sub_projeto,
+          hora_homem: nivel.hora_humano_nivel_sub_projeto,
         })
       })
     })
     return tabela
   }
-
-  console.log("Renderizou")
 
   useEffect(() => {
     getProjeto()
@@ -79,7 +84,7 @@ function DetalhesProjeto() {
         liderProjeto={projeto.chefe_projeto}
       />
       <MenuSelecao
-        opcoes={["ESTRUTURA", "PACOTES"]}
+        opcoes={["ESTRUTURA", "PACOTES", "CRONOGRAMA"]}
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
@@ -88,7 +93,7 @@ function DetalhesProjeto() {
         <VisualizarEditarWbs
           projeto={projeto}
           tabela={tabela}
-          atualizar={atualizar}
+          setTabela={setTabela}
           setAtualizar={setAtualizar}
         />
       )}
