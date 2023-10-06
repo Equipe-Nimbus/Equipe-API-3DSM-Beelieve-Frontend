@@ -2,11 +2,33 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import Button from "./Button"
+import Swal from 'sweetalert2';
 
+import { useNavigate } from "react-router-dom"
 import { BsPlayFill } from "react-icons/bs"
 
-function VisaoGeral({nomeProjeto, descricaoProjeto, liderProjeto}) {
-  const [projetoIniciado, setProjetoIniciado] = useState()
+const handleExcluirProjetoClick = () => {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Cuidado!',
+    text: 'Tem certeza que deseja excluir esse projeto?',
+    showDenyButton: true,
+    confirmButtonText: 'Sim',
+    denyButtonText: `Não`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire('Excluido com sucesso!', '', 'success')
+    } else if (result.isDenied) {
+    }
+  });
+};
+
+function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoIniciado }) {
+  const navigate = useNavigate()
+  const dataAtual = new Date();
+  const ano = dataAtual.getFullYear();
+  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+  const dataInicio = `${mes}-${ano}`;
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
@@ -22,14 +44,26 @@ function VisaoGeral({nomeProjeto, descricaoProjeto, liderProjeto}) {
             {descricaoProjeto}
           </p>
         </div>
-        {projetoIniciado &&
-          <Button
-            texto="Iniciar projeto"
-            iconeOpcional={BsPlayFill}
-            iconeTamanho="20px"
-            className="mr-5 flex  h-1/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-          />
-        }
+        <div className="flex flex-col gap-5">
+          {projetoIniciado == null && (
+            <>
+              <Button
+                texto="Iniciar projeto"
+                iconeOpcional={BsPlayFill}
+                iconeTamanho="20px"
+                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+                onClick={() => navigate(`/projetos/iniciarprojeto/${dataInicio}`)}
+              />
+              <Button
+                texto="Excluir projeto"
+                iconeOpcional={BsPlayFill}
+                iconeTamanho="20px"
+                onClick={handleExcluirProjetoClick}
+                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
+              />
+            </>
+          )}
+        </div>
       </div>
 
       <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
