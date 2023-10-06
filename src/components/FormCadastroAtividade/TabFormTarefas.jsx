@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { BiTrash } from "react-icons/bi"
-
+import {AiOutlinePlus} from "react-icons/ai"
 //import schemaInsercaoAtividade from './validationAtividade';
 import Button from "../Button"
 import axios from "../../services/axios"
 
-const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
+const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto }) => {
   const [tarefa, setTarefa] = useState([
     {
       id: "",
@@ -144,17 +144,18 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
 
   return (
     <div>
-      <button onClick={() => window.history.back()}>Voltar</button>
-      <h1>Pacote de trabalho: {}</h1>
+      <h1 className="text-complementary-20 text-3xl mb-5">{nomeProjeto}</h1>
+      <h2 className="text-2xl mb-2">Pacote de trabalho: {`${ordem} - ${nomePacote}`}</h2>
       <hr className="border-n90" />
 
       <div className="flex flex-col gap-2">
         <div className="ps-40">
           <button
             onClick={addRow}
-            className="mt-9 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
+            className="flex mt-9 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
           >
             Adicionar tarefa
+            <AiOutlinePlus className="ml-1 mt-2" />
           </button>
         </div>
 
@@ -230,7 +231,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
           </tbody>
         </table>
 
-        <div className="place-self-end mr-10">
+        <div className="place-self-end mr-40">
           <Button
             texto="Salvar"
             tipo="button"

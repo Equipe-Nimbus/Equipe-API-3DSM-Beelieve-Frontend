@@ -125,10 +125,11 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                         to={`/projetos/tarefas/${linha.id}`}
                         state={{
                           tipo_pai: "subprojeto",
-                          tarefas: subProjetosAcessiveis.find(
+                          subprojeto: subProjetosAcessiveis.find(
                             (subprojeto) =>
                               subprojeto.id_sub_projeto === linha.id,
-                          )?.tarefas,
+                          ),
+                          nomeProjeto: projeto.nome_projeto
                         }}
                       >
                         {linha.descricao}
@@ -142,10 +143,11 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                       to={`/projetos/tarefas/${linha.id}`}
                       state={{
                         tipo_pai: "nivelsubprojeto",
-                        tarefas: subProjetosAcessiveis.find(
+                        subprojeto: subProjetosAcessiveis.find(
                           (subprojeto) =>
                             subprojeto.id_nivel_sub_projeto === linha.id,
-                        )?.tarefas,
+                        ),
+                        nomeProjeto: projeto.nome_projeto
                       }}
                     >
                       {linha.descricao}

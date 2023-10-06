@@ -21,6 +21,7 @@ module.exports = {
       "on-primary": "#191919" /* Em fundo da cor primária */,
       "on-light": "#191919" /* Em fundos claros (branco, azul clarinho) */,
       "on-bg22": "#DADDE6" /* Em fundo azul médio */,
+      "azulzin": "#0E1420",
 
       /* Tons de cinza */
       n90: "#E6E6E6",
