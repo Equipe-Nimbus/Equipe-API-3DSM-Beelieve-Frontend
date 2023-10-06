@@ -37,24 +37,25 @@ function LerExcel({niveisExcel, setniveisExcel}) {
             const splitValue = (item.usavel ?? '').trim().split(' ');
         
             if (index === 0) {
-                acc.projeto = {
-                    ordem_projeto: splitValue.shift().replace('.', ''),
-                    nome_projeto: splitValue.join(' ') 
-                };
+                if (!acc.subProjeto) {
+                    acc.subProjeto = [];
+                }
+                acc.subProjeto.push({
+                    nivel: splitValue.shift().replace('.', ''),
+                    descricao: splitValue.join(' ') 
+                });
             } else if (dots === 1 || dots === 2) { 
                 if (!acc.subProjeto) {
                     acc.subProjeto = [];
                 }
                 acc.subProjeto.push({
-                    ordem_sub_projeto: splitValue.shift(),
-                    nome_sub_projeto: splitValue.join(' ')
+                    nivel: splitValue.shift(),
+                    descricao: splitValue.join(' ')
                 });
             }
         
             return acc;
         }, {});
-
-          // console.log(filteredWBS)
             setniveisExcel(filteredWBS)
         };
     }
@@ -68,7 +69,7 @@ function LerExcel({niveisExcel, setniveisExcel}) {
             type="file"
             accept=".xlsx, .xls"
             onChange={handleFileUpload}
-            className="bg-primary50 text-on-primary mb-5  flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"
+            className="bg-primary50 text-on-primary mb-5 flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"
             />
         </div>
     )

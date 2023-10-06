@@ -58,8 +58,8 @@ function FormCadastroProjeto() {
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
 
-    //console.log(projeto)
-    await axios.post("/projeto/cadastrar", projeto).then((response) => {
+    console.log(projeto)
+    /* await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
         window.alert("Cadastro realizado com sucesso!")
         navigate("/projetos")
@@ -67,7 +67,7 @@ function FormCadastroProjeto() {
       else {
         window.alert("Erro ao realizar o cadastro :(")
       }
-    })
+    }) */
   }
 
   const handlerBlur = (evento) => {
@@ -81,10 +81,22 @@ function FormCadastroProjeto() {
     setValue("valorHora", value)
   }
 
-  console.log(niveisExcel)
+  //console.log(niveisExcel)
+
+  useEffect(() => {
+    if(niveisExcel.subProjeto){
+      setValue("nomeProjeto", niveisExcel.subProjeto[0].descricao)
+      let tabela = [...tabelaWBS]
+      tabela = niveisExcel.subProjeto
+      console.log("TABELA", tabela)
+      setTabelaWBS(tabela) 
+    }
+  }, [niveisExcel])
+
   return (
     <form onSubmit={handleSubmit(cadastrarProjeto)}>
       <LerExcel niveisExcel={niveisExcel} setniveisExcel={setniveisExcel} />
+      <hr className="border-n90" />
       <div className="mt-4 flex flex-col">
         <label
           htmlFor="nomeProjeto"
