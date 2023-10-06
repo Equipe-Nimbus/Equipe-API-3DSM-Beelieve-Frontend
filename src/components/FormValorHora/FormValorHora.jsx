@@ -14,6 +14,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
 
   useEffect(() => {
     checarNivelSubProjeto(projeto.sub_projetos)
+    
   }, [])
 
   const checarNivelSubProjeto = (subprojetos) => {
@@ -40,6 +41,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       descricao: linha.descricao,
       orcamento: 0,
       hora_homem: 0,
+      materiais:0
     }
   })
 
@@ -58,6 +60,10 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   const handleOrcamento = async (index, valor) => {
     setValue(`estruturaDetalhes[${index}].orcamento`, valor)
   }
+  
+  const handleMateriais = async (index, valor) => {
+    setValue(`estruturaDetalhes[${index}].materiais`, valor)
+  }
 
   const atualizarDetalhesPacotes = async (data) => {
     const estruturaPreenchida = data.estruturaDetalhes
@@ -67,9 +73,11 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     projeto.orcamento_projeto = estruturaPreenchida[0].orcamento
     projeto.hora_humano_total = parseFloat(estruturaPreenchida[0].hora_homem)
     projeto.sub_projetos = novaEstrutura
-
+    
+    projeto.materiais_projeto = estruturaPreenchida[0].materiais
+	
     const dadoOrcamentoProjeto = projeto
-
+    
     try {
       await axios
         .put("/projeto/atualizar/orcamento", dadoOrcamentoProjeto)
@@ -85,6 +93,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         })
     } catch (error) { }
   }
+
 
   return (
     <div>
@@ -181,7 +190,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     type="text"
                     currency="BRL"
                     config={formatacaoDinheiro}
-                    onChange={(e, value) => handleOrcamento(index, value)}
+                    onChange={(e, value) => handleMateriais(index, value)}
                   />
                 </td>
                 <td class="break-all border px-1">{ }</td>
