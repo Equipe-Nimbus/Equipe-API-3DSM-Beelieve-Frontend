@@ -152,7 +152,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto 
         <div className="ps-40">
           <button
             onClick={addRow}
-            className="flex mt-9 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
+            className="flex mt-9 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary ml-4"
           >
             Adicionar tarefa
             <AiOutlinePlus className="ml-1 mt-2" />
