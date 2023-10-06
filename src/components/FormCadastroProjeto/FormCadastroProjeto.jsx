@@ -7,12 +7,16 @@ import IntlCurrencyInput from "react-intl-currency-input"
 import schemaProjetoInicial from "./validation"
 import TabelaWbs from "../TabelaWbs"
 import Button from "../Button"
+import LerExcel from "../LerExcel"
 
 import axios from "../../services/axios"
 import { formatarEstrutura } from "../../utils/formatarEstrutura"
 import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 
-function FormCadastroProjeto() {
+
+function FormCadastroProjeto() { 
+  const [niveisExcel, setniveisExcel] = useState({})
+
   const {
     register,
     handleSubmit,
@@ -77,8 +81,10 @@ function FormCadastroProjeto() {
     setValue("valorHora", value)
   }
 
+  console.log(niveisExcel)
   return (
     <form onSubmit={handleSubmit(cadastrarProjeto)}>
+      <LerExcel niveisExcel={niveisExcel} setniveisExcel={setniveisExcel} />
       <div className="mt-4 flex flex-col">
         <label
           htmlFor="nomeProjeto"

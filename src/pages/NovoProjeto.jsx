@@ -3,7 +3,6 @@ import Button from "../components/Button";
 import FormCadastroProjeto from "../components/FormCadastroProjeto/FormCadastroProjeto";
 
 import { HiOutlineArrowUpCircle } from "react-icons/hi2";
-import LerExcel from "../components/LerExcel";
 
 function NovoProjeto() {
   return (
@@ -16,7 +15,6 @@ function NovoProjeto() {
           iconeTamanho="24px"
           className="bg-primary50 text-on-primary mb-5  flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"
         /> */}
-        <LerExcel/>
         <hr className="border-n90" />
         <FormCadastroProjeto />
       </div>

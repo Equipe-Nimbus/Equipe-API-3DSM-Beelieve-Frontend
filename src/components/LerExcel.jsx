@@ -1,11 +1,7 @@
-import { useState } from 'react';
-import { json } from 'react-router-dom';
 import * as XLSX from "xlsx";
- 
-function LerExcel() {
+
+function LerExcel({niveisExcel, setniveisExcel}) {
     
-    const [data, setdata] = useState([])
- 
     const handleFileUpload = (e) =>{
         const reader = new FileReader();
         reader.readAsBinaryString(e.target.files[0]);
@@ -16,50 +12,55 @@ function LerExcel() {
             const sheet = workbook.Sheets[sheetName];
             const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 }); 
             const selectedData = parsedData.map(row => [row[0]]);
+            const jsonWBS = JSON.stringify(selectedData.map(item => {
+              const value = item.toString();
+              const valueArray = value.split(' ');
+          
+              let result = {};
+          
+              if (valueArray.length === 1) {
+              } else {
+                  result.usavel = value;
+              }
+              
+              return result;
+          }));
+          
+        
+          const parsedJsonWBS = JSON.parse(jsonWBS);
+          var filteredWBS = parsedJsonWBS.filter(obj => Object.keys(obj).length !== 0);
+          filteredWBS.pop()
+          
+        
+          var filteredWBS = filteredWBS.reduce((acc, item, index) => {
+            const dots = (item.usavel ?? '').trim().split('.').length - 1;
+            const splitValue = (item.usavel ?? '').trim().split(' ');
+        
+            if (index === 0) {
+                acc.projeto = {
+                    ordem_projeto: splitValue.shift().replace('.', ''),
+                    nome_projeto: splitValue.join(' ') 
+                };
+            } else if (dots === 1 || dots === 2) { 
+                if (!acc.subProjeto) {
+                    acc.subProjeto = [];
+                }
+                acc.subProjeto.push({
+                    ordem_sub_projeto: splitValue.shift(),
+                    nome_sub_projeto: splitValue.join(' ')
+                });
+            }
+        
+            return acc;
+        }, {});
 
-            setdata(selectedData);
+          // console.log(filteredWBS)
+            setniveisExcel(filteredWBS)
         };
     }
 
-    const jsonWBS = JSON.stringify(data.map(item => {
-        const value = item.toString();
-        const valueArray = value.split(' ');
-    
-        let result = {};
-    
-        if (valueArray.length === 1) {
-        } else {
-            result.usavel = value;
-        }
-        
-        return result;
-    }));
-    
-    const parsedJsonWBS = JSON.parse(jsonWBS);
-    const filteredWBS = parsedJsonWBS.filter(obj => Object.keys(obj).length !== 0);
-    filteredWBS.pop()
-      
-    const niveis = filteredWBS.reduce((acc, item, index) => {
-        const dots = (item.usavel ?? '').trim().split('.').length - 1;
-      
-        if (index === 0) {
-          acc.projeto = (item.usavel ?? '').trim();
-        } else if (dots === 1) {
-          if (!acc.subProjeto) {
-            acc.subProjeto = [];
-          }
-          acc.subProjeto.push((item.usavel ?? '').trim());
-        } else if (dots === 2) {
-          if (!acc.subNivel) {
-            acc.subNivel = [];
-          }
-          acc.subNivel.push((item.usavel ?? '').trim());
-        }
-      
-        return acc;
-      }, {});
 
-    console.log(niveis);
+
 
     return (
         <div>
@@ -69,14 +70,6 @@ function LerExcel() {
             onChange={handleFileUpload}
             className="bg-primary50 text-on-primary mb-5  flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"
             />
-
-<tbody>
-    {data.map((row, index) => (
-        <tr key={index}>
-            <td>{row[0]}</td>
-        </tr>
-    ))}
-</tbody>
         </div>
     )
 }    

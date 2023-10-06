@@ -1,10 +1,11 @@
 import React, { useEffect } from "react"
 import Button from "./Button"
 
+
 import { FiPlus, FiMinus } from "react-icons/fi"
 
 function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
-	
+
 	
   const gerarTabela = (tabelaWBS) => {
     return (
