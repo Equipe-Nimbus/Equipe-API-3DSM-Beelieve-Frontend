@@ -7,6 +7,8 @@ import Button from "../Button"
 import schemaCronograma from "./validation"
 import axios from "../../services/axios"
 
+import { FiPlus, FiMinus } from "react-icons/fi"
+
 function Cronograma({ idProjeto }) {
   const [cronograma, setCronograma] = useState({})
 
@@ -58,7 +60,7 @@ function Cronograma({ idProjeto }) {
       const regexNumeros = /^[-+]?\d+(\.\d+)?$/
 
       if (!regexNumeros.test(valor)) {
-        setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, 0)
+        setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, '0%')
       } else {
         valor = valor + "%"
         setValue(
@@ -71,15 +73,17 @@ function Cronograma({ idProjeto }) {
 
   const renderizarColunas = () => {
     return fields?.map((mes, indexMes) => (
-      <th key={indexMes}>{mes.mes_cronograma}</th>
+      <th key={indexMes} className="px-6 py-3 text-center">
+        {mes.mes_cronograma}
+      </th>
     ))
   }
 
   const renderizarLinhas = () => {
     return fields[0]?.niveis.map((nivel, indexNivel) => (
-      <tr key={indexNivel}>
+      <tr key={indexNivel} className="even:bg-amber-100 odd:bg-blue-100">
         {renderizarColunas().map((coluna, indexMes) => (
-          <td key={indexMes}>
+          <td key={indexMes} className="px-1 py-5 text-lg">
             <input
               type="text"
               {...register(
@@ -88,12 +92,42 @@ function Cronograma({ idProjeto }) {
               onBlur={(e) =>
                 blurPorcentagem(e.target.value, indexMes, indexNivel)
               }
+              className="text-center"
             />
           </td>
         ))}
       </tr>
     ))
   }
+
+  const adicionarMes = () => {
+    const ultimoMes =
+      cronograma.lista_cronograma[cronograma.lista_cronograma.length - 1]
+    //console.log(ultimoMes)
+
+    const novoMes = {
+      mes_cronograma: `Mês ${ultimoMes.ordem_mes_cronograma + 1}`,
+      ordem_mes_cronograma: ultimoMes.ordem_mes_cronograma + 1,
+      niveis: ultimoMes.niveis,
+    }
+
+    const novoCronograma = { ...cronograma }
+    novoCronograma.lista_cronograma.push(novoMes)
+    setCronograma(novoCronograma)
+
+    //console.log(novoMes)
+  }
+
+  const removerMes = () => {
+    const novoCronograma = { ...cronograma }
+    novoCronograma.lista_cronograma.pop()
+
+    setCronograma(novoCronograma)
+  }
+
+  useEffect(() => {
+    setValue("cronograma", cronograma.lista_cronograma)
+  }, [cronograma])
 
   const atualizarCronograma = async (data) => {
     data.cronograma.forEach((mes) =>
@@ -117,42 +151,79 @@ function Cronograma({ idProjeto }) {
           window.alert("Planejamento salvo com sucesso!")
         }
       })
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit(atualizarCronograma)}>
-      <div className="flex">
-        <table>
-          <thead>
-            <tr>
-              <th>Nível</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fields[0]?.niveis.map((nivel, indexNivel) => (
-              <tr key={indexNivel}>
-                <td>{nivel.ordem_nivel}</td>
-                <td>{nivel.nome_nivel}</td>
+    <>
+      <h1 className="ml-5 text-xl font-semibold text-on-light">
+        Avanço planejado
+      </h1>
+      <hr className="border-n90"></hr>
+      <form onSubmit={handleSubmit(atualizarCronograma)}>
+        <div className="flex justify-center mt-5">
+          <table className="mt-5 text-left">
+            <thead className="bg-primary98 p-10 text-base uppercase">
+              <tr>
+                <th className="px-6 py-3">Nível</th>
+                <th className="px-6 py-3">Descrição</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="max-w-4xl overflow-auto">
-          <table>
-            <thead>
-              <tr>{renderizarColunas()}</tr>
             </thead>
-            <tbody>{renderizarLinhas()}</tbody>
+            <tbody>
+              {fields[0]?.niveis.map((nivel, indexNivel) => (
+                <tr key={indexNivel}>
+                  <td className="px-4 py-2 text-lg font-semibold">
+                    {nivel.ordem_nivel}
+                  </td>
+                  <td className="font-regular px-6 text-lg">
+                    {nivel.nome_nivel}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-        </div>
-      </div>
 
-      {errors?.cronograma && <p>{errors.cronograma.message}</p>}
-      <Button texto="teste" tipo="submit" />
-    </form>
+          <div className="max-w-6xl overflow-x-auto ">
+            <table className="mt-5 text-left">
+              <thead className="bg-primary98 p-10 text-base uppercase">
+                <tr>{renderizarColunas()}</tr>
+              </thead>
+              <tbody>{renderizarLinhas()}</tbody>
+            </table>
+          </div>
+        </div>
+        <div className="flex justify-between mt-5 mx-20">
+          <div>
+            <Button
+              iconeOpcional={FiMinus}
+              tipo="button"
+              onClick={(e) => {
+                removerMes()
+              }}
+              className="m-2 rounded-full bg-primary50"
+              iconeTamanho="28px"
+            />
+            <Button
+              iconeOpcional={FiPlus}
+              tipo="button"
+              onClick={(e) => {
+                adicionarMes()
+              }}
+              className="m-2 rounded-full bg-primary50"
+              iconeTamanho="28px"
+            />
+          </div>
+
+          <Button
+            texto="Salvar"
+            tipo="submit"
+            className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+          />
+        </div>
+      </form>
+    </>
   )
 }
 
