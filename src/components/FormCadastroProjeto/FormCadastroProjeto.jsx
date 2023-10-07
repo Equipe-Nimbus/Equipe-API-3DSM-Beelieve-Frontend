@@ -25,6 +25,8 @@ function FormCadastroProjeto() {
   } = useForm({
     defaultValues: {
       valorHora: 0,
+      prazoProjeto: null
+      
     },
     resolver: yupResolver(schemaProjetoInicial),
   })
@@ -45,6 +47,7 @@ function FormCadastroProjeto() {
       nome_projeto: data.nomeProjeto,
       descricao_projeto: data.descricaoProjeto,
       valor_hora_projeto: data.valorHora,
+      prazo_meses: data.prazoProjeto,
       ordem_projeto: 1,
       sub_projetos: [],
     }
@@ -161,6 +164,28 @@ function FormCadastroProjeto() {
         {errors?.valorHora && (
           <label htmlFor="valorHora" className="text-sm font-light text-error">
             {errors.valorHora.message}
+          </label>
+        )}
+      </div>
+      <div className="mt-4 flex flex-col">
+        <label
+          htmlFor="prazoProjeto"
+          className="text-base font-medium text-on-light"
+        >
+          Prazo (meses)
+        </label>
+        <input
+          type="number"
+          min={0}
+          className="w-1/2 rounded-md border border-n70 p-1"
+          {...register("prazoProjeto")}
+        />
+        {errors?.prazoProjeto && (
+          <label
+            htmlFor="prazoProjeto"
+            className="text-sm font-light text-error"
+          >
+            {errors.prazoProjeto.message}
           </label>
         )}
       </div>

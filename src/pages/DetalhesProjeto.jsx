@@ -7,6 +7,7 @@ import VisaoGeral from "../components/VisaoGeral"
 import MenuSelecao from "../components/MenuSelecao"
 import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 import FormValorHora from "../components/FormValorHora/FormValorHora"
+import Cronograma from "../components/Cronograma/Cronograma"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
@@ -100,12 +101,18 @@ function DetalhesProjeto() {
       )}
 
       {secaoAtual === "PACOTES" && (
-        <div class="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
           <FormValorHora
             tabela={tabela}
             projeto={projeto}
             setAtualizar={setAtualizar}
           />
+        </div>
+      )}
+
+      {secaoAtual === "CRONOGRAMA" && (
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <Cronograma idProjeto={id} />
         </div>
       )}
     </>
