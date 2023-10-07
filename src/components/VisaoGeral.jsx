@@ -19,12 +19,21 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoInicia
   const { id } = useParams()
 
   const handleIniciarProjetoClick = async () => {
-    try {
-      const response = await axios.post(`/projeto/${id}/iniciarprojeto/${dataInicio}`);
-      const dados = response.data;
-    } catch (error) {
-      console.error('Erro ao fazer a solicitação POST:', error);
-    }
+//    try {
+      const data = {
+        "data_inicio_projeto": dataInicio
+      }
+      const response = await (await axios.post(`/projeto/${id}/iniciarprojeto`, data)
+      .then(res => {
+        console.log("response:", res.data);
+      })
+      .catch(error => {
+        console.log("error", error);
+      }))
+     // const dados = response.data;
+   // } catch (error) {
+    //  console.error('Erro ao fazer a solicitação POST:', error);
+  //  }
   }
 
   const handleExcluirProjetoClick = () => {
