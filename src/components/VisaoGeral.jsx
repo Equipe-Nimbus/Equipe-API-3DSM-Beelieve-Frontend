@@ -1,27 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react"
+import React from "react"
+import { useParams } from "react-router-dom"
 import PropTypes from "prop-types"
 import Button from "./Button"
-import Swal from 'sweetalert2';
+
+import Swal from 'sweetalert2'
+import axios from "../services/axios"
 
 import { useNavigate } from "react-router-dom"
 import { BsPlayFill } from "react-icons/bs"
-
-const handleExcluirProjetoClick = () => {
-  Swal.fire({
-    icon: 'warning',
-    title: 'Cuidado!',
-    text: 'Tem certeza que deseja excluir esse projeto?',
-    showDenyButton: true,
-    confirmButtonText: 'Sim',
-    denyButtonText: `Não`,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire('Excluido com sucesso!', '', 'success')
-    } else if (result.isDenied) {
-    }
-  });
-};
 
 function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoIniciado }) {
   const navigate = useNavigate()
@@ -29,6 +16,32 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoInicia
   const ano = dataAtual.getFullYear();
   const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
   const dataInicio = `${mes}-${ano}`;
+  const { id } = useParams()
+
+  const handleIniciarProjetoClick = async () => {
+    try {
+      const response = await axios.post(`/projeto/${id}/iniciarprojeto/${dataInicio}`);
+      const dados = response.data;
+    } catch (error) {
+      console.error('Erro ao fazer a solicitação POST:', error);
+    }
+  }
+
+  const handleExcluirProjetoClick = () => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Cuidado!',
+      text: 'Tem certeza que deseja excluir esse projeto?',
+      showDenyButton: true,
+      confirmButtonText: 'Sim',
+      denyButtonText: `Não`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('Excluido com sucesso!', '', 'success')
+      } else if (result.isDenied) {
+      }
+    });
+  };
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
@@ -52,7 +65,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoInicia
                 iconeOpcional={BsPlayFill}
                 iconeTamanho="20px"
                 className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-                onClick={() => navigate(`/projetos/iniciarprojeto/${dataInicio}`)}
+                onClick={handleIniciarProjetoClick}
               />
               <Button
                 texto="Excluir projeto"

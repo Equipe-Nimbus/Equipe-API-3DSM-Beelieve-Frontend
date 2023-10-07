@@ -59,7 +59,7 @@ function FormCadastroProjeto() {
     const projeto = gerarJsonProjeto(data)
 
     console.log(projeto)
-    /* await axios.post("/projeto/cadastrar", projeto).then((response) => {
+    await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
         window.alert("Cadastro realizado com sucesso!")
         navigate("/projetos")
@@ -67,7 +67,7 @@ function FormCadastroProjeto() {
       else {
         window.alert("Erro ao realizar o cadastro :(")
       }
-    }) */
+    })
   }
 
   const handlerBlur = (evento) => {
