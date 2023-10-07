@@ -29,7 +29,9 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       }
     })
 
+
     //console.log(subProjetosFiltrados)
+
     setSubProjetosAcessiveis(subProjetosFiltrados)
   }
 
@@ -40,6 +42,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       descricao: linha.descricao,
       orcamento: linha.orcamento ? linha.orcamento : 0,
       hora_homem: linha.hora_homem ? linha.hora_homem : 0,
+      materiais: linha.materiais ? linha.materiais: 0
     }
   })
 
@@ -58,6 +61,10 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   const handleOrcamento = async (index, valor) => {
     setValue(`estruturaDetalhes[${index}].orcamento`, valor)
   }
+  
+  const handleMateriais = async (index, valor) => {
+    setValue(`estruturaDetalhes[${index}].materiais`, valor)
+  }
 
   const atualizarDetalhesPacotes = async (data) => {
     const estruturaPreenchida = data.estruturaDetalhes
@@ -67,9 +74,11 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     projeto.orcamento_projeto = estruturaPreenchida[0].orcamento
     projeto.hora_humano_total = parseFloat(estruturaPreenchida[0].hora_homem)
     projeto.sub_projetos = novaEstrutura
-
+    
+    projeto.materiais_projeto = estruturaPreenchida[0].materiais
+	
     const dadoOrcamentoProjeto = projeto
-
+    
     try {
       await axios
         .put("/projeto/atualizar/orcamento", dadoOrcamentoProjeto)
@@ -83,9 +92,9 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
             window.alert("Ocorreu algum problema na atualização :(")
           }
         })
+
     } catch (error) {}
   }
-
   return (
     <div>
       <div className="mx-5 mb-2 flex items-center justify-between">
@@ -96,25 +105,29 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       <hr className="border-n90" />
       <form
         onSubmit={handleSubmit(atualizarDetalhesPacotes)}
-        className="my-10 flex flex-col"
+
+        className="my-10 flex flex-col gap-2"
       >
-        <table className="mx-auto mt-5 w-2/3 text-left">
+        <table className="mx-auto border px-16 rounded">
           <thead className="bg-primary98 p-10 text-base uppercase">
             <tr>
-              <th className="px-6 py-3">Nível</th>
-              <th className="">Descrição</th>
-              <th className="">Orçamento</th>
-              <th className="">Hora Homem</th>
-              <th className="">Atribuição</th>
+              <th class="border px-12 py-3">Nível</th>
+              <th class="border px-12 py-3">Descrição</th>
+              <th class="border px-12 py-3">Orçamento</th>
+              <th class="border px-6 py-3">Hora Homem</th>
+              <th class="">Materiais</th>
+              <th class="border px-12 py-3">Atribuição</th>
             </tr>
           </thead>
           <tbody>
             {fields.map((linha, index) => (
+
               <tr key={index} className="border-b border-n90">
                 <td className="px-4 py-3 text-lg font-semibold">
                   {linha.nivel}
                 </td>
                 <td className="text-lg font-regular">
+
                   {linha.nivel === "1" && linha.descricao}
 
                   {linha.nivel.length === 3 &&
@@ -154,7 +167,9 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     </Link>
                   )}
                 </td>
-                <td>
+
+                <td class="border px-4">
+
                   <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].orcamento`}
                     {...register(`estruturaDetalhes[${index}].orcamento`)}
@@ -165,7 +180,9 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     onChange={(e, value) => handleOrcamento(index, value)}
                   />
                 </td>
+
                 <td>
+
                   <input
                     id="hora"
                     name={`estruturaDetalhes[${index}].hora_homem`}
@@ -174,11 +191,29 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     type="number"
                   />
                 </td>
-                <td></td>
+
+                <td class="border px-4">
+                  <IntlCurrencyInput
+                    name={`estruturaDetalhes[${index}].materiais`}
+                    {...register(`estruturaDetalhes[${index}].materiais`)}
+                    defaultValue={linha.materiais}
+                    type="text"
+                    currency="BRL"
+                    config={formatacaoDinheiro}
+                    onChange={(e, value) => handleMateriais(index, value)}
+                  />
+                </td>
+                <td class="break-all border px-1">{ }</td>
+
               </tr>
             ))}
           </tbody>
         </table>
+
+        <div className="mt-7 ml-6">
+          <input className="border px-2 py-1 rounded w-36 font-bold" type='text' value={`Hora = R$ ${sessionStorage.getItem('valor')} `} readOnly />
+        </div>
+
         <Button
           texto="Salvar"
           tipo="submit"

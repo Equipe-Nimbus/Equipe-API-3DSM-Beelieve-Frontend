@@ -85,7 +85,7 @@ function DetalhesProjeto() {
         projetoIniciado={projeto.data_inicio_projeto}
       />
       <MenuSelecao
-        opcoes={["ESTRUTURA", "PACOTES"]}
+        opcoes={["ESTRUTURA", "PACOTES", "CRONOGRAMA"]}
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />

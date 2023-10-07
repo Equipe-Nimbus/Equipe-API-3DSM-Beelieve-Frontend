@@ -1,14 +1,22 @@
 import App from "./App";
 import ListaProjeto from "./pages/ListaProjeto";
 import NovoProjeto from "./pages/NovoProjeto";
-import DetalhesProjeto from './pages/DetalhesProjeto';
-import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 
+import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
+import DetalhesProjeto from './pages/DetalhesProjeto'
+import { element } from "prop-types";
+import MudaData from "./pages/MudaData";
 
 const router = [
     {
         path: "/",
-        element: <App/>
+        element: <App/>,
+        children: [
+			{
+				path: "muda-data",
+				element: <MudaData/>
+			},
+		]
     },
     {   
         path: "/projetos",
@@ -25,12 +33,15 @@ const router = [
                 path: ":id",
                 element: <DetalhesProjeto/>,
             },
+
             {
                 path: "tarefas/:idTarefa",
                 element: <NovaTarefa/>
             }
+
         ]
-    }
+    },
+    
 ]
 
 export default router
