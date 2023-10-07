@@ -82,7 +82,7 @@ function DetalhesProjeto() {
         nomeProjeto={projeto.nome_projeto}
         descricaoProjeto={projeto.descricao_projeto}
         liderProjeto={projeto.chefe_projeto}
-        projetoIniciado={projeto.data_inicio_projeto}
+        DataProjetoIniciado={projeto.data_inicio_projeto}
       />
       <MenuSelecao
         opcoes={["ESTRUTURA", "PACOTES", "CRONOGRAMA"]}

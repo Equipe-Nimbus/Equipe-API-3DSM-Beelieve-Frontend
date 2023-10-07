@@ -1,55 +1,64 @@
 /* eslint-disable no-unused-vars */
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import PropTypes from "prop-types"
 import Button from "./Button"
 
 import Swal from 'sweetalert2'
 import axios from "../services/axios"
 
-import { useNavigate } from "react-router-dom"
 import { BsPlayFill } from "react-icons/bs"
 
-function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoIniciado }) {
-  const navigate = useNavigate()
+function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIniciado }) {
+  const [projetoNaoIniciado, setProjetoNaoIniciado] = useState(!DataProjetoIniciado);
+
+  // pegando o mes-ano atual
   const dataAtual = new Date();
   const ano = dataAtual.getFullYear();
   const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
   const dataInicio = `${mes}-${ano}`;
+
   const { id } = useParams()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setProjetoNaoIniciado(!DataProjetoIniciado);
+  }, [DataProjetoIniciado]);
 
   const handleIniciarProjetoClick = async () => {
-//    try {
-      const data = {
-        "data_inicio_projeto": dataInicio
-      }
-      const response = await (await axios.post(`/projeto/${id}/iniciarprojeto`, data)
+    const data = {
+      "data_inicio_projeto": dataInicio
+    }
+    const response = await (await axios.post(`/projeto/${id}/iniciarprojeto`, data)
       .then(res => {
-        console.log("response:", res.data);
+        setProjetoNaoIniciado(false)
+        Swal.fire('Projeto já iniciado!', '', 'sucess');
       })
       .catch(error => {
         console.log("error", error);
       }))
-     // const dados = response.data;
-   // } catch (error) {
-    //  console.error('Erro ao fazer a solicitação POST:', error);
-  //  }
   }
 
-  const handleExcluirProjetoClick = () => {
-    Swal.fire({
+  const handleExcluirProjetoClick = async  () => {
+    const confirmacao = await Swal.fire({
       icon: 'warning',
       title: 'Cuidado!',
       text: 'Tem certeza que deseja excluir esse projeto?',
       showDenyButton: true,
       confirmButtonText: 'Sim',
       denyButtonText: `Não`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('Excluido com sucesso!', '', 'success')
-      } else if (result.isDenied) {
-      }
     });
+
+    if (confirmacao.isConfirmed) {
+      try {
+        const response = await axios.delete(`/projeto/deletar/${id}`);
+        Swal.fire('Excluído com sucesso!', '', 'success');
+        navigate("/projetos")
+      } catch (error) {
+        console.error('Erro ao excluir o projeto:', error);
+      }
+    }
   };
 
   return (
@@ -67,7 +76,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, projetoInicia
           </p>
         </div>
         <div className="flex flex-col gap-5">
-          {projetoIniciado == null && (
+          {projetoNaoIniciado && (
             <>
               <Button
                 texto="Iniciar projeto"
