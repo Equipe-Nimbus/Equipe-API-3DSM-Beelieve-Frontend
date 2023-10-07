@@ -7,288 +7,8 @@ import Button from "../Button"
 import schemaCronograma from "./validation"
 import axios from "../../services/axios"
 
-function Cronograma({ tabela, idProjeto }) {
-  const [dados, setDados] = useState({
-    _id: 1,
-    lista_cronograma: [
-      {
-        mes_cronograma: "Mes 1",
-        ordem_mes_cronograma: 1,
-        niveis: [
-          {
-            tipo: "projeto",
-            ordem_nivel: "1",
-            nome_nivel: "Beelieve",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.1",
-            nome_nivel: "Frontend",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.1.1",
-            nome_nivel: "Design",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.2",
-            nome_nivel: "Backend",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.2.1",
-            nome_nivel: "BD",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-        ],
-      },
-      {
-        mes_cronograma: "Mes 2",
-        ordem_mes_cronograma: 2,
-        niveis: [
-          {
-            tipo: "projeto",
-            ordem_nivel: "1",
-            nome_nivel: "Beelieve",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.1",
-            nome_nivel: "Frontend",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.1.1",
-            nome_nivel: "Design",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.2",
-            nome_nivel: "Backend",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.2.1",
-            nome_nivel: "BD",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-        ],
-      },
-      {
-        mes_cronograma: "Mes 3",
-        ordem_mes_cronograma: 3,
-        niveis: [
-          {
-            tipo: "projeto",
-            ordem_nivel: "1",
-            nome_nivel: "Beelieve",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.1",
-            nome_nivel: "Frontend",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.1.1",
-            nome_nivel: "Design",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.2",
-            nome_nivel: "Backend",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.2.1",
-            nome_nivel: "BD",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-        ],
-      },
-      {
-        mes_cronograma: "Mes 4",
-        ordem_mes_cronograma: 4,
-        niveis: [
-          {
-            tipo: "projeto",
-            ordem_nivel: "1",
-            nome_nivel: "Beelieve",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.1",
-            nome_nivel: "Frontend",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.1.1",
-            nome_nivel: "Design",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.2",
-            nome_nivel: "Backend",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.2.1",
-            nome_nivel: "BD",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-        ],
-      },
-      {
-        mes_cronograma: "Mes 5",
-        ordem_mes_cronograma: 5,
-        niveis: [
-          {
-            tipo: "projeto",
-            ordem_nivel: "1",
-            nome_nivel: "Beelieve",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.1",
-            nome_nivel: "Frontend",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.1.1",
-            nome_nivel: "Design",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.2",
-            nome_nivel: "Backend",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.2.1",
-            nome_nivel: "BD",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-        ],
-      },
-      {
-        mes_cronograma: "Mes 6",
-        ordem_mes_cronograma: 6,
-        niveis: [
-          {
-            tipo: "projeto",
-            ordem_nivel: "1",
-            nome_nivel: "Beelieve",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.1",
-            nome_nivel: "Frontend",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.1.1",
-            nome_nivel: "Design",
-            id_nivel: 1,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "subprojeto",
-            ordem_nivel: "1.2",
-            nome_nivel: "Backend",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-          {
-            tipo: "nivelsubprojeto",
-            ordem_nivel: "1.2.1",
-            nome_nivel: "BD",
-            id_nivel: 2,
-            progresso_planejado: 0.0,
-            progresso_real: 0.0,
-          },
-        ],
-      },
-    ],
-  })
+function Cronograma({ idProjeto }) {
+  const [cronograma, setCronograma] = useState({})
 
   const {
     register,
@@ -298,7 +18,7 @@ function Cronograma({ tabela, idProjeto }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      cronograma: dados.lista_cronograma,
+      cronograma: cronograma.lista_cronograma,
     },
     resolver: yupResolver(schemaCronograma),
   })
@@ -307,6 +27,31 @@ function Cronograma({ tabela, idProjeto }) {
     control,
     name: "cronograma",
   })
+
+  const getCronograma = async () => {
+    try {
+      await axios.get(`/cronograma/${idProjeto}`).then((response) => {
+        let cronogramaResgatado = response.data
+
+        cronogramaResgatado.lista_cronograma =
+          cronogramaResgatado.lista_cronograma.map((mes) => ({
+            ...mes,
+            niveis: mes.niveis.map((nivel) => ({
+              ...nivel,
+              progresso_planejado: String(nivel.progresso_planejado) + "%",
+            })),
+          }))
+
+        setCronograma(cronogramaResgatado)
+
+        setValue("cronograma", cronogramaResgatado.lista_cronograma)
+      })
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    getCronograma()
+  }, [])
 
   const blurPorcentagem = (valor, mes, nivel) => {
     if (valor.slice(-1) !== "%") {
@@ -324,56 +69,87 @@ function Cronograma({ tabela, idProjeto }) {
     }
   }
 
-  const atualizarCronograma = (data) => {
+  const renderizarColunas = () => {
+    return fields?.map((mes, indexMes) => (
+      <th key={indexMes}>{mes.mes_cronograma}</th>
+    ))
+  }
+
+  const renderizarLinhas = () => {
+    return fields[0]?.niveis.map((nivel, indexNivel) => (
+      <tr key={indexNivel}>
+        {renderizarColunas().map((coluna, indexMes) => (
+          <td key={indexMes}>
+            <input
+              type="text"
+              {...register(
+                `cronograma[${indexMes}].niveis[${indexNivel}].progresso_planejado`,
+              )}
+              onBlur={(e) =>
+                blurPorcentagem(e.target.value, indexMes, indexNivel)
+              }
+            />
+          </td>
+        ))}
+      </tr>
+    ))
+  }
+
+  const atualizarCronograma = async (data) => {
     data.cronograma.forEach((mes) =>
       mes.niveis.forEach((nivel) => {
-        if (nivel.progresso_planejado === "0") {
-          nivel.progresso_planejado = 0
-        } else {
-          nivel.progresso_planejado = parseFloat(nivel.progresso_planejado.slice(0, -1),
+        if (nivel.progresso_planejado.slice(-1) === "%") {
+          nivel.progresso_planejado = parseFloat(
+            nivel.progresso_planejado.slice(0, -1),
           )
+        } else {
+          nivel.progresso_planejado = parseFloat(nivel.progresso_planejado)
         }
       }),
     )
-    
-    dados.lista_cronograma = data.cronograma
-    console.log("cronograma mudado: ", dados)
+
+    cronograma.lista_cronograma = data.cronograma
+    //console.log("cronograma mudado: ", cronograma)
+
+    try {
+      await axios.put("/cronograma/atualiza", cronograma).then((response) => {
+        if (response.status === 200) {
+          window.alert("Planejamento salvo com sucesso!")
+        }
+      })
+    } catch (error) {}
   }
 
   return (
     <form onSubmit={handleSubmit(atualizarCronograma)}>
-      <table>
-        <thead>
-          <tr>
-            <th>Nível</th>
-            <th>Descrição</th>
-            {fields.map((mes, indexMes) => (
-              <th key={indexMes}>{mes.mes_cronograma}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {fields[0].niveis.map((nivel, indexNivel) => (
-            <tr key={indexNivel}>
-              <td>{nivel.ordem_nivel}</td>
-              <td>{nivel.nome_nivel}</td>
-              {fields.map((mes, indexMes) => (
-                <td key={indexMes}>
-                  <input
-                    type="text"
-                    {...register(
-                      `cronograma[${indexMes}].niveis[${indexNivel}].progresso_planejado`,
-                    )}
-                    onBlur={(e) =>
-                      blurPorcentagem(e.target.value, indexMes, indexNivel)
-                    }
-                  ></input>
-                </td>
-              ))}
+      <div className="flex">
+        <table>
+          <thead>
+            <tr>
+              <th>Nível</th>
+              <th>Descrição</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {fields[0]?.niveis.map((nivel, indexNivel) => (
+              <tr key={indexNivel}>
+                <td>{nivel.ordem_nivel}</td>
+                <td>{nivel.nome_nivel}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="max-w-4xl overflow-auto">
+          <table>
+            <thead>
+              <tr>{renderizarColunas()}</tr>
+            </thead>
+            <tbody>{renderizarLinhas()}</tbody>
+          </table>
+        </div>
+      </div>
+
       {errors?.cronograma && <p>{errors.cronograma.message}</p>}
       <Button texto="teste" tipo="submit" />
     </form>

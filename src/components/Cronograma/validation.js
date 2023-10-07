@@ -11,17 +11,18 @@ const schemaCronograma = yup.object().shape({
               "porcentagem-invalida",
               "Porcentagem deve estar entre 0 e 100",
               (valor) => {
-                if (valor !== '0') {
-                  console.log(typeof valor)
-                  const valorNumerico = parseFloat(valor.slice(0, -1))
-                  return (
-                    !isNaN(valorNumerico) &&
-                    valorNumerico >= 0 &&
-                    valorNumerico <= 100
-                  )
+                let valorNumerico = 0
+                if (valor.slice(-1) === '%') {
+                  valorNumerico = parseFloat(valor.slice(0, -1))
                 } else {
-                  return true
+                  valorNumerico = parseFloat(valor)
                 }
+                
+                return (
+                  !isNaN(valorNumerico) &&
+                  valorNumerico >= 0 &&
+                  valorNumerico <= 100
+                )
               },
             ),
         }),

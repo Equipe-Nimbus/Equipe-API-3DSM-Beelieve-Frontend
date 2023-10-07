@@ -111,7 +111,7 @@ function DetalhesProjeto() {
 
       {secaoAtual === "CRONOGRAMA" && (
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <Cronograma tabela={tabela} idProjeto={id} />
+          <Cronograma idProjeto={id} />
         </div>
       )}
     </>
