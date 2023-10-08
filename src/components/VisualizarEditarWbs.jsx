@@ -17,15 +17,16 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
 
   const atualizarEstruturaProjeto = async (e) => {
     e.preventDefault()
-    const novaEstrutura = formatarEstrutura(tabela)
-    projeto.sub_projetos = novaEstrutura
     projeto.nome_projeto = tabela[0].descricao
 
-    //console.log('NOVO PROJETO EDITADO: ', projeto)
+    const novaEstrutura = formatarEstrutura(projeto, tabela)
+    
+
+    console.log('NOVO PROJETO EDITADO: ', novaEstrutura)
 
     try {
       await axios
-        .put("/projeto/atualizar/estrutura", projeto)
+        .put("/projeto/atualizar/estrutura", novaEstrutura)
         .then((response) => {
           if ((response.status = 200)) {
             //console.log("resposta: ", response)

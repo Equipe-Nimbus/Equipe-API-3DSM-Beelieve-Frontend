@@ -52,10 +52,9 @@ function FormCadastroProjeto() {
       sub_projetos: [],
     }
 
-    const estrutura = formatarEstrutura(tabelaWBS)
-    projeto.sub_projetos = estrutura
+    const projetoFormatado = formatarEstrutura(projeto, tabelaWBS)
 
-    return projeto
+    return projetoFormatado
   }
 
   const cadastrarProjeto = async (data) => {

@@ -168,22 +168,20 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   }, [estruturaDetalhes])
 
   const atualizarDetalhesPacotes = async (data) => {
-    const estruturaPreenchida = data.estruturaDetalhes
+    const detalhesPacotesPreenchidos = data.estruturaDetalhes
 
-    const novaEstrutura = formatarEstrutura(estruturaPreenchida)
-
-    projeto.orcamento_projeto = parseFloat(estruturaPreenchida[0].orcamento)
-    projeto.hora_humano_total = parseFloat(estruturaPreenchida[0].hora_homem)
+    projeto.orcamento_projeto = parseFloat(detalhesPacotesPreenchidos[0].orcamento)
+    projeto.hora_humano_total = parseFloat(detalhesPacotesPreenchidos[0].hora_homem)
+    projeto.materiais_projeto = detalhesPacotesPreenchidos[0].materiais
     projeto.hora_valor_projeto = data.valorHora
-    projeto.sub_projetos = novaEstrutura
-    projeto.materiais_projeto = estruturaPreenchida[0].materiais
+    
+    const projetoFormatado = formatarEstrutura(projeto, detalhesPacotesPreenchidos)
 
-    const dadoOrcamentoProjeto = projeto
-    //console.log(dadoOrcamentoProjeto)
+    console.log(projetoFormatado)
 
     try {
       await axios
-        .put("/projeto/atualizar/orcamento", dadoOrcamentoProjeto)
+        .put("/projeto/atualizar/orcamento", projetoFormatado)
         .then((response) => {
           if (response.status === 200) {
             //console.log("resposta: ", response)

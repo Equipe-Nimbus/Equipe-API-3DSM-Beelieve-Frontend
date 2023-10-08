@@ -75,6 +75,9 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
     const novaLinha = {
       nivel: novoNivel,
       descricao: "Nova Descrição",
+      orcamento: 0,
+      hora_homem: 0,
+      materiais: 0
     }
 
     const novaTabela = [...tabelaWBS]
