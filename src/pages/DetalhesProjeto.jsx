@@ -32,11 +32,12 @@ function DetalhesProjeto() {
   const gerarTabela = () => {
     const tabela = []
     tabela.push({
-      id: 0,
+      id: projeto.id_projeto,
       nivel: "1",
       descricao: projeto.nome_projeto,
       orcamento: projeto.orcamento_projeto,
       hora_homem: projeto.hora_humano_total,
+      materiais: projeto.materiais_projeto,
     })
 
     projeto.sub_projetos?.forEach((subprojeto) => {
@@ -45,6 +46,7 @@ function DetalhesProjeto() {
         nivel: subprojeto.ordem_sub_projeto,
         descricao: subprojeto.nome_sub_projeto,
         orcamento: subprojeto.orcamento_sub_projeto,
+        materiais: subprojeto.materiais_sub_projeto,
         hora_homem: subprojeto.hora_humano_sub_projeto,
       })
 
@@ -55,6 +57,7 @@ function DetalhesProjeto() {
           descricao: nivel.nome_nivel_sub_projeto,
           orcamento: nivel.orcamento_nivel_sub_projeto,
           hora_homem: nivel.hora_humano_nivel_sub_projeto,
+          materiais: nivel.materiais_nivel_sub_projeto,
         })
       })
     })

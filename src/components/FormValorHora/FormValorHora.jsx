@@ -12,10 +12,6 @@ import axios from "../../services/axios"
 function FormValorHora({ tabela, projeto, setAtualizar }) {
   const [subProjetosAcessiveis, setSubProjetosAcessiveis] = useState([])
 
-  useEffect(() => {
-    checarNivelSubProjeto(projeto.sub_projetos)
-  }, [])
-
   const checarNivelSubProjeto = (subprojetos) => {
     const subProjetosFiltrados = []
 
@@ -29,26 +25,32 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       }
     })
 
-
-    //console.log(subProjetosFiltrados)
+    //console.log("subprojetos alteraveis: ", subProjetosFiltrados)
 
     setSubProjetosAcessiveis(subProjetosFiltrados)
   }
 
-  const estruturaDetalhes = tabela.map((linha) => {
-    return {
-      id: linha.id,
-      nivel: linha.nivel,
-      descricao: linha.descricao,
-      orcamento: linha.orcamento ? linha.orcamento : 0,
-      hora_homem: linha.hora_homem ? linha.hora_homem : 0,
-      materiais: linha.materiais ? linha.materiais: 0
-    }
-  })
+  useEffect(() => {
+    checarNivelSubProjeto(projeto.sub_projetos)
+  }, [])
 
-  const { register, handleSubmit, control, setValue } = useForm({
+  const [estruturaDetalhes, setEstruturaDetalhes] = useState(
+    tabela.map((linha) => {
+      return {
+        id: linha.id,
+        nivel: linha.nivel,
+        descricao: linha.descricao,
+        orcamento: linha.orcamento ? linha.orcamento : 0,
+        hora_homem: linha.hora_homem ? linha.hora_homem : 0,
+        materiais: linha.materiais ? linha.materiais : 0,
+      }
+    }),
+  )
+
+  const { register, handleSubmit, control, setValue, getValues } = useForm({
     defaultValues: {
       estruturaDetalhes: estruturaDetalhes,
+      valorHora: projeto.hora_valor_projeto
     },
   })
 
@@ -58,12 +60,100 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     name: "estruturaDetalhes",
   })
 
-  const handleOrcamento = async (index, valor) => {
-    setValue(`estruturaDetalhes[${index}].orcamento`, valor)
+  const handleOrcamento = async (index, nivel) => {
+    const horaHomem = Number(getValues(`estruturaDetalhes[${index}].hora_homem`),)
+    const material = Number(getValues(`estruturaDetalhes[${index}].materiais`))
+    const valorHora = getValues('valorHora')
+    const orcamentoNivel = horaHomem * valorHora + material
+
+    setValue(`estruturaDetalhes[${index}].orcamento`, orcamentoNivel)
+
+    //consistência do subprojeto
+    if (nivel.length > 3) {
+      const nivelSubProjetoPai = nivel.slice(0, 3)
+      const indexSubProjetoPai = estruturaDetalhes.findIndex(
+        (subprojeto) => subprojeto.nivel === nivelSubProjetoPai,
+      )
+
+      const subProjetosFilhos = estruturaDetalhes.filter(
+        (subprojeto) =>
+          subprojeto.nivel.startsWith(nivelSubProjetoPai) &&
+          subprojeto.nivel.length > 3,
+      )
+
+      let orcamentoSubProjetosSomados = 0
+      let horaHomemSubProjetosSomados = 0
+      let materialSubProjetosSomados = 0
+      subProjetosFilhos.forEach((subprojeto) => {
+        const indexSubProjeto = estruturaDetalhes.findIndex(
+          (linha) => linha.nivel === subprojeto.nivel,
+        )
+        const orcamentoSubProjeto = getValues(
+          `estruturaDetalhes[${indexSubProjeto}].orcamento`,
+        )
+        const horaHomemSubProjeto = parseFloat(
+          getValues(`estruturaDetalhes[${indexSubProjeto}].hora_homem`),
+        )
+        const materialSubProjeto = getValues(
+          `estruturaDetalhes[${indexSubProjeto}].materiais`,
+        )
+
+        orcamentoSubProjetosSomados =
+          orcamentoSubProjetosSomados + orcamentoSubProjeto
+        horaHomemSubProjetosSomados =
+          horaHomemSubProjetosSomados + horaHomemSubProjeto
+        materialSubProjetosSomados =
+          materialSubProjetosSomados + materialSubProjeto
+      })
+
+      setValue(
+        `estruturaDetalhes[${indexSubProjetoPai}].orcamento`,
+        orcamentoSubProjetosSomados,
+      )
+      setValue(
+        `estruturaDetalhes[${indexSubProjetoPai}].hora_homem`,
+        horaHomemSubProjetosSomados,
+      )
+      setValue(
+        `estruturaDetalhes[${indexSubProjetoPai}].materiais`,
+        materialSubProjetosSomados,
+      )
+    }
+
+    const valores = getValues("estruturaDetalhes")
+
+    let orcamentoTotalProjeto = 0
+    let horaHomemTotalProjeto = 0
+    let materialTotalProjeto = 0
+    valores.forEach((nivel) => {
+      if (nivel.nivel.length === 3) {
+        const orcamentoNivel = nivel.orcamento
+        const horaHomemNivel = parseFloat(nivel.hora_homem)
+        const materialNivel = nivel.materiais
+
+        orcamentoTotalProjeto = orcamentoTotalProjeto + orcamentoNivel
+        horaHomemTotalProjeto = horaHomemTotalProjeto + horaHomemNivel
+        materialTotalProjeto = materialTotalProjeto + materialNivel
+      }
+    })
+
+    setValue(`estruturaDetalhes[0].orcamento`, orcamentoTotalProjeto)
+    setValue(`estruturaDetalhes[0].hora_homem`, horaHomemTotalProjeto)
+    setValue(`estruturaDetalhes[0].materiais`, materialTotalProjeto)
+
+    setEstruturaDetalhes(valores)
   }
-  
+
+  useEffect(() => {
+    setValue(`estruturaDetalhes`, estruturaDetalhes)
+  }, [estruturaDetalhes])
+
   const handleMateriais = async (index, valor) => {
     setValue(`estruturaDetalhes[${index}].materiais`, valor)
+  }
+
+  const handleValorHora = async (valor) => {
+    setValue(`valorHora`, valor)
   }
 
   const atualizarDetalhesPacotes = async (data) => {
@@ -71,28 +161,27 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
 
     const novaEstrutura = formatarEstrutura(estruturaPreenchida)
 
-    projeto.orcamento_projeto = estruturaPreenchida[0].orcamento
+    projeto.orcamento_projeto = parseFloat(estruturaPreenchida[0].orcamento)
     projeto.hora_humano_total = parseFloat(estruturaPreenchida[0].hora_homem)
+    projeto.hora_valor_projeto = data.valorHora
     projeto.sub_projetos = novaEstrutura
-    
     projeto.materiais_projeto = estruturaPreenchida[0].materiais
-	
+
     const dadoOrcamentoProjeto = projeto
-    
+    //console.log(dadoOrcamentoProjeto)
+
     try {
       await axios
         .put("/projeto/atualizar/orcamento", dadoOrcamentoProjeto)
         .then((response) => {
           if (response.status === 200) {
-            console.log("resposta: ", response)
+            //console.log("resposta: ", response)
             window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
-          }
-          else {
+          } else {
             window.alert("Ocorreu algum problema na atualização :(")
           }
         })
-
     } catch (error) {}
   }
   return (
@@ -105,29 +194,26 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       <hr className="border-n90" />
       <form
         onSubmit={handleSubmit(atualizarDetalhesPacotes)}
-
         className="my-10 flex flex-col gap-2"
       >
-        <table className="mx-auto border px-16 rounded">
+        <table className="mx-auto rounded px-16">
           <thead className="bg-primary98 p-10 text-base uppercase">
             <tr>
-              <th class="border px-12 py-3">Nível</th>
-              <th class="border px-12 py-3">Descrição</th>
-              <th class="border px-12 py-3">Orçamento</th>
-              <th class="border px-6 py-3">Hora Homem</th>
+              <th class="px-12 py-3">Nível</th>
+              <th class="px-12 py-3">Descrição</th>
+              <th class="px-12 py-3">Orçamento</th>
+              <th class="px-6 py-3">Hora Homem</th>
               <th class="">Materiais</th>
-              <th class="border px-12 py-3">Atribuição</th>
+              <th class="px-12 py-3">Atribuição</th>
             </tr>
           </thead>
           <tbody>
             {fields.map((linha, index) => (
-
               <tr key={index} className="border-b border-n90">
                 <td className="px-4 py-3 text-lg font-semibold">
                   {linha.nivel}
                 </td>
-                <td className="text-lg font-regular">
-
+                <td className="font-regular text-lg">
                   {linha.nivel === "1" && linha.descricao}
 
                   {linha.nivel.length === 3 &&
@@ -142,7 +228,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                             (subprojeto) =>
                               subprojeto.id_sub_projeto === linha.id,
                           ),
-                          nomeProjeto: projeto.nome_projeto
+                          nomeProjeto: projeto.nome_projeto,
                         }}
                       >
                         {linha.descricao}
@@ -160,7 +246,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                           (subprojeto) =>
                             subprojeto.id_nivel_sub_projeto === linha.id,
                         ),
-                        nomeProjeto: projeto.nome_projeto
+                        nomeProjeto: projeto.nome_projeto,
                       }}
                     >
                       {linha.descricao}
@@ -168,8 +254,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                   )}
                 </td>
 
-                <td class="border px-4">
-
+                <td class="px-4">
                   <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].orcamento`}
                     {...register(`estruturaDetalhes[${index}].orcamento`)}
@@ -177,22 +262,32 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     type="text"
                     currency="BRL"
                     config={formatacaoDinheiro}
-                    onChange={(e, value) => handleOrcamento(index, value)}
+                    disabled
+                    className="text-center"
                   />
                 </td>
 
                 <td>
-
                   <input
                     id="hora"
                     name={`estruturaDetalhes[${index}].hora_homem`}
                     {...register(`estruturaDetalhes[${index}].hora_homem`)}
                     defaultValue={linha.hora_homem}
                     type="number"
+                    onBlur={(e) => handleOrcamento(index, linha.nivel)}
+                    className="text-center"
+                    disabled={
+                      (linha.nivel.length === 3 &&
+                        !subProjetosAcessiveis.some(
+                          (subprojeto) =>
+                            subprojeto.id_sub_projeto === linha.id,
+                        )) ||
+                      linha.nivel === "1"
+                    }
                   />
                 </td>
 
-                <td class="border px-4">
+                <td class="px-4">
                   <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].materiais`}
                     {...register(`estruturaDetalhes[${index}].materiais`)}
@@ -201,17 +296,35 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     currency="BRL"
                     config={formatacaoDinheiro}
                     onChange={(e, value) => handleMateriais(index, value)}
+                    onBlur={(e) => handleOrcamento(index, linha.nivel)}
+                    disabled={
+                      (linha.nivel.length === 3 &&
+                        !subProjetosAcessiveis.some(
+                          (subprojeto) =>
+                            subprojeto.id_sub_projeto === linha.id,
+                        )) ||
+                      linha.nivel === "1"
+                    }
+                    className="text-center"
                   />
                 </td>
-                <td class="break-all border px-1">{ }</td>
-
+                <td class="break-all px-1">{}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        <div className="mt-7 ml-6">
-          <input className="border px-2 py-1 rounded w-36 font-bold" type='text' value={`Hora = R$ ${sessionStorage.getItem('valor')} `} readOnly />
+        <div className="ml-6 mt-7 rounded border px-2 py-1 font-bold w-fit">
+          <label htmlFor="valorHora">Hora = </label>
+          <IntlCurrencyInput
+            {...register(`valorHora`)}
+            type="text"
+            currency="BRL"
+            config={formatacaoDinheiro}
+            onChange={(e, value) => handleValorHora(value)}
+            defaultValue={projeto.hora_valor_projeto}
+            className="w-16"
+          />
         </div>
 
         <Button

@@ -61,7 +61,6 @@ function FormCadastroProjeto() {
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
 
-    console.log(projeto)
     await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
         window.alert("Cadastro realizado com sucesso!")
@@ -84,14 +83,12 @@ function FormCadastroProjeto() {
     setValue("valorHora", value)
   }
 
-  //console.log(niveisExcel)
-
   useEffect(() => {
     if(niveisExcel.subProjeto){
       setValue("nomeProjeto", niveisExcel.subProjeto[0].descricao)
       let tabela = [...tabelaWBS]
       tabela = niveisExcel.subProjeto
-      console.log("TABELA", tabela)
+      //console.log("TABELA", tabela)
       setTabelaWBS(tabela) 
     }
   }, [niveisExcel])
