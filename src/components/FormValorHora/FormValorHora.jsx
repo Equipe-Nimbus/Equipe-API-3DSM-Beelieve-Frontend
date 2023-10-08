@@ -11,6 +11,18 @@ import axios from "../../services/axios"
 
 function FormValorHora({ tabela, projeto, setAtualizar }) {
   const [subProjetosAcessiveis, setSubProjetosAcessiveis] = useState([])
+  const [estruturaDetalhes, setEstruturaDetalhes] = useState(
+    tabela.map((linha) => {
+      return {
+        id: linha.id,
+        nivel: linha.nivel,
+        descricao: linha.descricao,
+        orcamento: linha.orcamento ? linha.orcamento : 0,
+        hora_homem: linha.hora_homem ? linha.hora_homem : 0,
+        materiais: linha.materiais ? linha.materiais : 0,
+      }
+    }),
+  )
 
   const checarNivelSubProjeto = (subprojetos) => {
     const subProjetosFiltrados = []
@@ -34,19 +46,6 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     checarNivelSubProjeto(projeto.sub_projetos)
   }, [])
 
-  const [estruturaDetalhes, setEstruturaDetalhes] = useState(
-    tabela.map((linha) => {
-      return {
-        id: linha.id,
-        nivel: linha.nivel,
-        descricao: linha.descricao,
-        orcamento: linha.orcamento ? linha.orcamento : 0,
-        hora_homem: linha.hora_homem ? linha.hora_homem : 0,
-        materiais: linha.materiais ? linha.materiais : 0,
-      }
-    }),
-  )
-
   const { register, handleSubmit, control, setValue, getValues } = useForm({
     defaultValues: {
       estruturaDetalhes: estruturaDetalhes,
@@ -60,7 +59,27 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     name: "estruturaDetalhes",
   })
 
-  const handleOrcamento = async (index, nivel) => {
+
+  const handleMateriais = (index, valor) => {
+    setValue(`estruturaDetalhes[${index}].materiais`, valor)
+  }
+
+  const handleValorHora = (valor) => {
+    setValue(`valorHora`, valor)
+  }
+
+  const handleTrocaValorHora = () =>{
+    const valorHora = getValues(`valorHora`)
+    const pacotes = getValues(`estruturaDetalhes`)
+    
+    pacotes.forEach((pacote, index) => {
+      setValue(`estruturaDetalhes[${index}].orcamento`, (pacote.hora_homem * valorHora) + pacote.materiais)
+    })
+
+    setEstruturaDetalhes(pacotes)
+  }
+
+  const handleOrcamento = (index, nivel) => {
     const horaHomem = Number(getValues(`estruturaDetalhes[${index}].hora_homem`),)
     const material = Number(getValues(`estruturaDetalhes[${index}].materiais`))
     const valorHora = getValues('valorHora')
@@ -148,14 +167,6 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     setValue(`estruturaDetalhes`, estruturaDetalhes)
   }, [estruturaDetalhes])
 
-  const handleMateriais = async (index, valor) => {
-    setValue(`estruturaDetalhes[${index}].materiais`, valor)
-  }
-
-  const handleValorHora = async (valor) => {
-    setValue(`valorHora`, valor)
-  }
-
   const atualizarDetalhesPacotes = async (data) => {
     const estruturaPreenchida = data.estruturaDetalhes
 
@@ -184,6 +195,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         })
     } catch (error) {}
   }
+
   return (
     <div>
       <div className="mx-5 mb-2 flex items-center justify-between">
@@ -322,6 +334,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
             currency="BRL"
             config={formatacaoDinheiro}
             onChange={(e, value) => handleValorHora(value)}
+            onBlur={(e) => handleTrocaValorHora()}
             defaultValue={projeto.hora_valor_projeto}
             className="w-16"
           />
