@@ -179,7 +179,6 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
           nivelQuebrado.length > 2 &&
           nivelQuebrado.slice(0, 2).toString() === nivelAntigo.toString()
         ) {
-          console.log("chegou")
           linha.nivel = `${novoNivel + "." + novaOrdemSubnivel}`
           novaOrdemSubnivel++
         }

@@ -12,13 +12,7 @@ import { FiPlus, FiMinus } from "react-icons/fi"
 function Cronograma({ idProjeto }) {
   const [cronograma, setCronograma] = useState({})
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: {
       cronograma: cronograma.lista_cronograma,
     },
@@ -60,7 +54,10 @@ function Cronograma({ idProjeto }) {
       const regexNumeros = /^[-+]?\d+(\.\d+)?$/
 
       if (!regexNumeros.test(valor)) {
-        setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, '0%')
+        setValue(
+          `cronograma[${mes}].niveis[${nivel}].progresso_planejado`,
+          "0%",
+        )
       } else {
         valor = valor + "%"
         setValue(
@@ -163,7 +160,7 @@ function Cronograma({ idProjeto }) {
       </h1>
       <hr className="border-n90"></hr>
       <form onSubmit={handleSubmit(atualizarCronograma)}>
-        <div className="flex justify-center mt-5">
+        <div className="mt-5 ml-5 flex justify-start">
           <table className="mt-5 text-left">
             <thead className="bg-primary98 p-10 text-base uppercase">
               <tr>
@@ -194,17 +191,19 @@ function Cronograma({ idProjeto }) {
             </table>
           </div>
         </div>
-        <div className="flex justify-between mt-5 mx-20">
+        <div className="mx-5 mt-5 flex justify-between">
           <div>
-            <Button
-              iconeOpcional={FiMinus}
-              tipo="button"
-              onClick={(e) => {
-                removerMes()
-              }}
-              className="m-2 rounded-full bg-primary50"
-              iconeTamanho="28px"
-            />
+            {cronograma.lista_cronograma?.length > 1 && (
+              <Button
+                iconeOpcional={FiMinus}
+                tipo="button"
+                onClick={(e) => {
+                  removerMes()
+                }}
+                className="m-2 rounded-full bg-primary50"
+                iconeTamanho="28px"
+              />
+            )}
             <Button
               iconeOpcional={FiPlus}
               tipo="button"
@@ -225,6 +224,7 @@ function Cronograma({ idProjeto }) {
       </form>
     </>
   )
+
 }
 
 export default Cronograma

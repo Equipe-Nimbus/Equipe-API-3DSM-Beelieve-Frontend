@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
 import TabelaWbs from "./TabelaWbs"
 import Button from "./Button"
@@ -22,7 +22,7 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
     const novaEstrutura = formatarEstrutura(projeto, tabela)
     
 
-    console.log('NOVO PROJETO EDITADO: ', novaEstrutura)
+    //console.log('NOVO PROJETO EDITADO: ', novaEstrutura)
 
     try {
       await axios

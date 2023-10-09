@@ -5,12 +5,9 @@ import TabFormTarefas from "./TabFormTarefas";
 
 function NovaTarefa() {
   const {idTarefa} = useParams()
-  //console.log(idTarefa)
-
 
   const location = useLocation()
   const {tipo_pai, subprojeto, nomeProjeto} = location.state
-  console.log(location.state)
 
   let ordemSubProjeto = ""
   let nomeSubProjeto = ""

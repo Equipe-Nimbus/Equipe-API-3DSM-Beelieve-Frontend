@@ -107,36 +107,18 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         const indexSubProjeto = estruturaDetalhes.findIndex(
           (linha) => linha.nivel === subprojeto.nivel,
         )
-        const orcamentoSubProjeto = getValues(
-          `estruturaDetalhes[${indexSubProjeto}].orcamento`,
-        )
-        const horaHomemSubProjeto = parseFloat(
-          getValues(`estruturaDetalhes[${indexSubProjeto}].hora_homem`),
-        )
-        const materialSubProjeto = getValues(
-          `estruturaDetalhes[${indexSubProjeto}].materiais`,
-        )
+        const orcamentoSubProjeto = getValues(`estruturaDetalhes[${indexSubProjeto}].orcamento`)
+        const horaHomemSubProjeto = parseFloat(getValues(`estruturaDetalhes[${indexSubProjeto}].hora_homem`))
+        const materialSubProjeto = getValues(`estruturaDetalhes[${indexSubProjeto}].materiais`)
 
-        orcamentoSubProjetosSomados =
-          orcamentoSubProjetosSomados + orcamentoSubProjeto
-        horaHomemSubProjetosSomados =
-          horaHomemSubProjetosSomados + horaHomemSubProjeto
-        materialSubProjetosSomados =
-          materialSubProjetosSomados + materialSubProjeto
+        orcamentoSubProjetosSomados = orcamentoSubProjetosSomados + orcamentoSubProjeto
+        horaHomemSubProjetosSomados = horaHomemSubProjetosSomados + horaHomemSubProjeto
+        materialSubProjetosSomados = materialSubProjetosSomados + materialSubProjeto
       })
 
-      setValue(
-        `estruturaDetalhes[${indexSubProjetoPai}].orcamento`,
-        orcamentoSubProjetosSomados,
-      )
-      setValue(
-        `estruturaDetalhes[${indexSubProjetoPai}].hora_homem`,
-        horaHomemSubProjetosSomados,
-      )
-      setValue(
-        `estruturaDetalhes[${indexSubProjetoPai}].materiais`,
-        materialSubProjetosSomados,
-      )
+      setValue(`estruturaDetalhes[${indexSubProjetoPai}].orcamento`, orcamentoSubProjetosSomados,)
+      setValue(`estruturaDetalhes[${indexSubProjetoPai}].hora_homem`, horaHomemSubProjetosSomados,)
+      setValue(`estruturaDetalhes[${indexSubProjetoPai}].materiais`, materialSubProjetosSomados,)
     }
 
     const valores = getValues("estruturaDetalhes")
@@ -177,7 +159,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     
     const projetoFormatado = formatarEstrutura(projeto, detalhesPacotesPreenchidos)
 
-    console.log(projetoFormatado)
+    //console.log(projetoFormatado)
 
     try {
       await axios

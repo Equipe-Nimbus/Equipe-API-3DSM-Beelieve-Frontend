@@ -111,7 +111,7 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto 
                 console.error( errors );
             } );*/
 
-    console.log("Dados Salvos:", geraJsonTarefas)
+    //console.log("Dados Salvos:", geraJsonTarefas)
   }
 
   const deleteRow = async (index) => {
