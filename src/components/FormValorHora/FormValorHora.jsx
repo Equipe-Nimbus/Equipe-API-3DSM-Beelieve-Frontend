@@ -176,6 +176,8 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     } catch (error) {}
   }
 
+  const statusInicio = projeto.data_inicio_projeto
+
   return (
     <div>
       <div className="mx-5 mb-2 flex items-center justify-between">
@@ -274,7 +276,8 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                           (subprojeto) =>
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
-                      linha.nivel === "1"
+                      linha.nivel === "1" ||
+                      statusInicio
                     }
                   />
                 </td>
@@ -295,7 +298,8 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                           (subprojeto) =>
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
-                      linha.nivel === "1"
+                      linha.nivel === "1"||
+                      statusInicio
                     }
                     className="text-center"
                   />
@@ -317,14 +321,15 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
             onBlur={(e) => handleTrocaValorHora()}
             defaultValue={projeto.hora_valor_projeto}
             className="w-16"
+            disabled={statusInicio}
           />
         </div>
 
-        <Button
+        {!statusInicio && <Button
           texto="Salvar"
           tipo="submit"
           className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-        />
+        />}
       </form>
     </div>
   )
