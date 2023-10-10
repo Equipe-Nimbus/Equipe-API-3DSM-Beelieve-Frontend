@@ -91,6 +91,7 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
               tabelaWBS={tabela}
               setTabelaWBS={setTabela}
               edicaoNivel1={true}
+              projeto={projeto}
             />
             <Button
               texto="Salvar"

@@ -6,7 +6,6 @@ import { FiPlus, FiMinus } from "react-icons/fi"
 
 function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
 
-	
   const gerarTabela = (tabelaWBS) => {
     return (
       <table id="wbsTable" className="mt-5 w-1/3 text-left text-on-light">
@@ -35,7 +34,6 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
                   className="w-full"
                   value={tabelaWBS[index].descricao}
                   onChange={(e) => handleDescricaoSubProjeto(e, index)}
-                  
                 />
               }
               </td>
@@ -46,6 +44,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
                   onClick={() => adicionarSubnivel(`${linha.nivel}`)}
                   className="m-2 rounded-full bg-primary50"
                   iconeTamanho="24px"
+
                 />
               )}
               {linha.nivel !== "1" && (
