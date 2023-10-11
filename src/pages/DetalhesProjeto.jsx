@@ -23,7 +23,7 @@ function DetalhesProjeto() {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data
-        //console.log("projeto resgatado: ", dados)
+        // console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
@@ -89,7 +89,7 @@ function DetalhesProjeto() {
         DataProjetoIniciado={projeto.data_inicio_projeto}
       />
       <MenuSelecao
-        opcoes={["ESTRUTURA", "PACOTES", "CRONOGRAMA"]}
+        opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO"]}
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
@@ -113,7 +113,7 @@ function DetalhesProjeto() {
         </div>
       )}
 
-      {secaoAtual === "CRONOGRAMA" && (
+      {secaoAtual === "PLANEJAMENTO" && (
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
           <Cronograma idProjeto={id} />
         </div>
