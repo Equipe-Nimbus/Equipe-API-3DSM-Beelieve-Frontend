@@ -7,7 +7,7 @@ function NovaTarefa() {
   const { idTarefa } = useParams()
 
   const location = useLocation()
-  const { tipo_pai, subprojeto, nomeProjeto } = location.state
+  const { tipo_pai, subprojeto, nomeProjeto, dataInicioProjeto } = location.state
 
   let ordemSubProjeto = ""
   let nomeSubProjeto = ""
@@ -38,6 +38,7 @@ function NovaTarefa() {
             ordem={ordemSubProjeto}
             nomePacote={nomeSubProjeto}
             nomeProjeto={nomeProjeto}
+            dataInicioProjeto={dataInicioProjeto}
           />
         </div>
       </div>

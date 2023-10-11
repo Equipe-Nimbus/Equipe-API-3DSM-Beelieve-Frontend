@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 import { BiTrash } from "react-icons/bi"
 import { AiOutlinePlus } from "react-icons/ai"
-//import schemaInsercaoAtividade from './validationAtividade';
+import schemaInsercaoAtividade from './validation';
 import Button from "../Button"
 import axios from "../../services/axios"
 
@@ -14,23 +15,16 @@ const TabFormTarefas = ({
   ordem,
   nomePacote,
   nomeProjeto,
+  dataInicioProjeto
 }) => {
 
-  const [tarefas, setTarefas] = useState([
-    {
-      id: "",
-      descricao: "",
-      resultadoEsperado: "",
-      status: 0,
-      peso: "",
-      prazo: "",
-    },
-  ])
+  const [tarefas, setTarefas] = useState([{}])
 
-  const { register, control, handleSubmit, setValue } = useForm({
+  const { register, control, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
       tarefas: tarefas
     },
+    resolver: yupResolver(schemaInsercaoAtividade)
   })
 
   const { fields } = useFieldArray({
@@ -48,7 +42,7 @@ const TabFormTarefas = ({
           resultadoEsperado: atividade.resultado_esperado_tarefa,
           status: atividade.status_tarefa ? atividade.status_tarefa : 0,
           peso: atividade.peso_tarefa,
-          prazo: atividade.prazo_tarefa,
+          prazo: atividade.prazo_tarefa ? atividade.prazo_tarefa : null,
         }
         return novaTarefa
       })
@@ -64,20 +58,28 @@ const TabFormTarefas = ({
       id: "",
       descricao: "",
       resultadoEsperado: "",
-      status: "",
+      status: 0,
       peso: "",
-      prazo: "",
+      prazo: null,
     }
 
     novaTarefa.push(novaLinha)
     setTarefas(novaTarefa)
   }
 
-  const deleteRow = async (index) => {
+  const deleteRow = (index) => {
     const tarefasExistentes = [...tarefas]
     tarefasExistentes.splice(index, 1)
 
     setTarefas(tarefasExistentes)
+  }
+
+  const handleStatus = (index) => {
+    const statusAtual = getValues(`tarefas[${index}].status`)
+    setValue(`tarefas[${index}].status`, statusAtual? 0 : 1)
+
+    const tarefasAtuais = getValues("tarefas")
+    setTarefas(tarefasAtuais)
   }
 
   useEffect(() => {
@@ -88,6 +90,8 @@ const TabFormTarefas = ({
     const listaTarefas = {
       tipo_pai: tipoPai,
       id_pai: idPai,
+      progresso_pai: 0,
+      inicializado: dataInicioProjeto? true : false,
       lista_tarefas: [],
     }
 
@@ -106,12 +110,10 @@ const TabFormTarefas = ({
   }
 
   const saveTarefa = async (data) => {
-    console.log(data.tarefas)
 
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
-    console.log(listaTarefasPreenchidas)
 
-    /* await axios
+    await axios
       .put("/tarefa/atualizar", listaTarefasPreenchidas)
       .then((response) => {
         if (response.status === 200) {
@@ -124,7 +126,7 @@ const TabFormTarefas = ({
         } else {
           console.error("Erro:", error)
         }
-      }) */
+      })
   }
 
   return (
@@ -147,21 +149,21 @@ const TabFormTarefas = ({
         </div>
 
         <form onSubmit={handleSubmit(saveTarefa)}>
-          <table class="mx-auto mt-5 w-4/5">
+          <table className="mx-auto mt-5 w-4/5">
             <thead className="bg-primary98 p-10 text-base uppercase">
               <tr>
-                <th class="px-6 py-3">Tarefa</th>
-                <th class="">Descrição</th>
-                <th class="">Resultado Esperado</th>
-                <th class="">Execução</th>
-                <th class="">Peso</th>
-                <th class="">Previsão</th>
+                <th className="px-6 py-3">Tarefa</th>
+                <th className="">Descrição</th>
+                <th className="">Resultado Esperado</th>
+                <th className="">Execução</th>
+                <th className="">Peso</th>
+                <th className="">Previsão</th>
               </tr>
             </thead>
             <tbody>
               {fields.map((tarefa, index) => (
                 <tr key={index} className="border-b border-n90">
-                  <td class="px-4 py-1.5 text-center text-lg font-semibold">
+                  <td className="px-4 py-1.5 text-center text-lg font-semibold">
                     {index + 1}
                   </td>
                   <td>
@@ -176,6 +178,7 @@ const TabFormTarefas = ({
                     <input
                       type="text"
                       {...register(`tarefas[${index}].resultadoEsperado`)}
+                      defaultValue={tarefa.resultadoEsperado}
                       className="w-full"
                     />
                   </td>
@@ -184,6 +187,7 @@ const TabFormTarefas = ({
                       type="checkbox"
                       {...register(`tarefas[${index}].status`)}
                       checked={fields[index].status === 1}
+                      onChange={(e) => handleStatus(index)}
                       className="w-full"
                     />
                   </td>
@@ -191,6 +195,8 @@ const TabFormTarefas = ({
                     <input
                       type="number"
                       {...register(`tarefas[${index}].peso`)}
+                      defaultValue={tarefa.peso}
+                      min={0}
                       className="w-full"
                     />
                   </td>
@@ -198,6 +204,7 @@ const TabFormTarefas = ({
                     <input
                       type="date"
                       {...register(`tarefas[${index}].prazo`)}
+                      defaultValue={tarefa.prazo}
                       className="w-full"
                     />
                   </td>

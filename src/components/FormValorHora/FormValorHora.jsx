@@ -9,7 +9,7 @@ import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 import { formatarEstrutura } from "../../utils/formatarEstrutura"
 import axios from "../../services/axios"
 
-function FormValorHora({ tabela, projeto, setAtualizar }) {
+function FormValorHora({ tabela, projeto, setAtualizar}) {
   const [subProjetosAcessiveis, setSubProjetosAcessiveis] = useState([])
   const [estruturaDetalhes, setEstruturaDetalhes] = useState(
     tabela.map((linha) => {
@@ -221,6 +221,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                               subprojeto.id_sub_projeto === linha.id,
                           ),
                           nomeProjeto: projeto.nome_projeto,
+                          dataInicioProjeto: projeto.data_inicio_projeto
                         }}
                       >
                         {linha.descricao}
@@ -239,6 +240,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                             subprojeto.id_nivel_sub_projeto === linha.id,
                         ),
                         nomeProjeto: projeto.nome_projeto,
+                        dataInicioProjeto: projeto.data_inicio_projeto
                       }}
                     >
                       {linha.descricao}
