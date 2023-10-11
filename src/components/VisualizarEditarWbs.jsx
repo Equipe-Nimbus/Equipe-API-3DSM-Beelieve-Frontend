@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Swal from 'sweetalert2'
 
 import TabelaWbs from "./TabelaWbs"
 import Button from "./Button"
@@ -30,11 +31,13 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
         .then((response) => {
           if ((response.status = 200)) {
             //console.log("resposta: ", response)
-            window.alert("Estrutura salva com sucesso!")
+            Swal.fire('Estrutura salva com sucesso!', '', 'sucess');
+            // window.alert("Estrutura salva com sucesso!")
             setAtualizar(true)
           }
           else {
-            window.alert("Ocorreu algum problema na atualização :(")
+            Swal.fire('Ocorreu algum problema na atualização :(', '', 'error');
+            // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
     } catch (error) {}

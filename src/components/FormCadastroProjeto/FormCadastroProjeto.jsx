@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import IntlCurrencyInput from "react-intl-currency-input"
+import Swal from 'sweetalert2'
 
 import schemaProjetoInicial from "./validation"
 import TabelaWbs from "../TabelaWbs"
@@ -62,11 +63,11 @@ function FormCadastroProjeto() {
 
     await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
-        window.alert("Cadastro realizado com sucesso!")
+        Swal.fire('Cadastro realizado com sucesso!', '', 'sucess');
         navigate("/projetos")
       }
       else {
-        window.alert("Erro ao realizar o cadastro :(")
+        Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
       }
     })
   }
