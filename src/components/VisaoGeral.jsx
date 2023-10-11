@@ -59,17 +59,16 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
         console.error('Erro ao excluir o projeto:', error);
       }
     }
-
-    const handleSalvarProgressoClick = async () => {
-      if (setProjetoIniciado(true)){
-        Swal.fire('Progresso salvo com sucesso!', '', 'success');
-      }
-
-      else{
-        Swal.fire('O projeto deve ser iniciado antes de salvar o progresso');
-      }
-    }
   };
+
+  const handleSalvarProgressoClick = async () => {
+    if (setProjetoNaoIniciado(false)){
+      Swal.fire('Progresso salvo com sucesso!', '', 'success');
+    }
+    else{
+      Swal.fire('O projeto deve ser iniciado antes de salvar o progresso');
+    }
+  }
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
