@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import Swal from 'sweetalert2'
 
 import Button from "../Button"
 
@@ -145,7 +146,8 @@ function Cronograma({ idProjeto }) {
     try {
       await axios.put("/cronograma/atualiza", cronograma).then((response) => {
         if (response.status === 200) {
-          window.alert("Planejamento salvo com sucesso!")
+          Swal.fire('Planejamento salvo com sucesso!', '', 'sucess');
+          // window.alert("Planejamento salvo com sucesso!")
         }
       })
     } catch (error) {

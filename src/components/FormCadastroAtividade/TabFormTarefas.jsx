@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { BiTrash } from "react-icons/bi"
 import {AiOutlinePlus} from "react-icons/ai"
+import Swal from 'sweetalert2'
+
 //import schemaInsercaoAtividade from './validationAtividade';
 import Button from "../Button"
 import axios from "../../services/axios"
@@ -92,7 +94,8 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto 
       .put("/tarefa/atualizar", geraJsonTarefas)
       .then((response) => {
         if (response.status === 200) {
-          window.alert("Tarefas atualizadas com sucesso!")
+          Swal.fire('Tarefas atualizadas com sucesso!', '', 'sucess');
+          // window.alert("Tarefas atualizadas com sucesso!")
         }
       })
       .catch((error) => {

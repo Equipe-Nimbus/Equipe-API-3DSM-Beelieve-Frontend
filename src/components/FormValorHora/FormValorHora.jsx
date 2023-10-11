@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useForm, useFieldArray } from "react-hook-form"
+import Swal from 'sweetalert2'
 
 import Button from "../Button"
 import IntlCurrencyInput from "react-intl-currency-input"
@@ -167,10 +168,12 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         .then((response) => {
           if (response.status === 200) {
             //console.log("resposta: ", response)
-            window.alert("Detalhes dos pacotes atualizados com sucesso!")
+            Swal.fire('Detalhes dos pacotes atualizados com sucesso!', '', 'sucess');
+            // window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
           } else {
-            window.alert("Ocorreu algum problema na atualização :(")
+            Swal.fire('Ocorreu algum problema na atualização :(', '', 'error');
+            // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
     } catch (error) {}
