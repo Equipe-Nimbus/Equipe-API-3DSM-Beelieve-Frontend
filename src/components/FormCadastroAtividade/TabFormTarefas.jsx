@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react"
+
 import { BiTrash } from "react-icons/bi"
-import {AiOutlinePlus} from "react-icons/ai"
+import { AiOutlinePlus } from "react-icons/ai"
 import Swal from 'sweetalert2'
 
 //import schemaInsercaoAtividade from './validationAtividade';
 import Button from "../Button"
 import axios from "../../services/axios"
 
-const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto }) => {
+const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto, iniciado }) => {
+  const [projetos, setProjetos] = useState([])
   const [tarefa, setTarefa] = useState([
     {
       id: "",
@@ -89,32 +91,36 @@ const TabFormTarefas = ({ tarefas, tipo_pai, id, ordem, nomePacote, nomeProjeto 
 
   const saveTarefa = async () => {
     const geraJsonTarefas = listaTarefas()
+    let PodeSalvar = true
+    const peloMenosUmaTarefaMarcada = tarefa.some((atividade) => atividade.status === 1);
+    console.log(iniciado.length)
+    if (peloMenosUmaTarefaMarcada) {
+      if (iniciado.length === 29 || iniciado.length === 4) {
+        PodeSalvar = true;
+      } else {
+        PodeSalvar = false;
+      }
+    }
 
-    await axios
-      .put("/tarefa/atualizar", geraJsonTarefas)
-      .then((response) => {
-        if (response.status === 200) {
-          Swal.fire('Tarefas atualizadas com sucesso!', '', 'sucess');
-          // window.alert("Tarefas atualizadas com sucesso!")
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          console.error("Recurso não encontrado.")
-        } else {
-          console.error("Erro:", error)
-        }
-      })
-
-    /*schemaInsercaoAtividade.validate( tarefa )
-            .then( tarefa => {
-                axios.post( '/tarefa/cadastrar', tarefa ).then( response => setTarefa( response.tarefa ));
-            } )
-            .catch( errors => {
-                console.error( errors );
-            } );*/
-
-    //console.log("Dados Salvos:", geraJsonTarefas)
+    if (PodeSalvar) {
+      await axios
+        .put("/tarefa/atualizar", geraJsonTarefas)
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire('Tarefas atualizadas com sucesso!', '', 'success');
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            console.error("Recurso não encontrado.")
+          } else {
+            console.error("Erro:", error)
+          }
+        })
+      console.log(PodeSalvar)
+    }else{
+      Swal.fire('Não pode salvar progresso sem iniciar projeto!', '', 'error');
+    }
   }
 
   const deleteRow = async (index) => {

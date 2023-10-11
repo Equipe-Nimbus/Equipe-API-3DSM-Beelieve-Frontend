@@ -180,6 +180,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   }
 
   const statusInicio = projeto.data_inicio_projeto
+  console.log()
 
   return (
     <div>
@@ -218,7 +219,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                       (subprojeto) => subprojeto.id_sub_projeto === linha.id,
                     ) ? (
                       <Link
-                        to={`/projetos/tarefas/${linha.id}`}
+                        to={`/projetos/tarefas/${linha.id}?Iniciado=${statusInicio}`}
                         state={{
                           tipo_pai: "subprojeto",
                           subprojeto: subProjetosAcessiveis.find(
@@ -236,7 +237,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
 
                   {linha.nivel.length > 3 && (
                     <Link
-                      to={`/projetos/tarefas/${linha.id}`}
+                      to={`/projetos/tarefas/${linha.id}?Iniciado=${statusInicio}`}
                       state={{
                         tipo_pai: "nivelsubprojeto",
                         subprojeto: subProjetosAcessiveis.find(

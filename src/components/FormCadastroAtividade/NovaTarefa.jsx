@@ -8,6 +8,7 @@ function NovaTarefa() {
 
   const location = useLocation()
   const {tipo_pai, subprojeto, nomeProjeto} = location.state
+  const statusInicio = new URLSearchParams(location.search).get("Iniciado");
 
   let ordemSubProjeto = ""
   let nomeSubProjeto = ""
@@ -32,7 +33,7 @@ function NovaTarefa() {
     </button>
       <div className="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
         <div>
-          <TabFormTarefas tarefas={subprojeto.tarefas} tipo_pai={tipo_pai} id={idTarefa} ordem={ordemSubProjeto} nomePacote={nomeSubProjeto} nomeProjeto={nomeProjeto}/>
+          <TabFormTarefas iniciado={statusInicio} tarefas={subprojeto.tarefas} tipo_pai={tipo_pai} id={idTarefa} ordem={ordemSubProjeto} nomePacote={nomeSubProjeto} nomeProjeto={nomeProjeto}/>
         </div>
       </div>
       

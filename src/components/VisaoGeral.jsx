@@ -108,15 +108,6 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
     }
   };
 
-  const handleSalvarProgressoClick = async () => {
-    if (setProjetoNaoIniciado(false)){
-      Swal.fire('Progresso salvo com sucesso!', '', 'success');
-    }
-    else{
-      Swal.fire('O projeto deve ser iniciado antes de salvar o progresso');
-    }
-  }
-
   useEffect(() => {
     setProjetoNaoIniciado(!DataProjetoIniciado);
   }, [DataProjetoIniciado]);
