@@ -316,7 +316,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
             onChange={(e, value) => handleValorHora(value)}
             onBlur={(e) => handleTrocaValorHora()}
             defaultValue={projeto.hora_valor_projeto}
-            className="w-16"
+            className="w-26"
           />
         </div>
 
