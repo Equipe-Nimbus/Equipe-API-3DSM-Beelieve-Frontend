@@ -87,6 +87,11 @@ function DetalhesProjeto() {
         descricaoProjeto={projeto.descricao_projeto}
         liderProjeto={projeto.chefe_projeto}
         DataProjetoIniciado={projeto.data_inicio_projeto}
+        camposValidados={{
+          tabela: tabela,
+          horaValorProjeto: projeto.hora_valor_projeto,
+          projeto: projeto
+        }}
       />
       <MenuSelecao
         opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO"]}
