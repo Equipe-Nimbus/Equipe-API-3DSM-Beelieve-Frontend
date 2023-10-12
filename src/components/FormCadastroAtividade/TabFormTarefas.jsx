@@ -11,7 +11,6 @@ import Button from "../Button"
 import axios from "../../services/axios"
 
 const TabFormTarefas = ({
-  iniciado,
   listaTarefas,
   tipoPai,
   idPai,
@@ -149,12 +148,12 @@ const TabFormTarefas = ({
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
 
     let PodeSalvar = true
-    const peloMenosUmaTarefaMarcada = tarefas.some(
-      (atividade) => atividade.status === 1,
+    const peloMenosUmaTarefaMarcada = listaTarefasPreenchidas.lista_tarefas.some(
+      (tarefa) => tarefa.status_tarefa === 1,
     )
-    console.log(iniciado.length)
+
     if (peloMenosUmaTarefaMarcada) {
-      if (iniciado.length === 29 || iniciado.length === 4) {
+      if (dataInicioProjeto) {
         PodeSalvar = true
       } else {
         PodeSalvar = false
@@ -176,9 +175,8 @@ const TabFormTarefas = ({
             console.error("Erro:", error)
           }
         })
-        console.log(PodeSalvar)
     } else {
-      Swal.fire('Não pode salvar progresso sem iniciar projeto!', '', 'error');
+      Swal.fire('Não é possível alterar o progresso de um projeto não iniciado!', '', 'error');
     }
   }
 
