@@ -11,13 +11,16 @@ function NovaTarefa() {
 
   let ordemSubProjeto = ""
   let nomeSubProjeto = ""
+  let progressoSubProjeto = ""
 
   if (tipo_pai === "subprojeto") {
     ordemSubProjeto = subprojeto.ordem_sub_projeto
     nomeSubProjeto = subprojeto.nome_sub_projeto
+    progressoSubProjeto = subprojeto.progresso_sub_projeto
   } else {
     ordemSubProjeto = subprojeto.ordem_nivel_sub_projeto
     nomeSubProjeto = subprojeto.nome_nivel_sub_projeto
+    progressoSubProjeto = subprojeto.progresso_nivel_sub_projeto
   }
 
   return (
@@ -39,6 +42,7 @@ function NovaTarefa() {
             nomePacote={nomeSubProjeto}
             nomeProjeto={nomeProjeto}
             dataInicioProjeto={dataInicioProjeto}
+            progressoPacote={progressoSubProjeto}
           />
         </div>
       </div>

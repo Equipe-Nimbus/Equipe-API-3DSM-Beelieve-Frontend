@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 
 import { BiTrash } from "react-icons/bi"
 import { AiOutlinePlus } from "react-icons/ai"
-import schemaInsercaoAtividade from './validation';
+import schemaInsercaoAtividade from "./validation"
 import Button from "../Button"
 import axios from "../../services/axios"
 
@@ -15,16 +15,17 @@ const TabFormTarefas = ({
   ordem,
   nomePacote,
   nomeProjeto,
-  dataInicioProjeto
+  dataInicioProjeto,
+  progressoPacote,
 }) => {
-
   const [tarefas, setTarefas] = useState([{}])
+  const [progresso, setProgresso] = useState(progressoPacote)
 
   const { register, control, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      tarefas: tarefas
+      tarefas: tarefas,
     },
-    resolver: yupResolver(schemaInsercaoAtividade)
+    resolver: yupResolver(schemaInsercaoAtividade),
   })
 
   const { fields } = useFieldArray({
@@ -40,9 +41,11 @@ const TabFormTarefas = ({
           id: atividade.id_tarefa,
           descricao: atividade.descricao_atividade_tarefa,
           resultadoEsperado: atividade.resultado_esperado_tarefa,
-          status: atividade.status_tarefa ? atividade.status_tarefa : 0,
-          peso: atividade.peso_tarefa,
-          prazo: atividade.prazo_tarefa ? atividade.prazo_tarefa : null,
+          status: atividade.status_tarefa === 1 ? true : false,
+          peso: atividade.peso_tarefa ? atividade.peso_tarefa : 0,
+          prazo: atividade.prazo_tarefa
+            ? atividade.prazo_tarefa.slice(0, 10)
+            : null,
         }
         return novaTarefa
       })
@@ -58,8 +61,8 @@ const TabFormTarefas = ({
       id: "",
       descricao: "",
       resultadoEsperado: "",
-      status: 0,
-      peso: "",
+      status: false,
+      peso: 0,
       prazo: null,
     }
 
@@ -76,7 +79,32 @@ const TabFormTarefas = ({
 
   const handleStatus = (index) => {
     const statusAtual = getValues(`tarefas[${index}].status`)
-    setValue(`tarefas[${index}].status`, statusAtual? 0 : 1)
+    setValue(`tarefas[${index}].status`, statusAtual ? false : true)
+
+    const tarefasAtuais = getValues("tarefas")
+    setTarefas(tarefasAtuais)
+  }
+
+  const handleProgresso = () => {
+    const tarefasAtuais = getValues("tarefas")
+
+    const somaDosPesos = tarefasAtuais.reduce(
+      (totalPesos, item) => totalPesos + parseInt(item.peso),
+      0,
+    )
+
+    const progresso =
+      (tarefasAtuais.reduce((totalPonderado, item) => {
+        return totalPonderado + parseInt(item.peso) * item.status
+      }, 0) /
+        somaDosPesos) *
+      100
+
+    setProgresso(isNaN(progresso) ? 0 : progresso)
+  }
+
+  const handlePeso = (index, valor) => {
+    setValue(`tarefas[${index}].peso`, valor)
 
     const tarefasAtuais = getValues("tarefas")
     setTarefas(tarefasAtuais)
@@ -84,14 +112,15 @@ const TabFormTarefas = ({
 
   useEffect(() => {
     setValue("tarefas", tarefas)
+    handleProgresso()
   }, [tarefas])
 
   function gerarJsonTarefas(tarefas) {
     const listaTarefas = {
       tipo_pai: tipoPai,
       id_pai: idPai,
-      progresso_pai: 0,
-      inicializado: dataInicioProjeto? true : false,
+      progresso_pai: parseFloat(progresso),
+      inicializado: dataInicioProjeto ? true : false,
       lista_tarefas: [],
     }
 
@@ -101,8 +130,12 @@ const TabFormTarefas = ({
         descricao_atividade_tarefa: atividade.descricao,
         resultado_esperado_tarefa: atividade.resultadoEsperado,
         peso_tarefa: parseInt(atividade.peso),
-        status_tarefa: atividade.status,
-        prazo_tarefa: atividade.prazo,
+        status_tarefa: atividade.status === true ? 1 : 0,
+        prazo_tarefa: atividade.prazo
+          ? `${atividade.prazo.getFullYear()}-${
+              atividade.prazo.getMonth() + 1
+            }-${atividade.prazo.getDate()}`
+          : null,
       })
     })
 
@@ -110,8 +143,8 @@ const TabFormTarefas = ({
   }
 
   const saveTarefa = async (data) => {
-
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
+    //console.log(listaTarefasPreenchidas)
 
     await axios
       .put("/tarefa/atualizar", listaTarefasPreenchidas)
@@ -131,32 +164,44 @@ const TabFormTarefas = ({
 
   return (
     <div>
-      <h1 className="mb-5 text-3xl text-complementary-20">{nomeProjeto}</h1>
-      <h2 className="mb-2 text-2xl">
-        Pacote de trabalho: {`${ordem} - ${nomePacote}`}
-      </h2>
+      <div className="mb-2 flex items-end gap-64 ">
+        <div>
+          <h1 className="mb-5 text-3xl text-complementary-20">{nomeProjeto}</h1>
+          <h2 className="text-2xl">
+            Pacote de trabalho: {`${ordem} - ${nomePacote}`}
+          </h2>
+        </div>
+        <div className="flex items-center gap-1">
+          
+          <span className="text-2xl">Progresso: <span className="text-2xl text-complementary-20">{`${parseInt(progresso)}%`}</span> </span>
+          <progress value={progresso} max={100} className="h-2 rounded bg-complementary-20"></progress>
+        </div>
+      </div>
       <hr className="border-n90" />
 
       <div className="flex flex-col gap-2">
         <div className="ps-40">
           <button
             onClick={addRow}
-            className="ml-4 mt-9 flex place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
+            className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
           >
             Adicionar tarefa
-            <AiOutlinePlus className="ml-1 mt-2" />
+            <AiOutlinePlus />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(saveTarefa)}>
+        <form
+          onSubmit={handleSubmit(saveTarefa)}
+          className="flex flex-col gap-10"
+        >
           <table className="mx-auto mt-5 w-4/5">
             <thead className="bg-primary98 p-10 text-base uppercase">
               <tr>
                 <th className="px-6 py-3">Tarefa</th>
                 <th className="">Descrição</th>
                 <th className="">Resultado Esperado</th>
-                <th className="">Execução</th>
                 <th className="">Peso</th>
+                <th className="">Execução</th>
                 <th className="">Previsão</th>
               </tr>
             </thead>
@@ -184,19 +229,20 @@ const TabFormTarefas = ({
                   </td>
                   <td>
                     <input
-                      type="checkbox"
-                      {...register(`tarefas[${index}].status`)}
-                      checked={fields[index].status === 1}
-                      onChange={(e) => handleStatus(index)}
+                      type="number"
+                      {...register(`tarefas[${index}].peso`)}
+                      defaultValue={tarefa.peso}
+                      onBlur={(e) => handlePeso(index, e.target.value)}
+                      min={0}
                       className="w-full"
                     />
                   </td>
                   <td>
                     <input
-                      type="number"
-                      {...register(`tarefas[${index}].peso`)}
-                      defaultValue={tarefa.peso}
-                      min={0}
+                      type="checkbox"
+                      {...register(`tarefas[${index}].status`)}
+                      checked={fields[index].status === true}
+                      onChange={(e) => handleStatus(index)}
                       className="w-full"
                     />
                   </td>
@@ -209,13 +255,13 @@ const TabFormTarefas = ({
                     />
                   </td>
                   <td className="text-center">
-                    <button onClick={() => deleteRow(index)}>
-                      <BiTrash
-                        color="#000000"
-                        size={24}
-                        className="hover:fill-primary50"
-                      />
-                    </button>
+                    <Button
+                      iconeOpcional={BiTrash}
+                      tipo="button"
+                      iconeTamanho="24px"
+                      className="hover:fill-primary50"
+                      onClick={(e) => deleteRow(index)}
+                    />
                   </td>
                 </tr>
               ))}

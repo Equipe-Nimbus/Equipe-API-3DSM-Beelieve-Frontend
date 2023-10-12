@@ -101,21 +101,21 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
         <span className="font-semibold text-complementary-20">
           Líder do projeto:
         </span>
-        <span>{liderProjeto}</span>
+        <span>{}</span>
       </span>
       <br />
       <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
         <span className="font-semibold text-complementary-20">
           Info Relevante:
         </span>
-        <span>{liderProjeto}</span>
+        <span>{}</span>
       </span>
       <br />
       <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
         <span className="font-semibold text-complementary-20">
           Info Relevante:
         </span>
-        <span>{liderProjeto}</span>
+        <span>{}</span>
       </span>
     </div>
   )

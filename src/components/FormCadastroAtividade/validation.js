@@ -12,7 +12,7 @@ const schemaInsercaoAtividade = yup.object().shape({
         .required("Resultado esperado é obrigatório"),
 
       status: yup
-        .number(),
+        .boolean(),
 
       peso: yup
         .number()
