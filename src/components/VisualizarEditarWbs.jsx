@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Swal from 'sweetalert2'
 
 import TabelaWbs from "./TabelaWbs"
 import Button from "./Button"
@@ -8,7 +9,7 @@ import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from "../services/axios"
 
 function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
-  const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
+  const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
 
   const mudarVisualizacao = (valor) => {
     const view = valor
@@ -30,15 +31,19 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
         .then((response) => {
           if ((response.status = 200)) {
             //console.log("resposta: ", response)
-            window.alert("Estrutura salva com sucesso!")
+            Swal.fire('Estrutura salva com sucesso!', '', 'sucess');
+            // window.alert("Estrutura salva com sucesso!")
             setAtualizar(true)
           }
           else {
-            window.alert("Ocorreu algum problema na atualização :(")
+            Swal.fire('Ocorreu algum problema na atualização :(', '', 'error');
+            // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
     } catch (error) {}
   }
+
+  const statusInicio = projeto.data_inicio_projeto
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
@@ -91,12 +96,13 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
               tabelaWBS={tabela}
               setTabelaWBS={setTabela}
               edicaoNivel1={true}
+              projeto={projeto.data_inicio_projeto}
             />
-            <Button
+            {!statusInicio && <Button
               texto="Salvar"
               tipo="submit"
               className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-            />
+            />}
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import Swal from "sweetalert2"
 
 import { BiTrash } from "react-icons/bi"
 import { AiOutlinePlus } from "react-icons/ai"
+
 import schemaInsercaoAtividade from "./validation"
 import Button from "../Button"
 import axios from "../../services/axios"
 
 const TabFormTarefas = ({
+  iniciado,
   listaTarefas,
   tipoPai,
   idPai,
@@ -144,22 +147,39 @@ const TabFormTarefas = ({
 
   const saveTarefa = async (data) => {
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
-    //console.log(listaTarefasPreenchidas)
 
-    await axios
-      .put("/tarefa/atualizar", listaTarefasPreenchidas)
-      .then((response) => {
-        if (response.status === 200) {
-          window.alert("Tarefas atualizadas com sucesso!")
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          console.error("Recurso não encontrado.")
-        } else {
-          console.error("Erro:", error)
-        }
-      })
+    let PodeSalvar = true
+    const peloMenosUmaTarefaMarcada = tarefas.some(
+      (atividade) => atividade.status === 1,
+    )
+    console.log(iniciado.length)
+    if (peloMenosUmaTarefaMarcada) {
+      if (iniciado.length === 29 || iniciado.length === 4) {
+        PodeSalvar = true
+      } else {
+        PodeSalvar = false
+      }
+    }
+
+    if (PodeSalvar) {
+      await axios
+        .put("/tarefa/atualizar", listaTarefasPreenchidas)
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            console.error("Recurso não encontrado.")
+          } else {
+            console.error("Erro:", error)
+          }
+        })
+        console.log(PodeSalvar)
+    } else {
+      Swal.fire('Não pode salvar progresso sem iniciar projeto!', '', 'error');
+    }
   }
 
   return (
@@ -172,9 +192,14 @@ const TabFormTarefas = ({
           </h2>
         </div>
         <div className="flex items-center gap-1">
-          
-          <span className="text-2xl">Progresso: <span className="text-2xl text-complementary-20">{`${parseInt(progresso)}%`}</span> </span>
-          <progress value={progresso} max={100} className="h-2 rounded bg-complementary-20"></progress>
+          <span className="text-2xl">
+            Progresso:{" "}
+            <span className="text-2xl text-complementary-20">{`${parseInt(progresso)}%`}</span> </span>
+          <progress
+            value={progresso}
+            max={100}
+            className="h-2 rounded bg-complementary-20"
+          ></progress>
         </div>
       </div>
       <hr className="border-n90" />

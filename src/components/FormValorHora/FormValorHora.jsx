@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useForm, useFieldArray } from "react-hook-form"
+import Swal from 'sweetalert2'
 
 import Button from "../Button"
 import IntlCurrencyInput from "react-intl-currency-input"
@@ -167,14 +168,19 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
         .then((response) => {
           if (response.status === 200) {
             //console.log("resposta: ", response)
-            window.alert("Detalhes dos pacotes atualizados com sucesso!")
+            Swal.fire('Detalhes dos pacotes atualizados com sucesso!', '', 'sucess');
+            // window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
           } else {
-            window.alert("Ocorreu algum problema na atualização :(")
+            Swal.fire('Ocorreu algum problema na atualização :(', '', 'error');
+            // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
     } catch (error) {}
   }
+
+  const statusInicio = projeto.data_inicio_projeto
+  console.log()
 
   return (
     <div>
@@ -213,7 +219,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                       (subprojeto) => subprojeto.id_sub_projeto === linha.id,
                     ) ? (
                       <Link
-                        to={`/projetos/tarefas/${linha.id}`}
+                        to={`/projetos/tarefas/${linha.id}?Iniciado=${statusInicio}`}
                         state={{
                           tipo_pai: "subprojeto",
                           subprojeto: subProjetosAcessiveis.find(
@@ -232,7 +238,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
 
                   {linha.nivel.length > 3 && (
                     <Link
-                      to={`/projetos/tarefas/${linha.id}`}
+                      to={`/projetos/tarefas/${linha.id}?Iniciado=${statusInicio}`}
                       state={{
                         tipo_pai: "nivelsubprojeto",
                         subprojeto: subProjetosAcessiveis.find(
@@ -276,7 +282,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                           (subprojeto) =>
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
-                      linha.nivel === "1"
+                      linha.nivel === "1" ||
+                      statusInicio
                     }
                   />
                 </td>
@@ -297,7 +304,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                           (subprojeto) =>
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
-                      linha.nivel === "1"
+                      linha.nivel === "1"||
+                      statusInicio
                     }
                     className="text-center"
                   />
@@ -322,11 +330,11 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
           />
         </div>
 
-        <Button
+        {!statusInicio && <Button
           texto="Salvar"
           tipo="submit"
           className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-        />
+        />}
       </form>
     </div>
   )
