@@ -21,6 +21,7 @@ const TabFormTarefas = ({
   progressoPacote,
 }) => {
   const [tarefas, setTarefas] = useState([])
+  const [progressoAnterior, setProgressoAnterior] = useState(progressoPacote)
   const [progresso, setProgresso] = useState(progressoPacote)
 
   const { register, control, handleSubmit, setValue, getValues } = useForm({
@@ -148,9 +149,10 @@ const TabFormTarefas = ({
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
 
     let PodeSalvar = true
-    const peloMenosUmaTarefaMarcada = listaTarefasPreenchidas.lista_tarefas.some(
-      (tarefa) => tarefa.status_tarefa === 1,
-    )
+    const peloMenosUmaTarefaMarcada =
+      listaTarefasPreenchidas.lista_tarefas.some(
+        (tarefa) => tarefa.status_tarefa === 1,
+      )
 
     if (peloMenosUmaTarefaMarcada) {
       if (dataInicioProjeto) {
@@ -161,22 +163,53 @@ const TabFormTarefas = ({
     }
 
     if (PodeSalvar) {
-      await axios
-        .put("/tarefa/atualizar", listaTarefasPreenchidas)
-        .then((response) => {
-          if (response.status === 200) {
-            Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+      if (progresso < progressoAnterior) {
+        Swal.fire({
+          title: "As alterações diminuíram o progresso. Continuar?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Continuar",
+          cancelButtonText: "Cancelar",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await axios
+              .put("/tarefa/atualizar", listaTarefasPreenchidas)
+              .then((response) => {
+                if (response.status === 200) {
+                  Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+                }
+              })
+              .catch((error) => {
+                if (error.response.status === 404) {
+                  console.error("Recurso não encontrado.")
+                } else {
+                  console.error("Erro:", error)
+                }
+              })
           }
         })
-        .catch((error) => {
-          if (error.response.status === 404) {
-            console.error("Recurso não encontrado.")
-          } else {
-            console.error("Erro:", error)
-          }
-        })
+      } else {
+        await axios
+          .put("/tarefa/atualizar", listaTarefasPreenchidas)
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+            }
+          })
+          .catch((error) => {
+            if (error.response.status === 404) {
+              console.error("Recurso não encontrado.")
+            } else {
+              console.error("Erro:", error)
+            }
+          })
+      }
     } else {
-      Swal.fire('Não é possível alterar o progresso de um projeto não iniciado!', '', 'error');
+      Swal.fire(
+        "Não é possível alterar o progresso de um projeto não iniciado!",
+        "",
+        "error",
+      )
     }
   }
 
@@ -240,6 +273,7 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].descricao`)}
                       defaultValue={tarefa.descricao}
                       className="w-full"
+                      disabled={tarefa.status === true}
                     />
                   </td>
                   <td>
@@ -248,6 +282,7 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].resultadoEsperado`)}
                       defaultValue={tarefa.resultadoEsperado}
                       className="w-full"
+                      disabled={tarefa.status === true}
                     />
                   </td>
                   <td>
@@ -258,6 +293,7 @@ const TabFormTarefas = ({
                       onBlur={(e) => handlePeso(index, e.target.value)}
                       min={0}
                       className="w-full"
+                      disabled={tarefa.status === true}
                     />
                   </td>
                   <td>
@@ -275,6 +311,7 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].prazo`)}
                       defaultValue={tarefa.prazo}
                       className="w-full"
+                      disabled={tarefa.status === true}
                     />
                   </td>
                   <td className="text-center">
