@@ -192,7 +192,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
       <hr className="border-n90" />
       <form
         onSubmit={handleSubmit(atualizarDetalhesPacotes)}
-        className="my-10 flex flex-col gap-2"
+        className="my-10 flex flex-col gap-2 overflow-x-auto pb-5"
       >
         <table className="mx-auto rounded px-16">
           <thead className="bg-primary98 p-10 text-base uppercase">
