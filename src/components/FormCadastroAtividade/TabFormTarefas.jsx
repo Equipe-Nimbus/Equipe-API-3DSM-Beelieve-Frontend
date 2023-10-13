@@ -20,7 +20,7 @@ const TabFormTarefas = ({
   dataInicioProjeto,
   progressoPacote,
 }) => {
-  const [tarefas, setTarefas] = useState([{}])
+  const [tarefas, setTarefas] = useState([])
   const [progresso, setProgresso] = useState(progressoPacote)
 
   const { register, control, handleSubmit, setValue, getValues } = useForm({

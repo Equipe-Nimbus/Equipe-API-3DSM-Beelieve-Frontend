@@ -7,7 +7,8 @@ import VisaoGeral from "../components/VisaoGeral"
 import MenuSelecao from "../components/MenuSelecao"
 import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 import FormValorHora from "../components/FormValorHora/FormValorHora"
-import Cronograma from "../components/Cronograma/Cronograma"
+import Planejamento from "../components/Cronograma/Planejamento"
+import Acompanhamento from "../components/Cronograma/Acompanhamento"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
@@ -94,7 +95,7 @@ function DetalhesProjeto() {
         }}
       />
       <MenuSelecao
-        opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO"]}
+        opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
@@ -120,7 +121,13 @@ function DetalhesProjeto() {
 
       {secaoAtual === "PLANEJAMENTO" && (
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <Cronograma idProjeto={id} />
+          <Planejamento idProjeto={id} />
+        </div>
+      )}
+
+      {secaoAtual === "ACOMPANHAMENTO" && (
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <Acompanhamento idProjeto={id} />
         </div>
       )}
     </>

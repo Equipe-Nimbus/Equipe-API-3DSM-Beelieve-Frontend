@@ -10,7 +10,7 @@ import axios from "../../services/axios"
 
 import { FiPlus, FiMinus } from "react-icons/fi"
 
-function Cronograma({ idProjeto }) {
+function Planejamento({ idProjeto }) {
   const [cronograma, setCronograma] = useState({})
 
   const { register, handleSubmit, control, setValue } = useForm({
@@ -229,4 +229,4 @@ function Cronograma({ idProjeto }) {
 
 }
 
-export default Cronograma
+export default Planejamento

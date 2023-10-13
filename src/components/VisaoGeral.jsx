@@ -15,7 +15,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
   const { tabela, horaValorProjeto, projeto } = camposValidados;
   const MaterialoNiveis = tabela.map((linha) => linha.materiais);
   const hora_homemNiveis = tabela.map((linha) => linha.hora_homem);
-  let tarefasComCamposVazios = false;
+  /* let tarefasComCamposVazios = false;
 
   // Verificando se subprojeto tem tarefa e se os campos tem algum valor
   for (const chaveProjeto in projeto.sub_projetos) {
@@ -43,7 +43,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
         break; // Sai do loop de projetos se encontrar tarefas com campos vazios
       }
     }
-  }
+  } */
 
   // pegando o mes-ano atual
   const dataAtual = new Date();
@@ -72,9 +72,9 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
       Swal.fire('Alerta!!!', 'Projeto não possui valores para material!', 'error');
     } else if (algumaHoraHomemZero) {
       Swal.fire('Alerta!!!', 'Projeto não possui valores para hora homem!', 'error');
-    } else if (tarefasComCamposVazios) {
-      Swal.fire('Alerta!!!', 'Existem tarefas com campos vazios. Não é possível iniciar o projeto.', 'error');
-    } else {
+    /* } else if (tarefasComCamposVazios) {
+      Swal.fire('Alerta!!!', 'Existem tarefas com campos vazios. Não é possível iniciar o projeto.', 'error'); */
+    } else { 
       // Swal.fire('Projeto iniciado com sucesso!', '', 'sucess');
       const response = await (await axios.post(`/projeto/${id}/iniciarprojeto`, data)
         .then(res => {
