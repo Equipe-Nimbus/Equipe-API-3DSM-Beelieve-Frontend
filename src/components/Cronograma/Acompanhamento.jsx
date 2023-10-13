@@ -65,6 +65,7 @@ function Acompanhamento({ idProjeto }) {
                 `cronograma[${indexMes}].niveis[${indexNivel}].progresso_real`,
               )}
               className="text-center"
+              disabled
             />
           </td>
         ))}
