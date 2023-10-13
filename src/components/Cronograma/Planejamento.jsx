@@ -30,17 +30,23 @@ function Planejamento({ idProjeto }) {
       await axios.get(`/cronograma/${idProjeto}`).then((response) => {
         let cronogramaResgatado = response.data
 
-        cronogramaResgatado.lista_cronograma =
-          cronogramaResgatado.lista_cronograma.map((mes) => ({
-            ...mes,
-            niveis: mes.niveis.map((nivel) => ({
-              ...nivel,
-              progresso_planejado: String(nivel.progresso_planejado) + "%",
-            })),
-          }))
+        let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
+        cronogramaResgatado.lista_cronograma.forEach((mes) => { 
+            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+
+            if(mes.mes_cronograma === `Dezembro ${anoCronograma}`){
+                anoCronograma++
+            }
+
+            mes.niveis.forEach((nivel) => {
+              nivel.progresso_planejado = String(nivel.progresso_planejado) + "%"
+              nivel.progresso_real = String(nivel.progresso_real) + "%"
+            })
+            
+        
+        })
 
         setCronograma(cronogramaResgatado)
-
         setValue("cronograma", cronogramaResgatado.lista_cronograma)
       })
     } catch (error) {}

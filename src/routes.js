@@ -4,7 +4,6 @@ import NovoProjeto from "./pages/NovoProjeto";
 
 import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto'
-import { element } from "prop-types";
 import MudaData from "./pages/MudaData";
 
 const router = [

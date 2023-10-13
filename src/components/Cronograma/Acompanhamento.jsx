@@ -24,27 +24,45 @@ function Acompanhamento({ idProjeto }) {
       await axios.get(`/cronograma/${idProjeto}`).then((response) => {
         let cronogramaResgatado = response.data
 
-        cronogramaResgatado.lista_cronograma =
-          cronogramaResgatado.lista_cronograma.map((mes) => ({
-            ...mes,
-            niveis: mes.niveis.map((nivel) => ({
-              ...nivel,
-              progresso_planejado: String(nivel.progresso_planejado) + "%",
-              progresso_real: String(nivel.progresso_real) + "%",
-            })),
-          }))
+        let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
+        const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        const dataAtual = new Date();
+
+        cronogramaResgatado.lista_cronograma.forEach((mes) => { 
+            const nomeDoMes = mes.mes_cronograma
+            const indiceMes = mesesDoAno.indexOf(nomeDoMes)
+            const data = new Date(anoCronograma, indiceMes)
+            
+            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+
+            if(mes.mes_cronograma === `Dezembro ${anoCronograma}`){
+                anoCronograma++
+            }
+
+            if (data > dataAtual) {
+              mes.niveis.forEach((nivel) => {
+                nivel.progresso_planejado = String(nivel.progresso_planejado) + "%"
+                nivel.progresso_real = '-'
+              })
+            } else {
+              mes.niveis.forEach((nivel) => {
+                nivel.progresso_planejado = String(nivel.progresso_planejado) + "%"
+                nivel.progresso_real = String(nivel.progresso_real) + "%"
+              })
+            }
+        
+        })
 
         setCronograma(cronogramaResgatado)
-
         setValue("cronograma", cronogramaResgatado.lista_cronograma)
       })
+
     } catch (error) {}
   }
 
   useEffect(() => {
     getCronograma()
   }, [])
-  console.log(cronograma)
 
   const renderizarColunas = () => {
     return fields?.map((mes, indexMes) => (
@@ -72,6 +90,14 @@ function Acompanhamento({ idProjeto }) {
       </tr>
     ))
   }
+  
+  const shouldHighlightColumn = (columnDate) => {
+    const currentDate = new Date(); // Obtenha a data atual
+    const columnMonth = new Date(columnDate);
+  
+    // Verifique se o mês da coluna é menor ou igual ao mês atual
+    return columnMonth <= currentDate;
+  };
 
   return (
     <>

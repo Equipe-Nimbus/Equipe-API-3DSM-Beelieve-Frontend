@@ -72,9 +72,9 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
       Swal.fire('Alerta!!!', 'Projeto não possui valores para material!', 'error');
     } else if (algumaHoraHomemZero) {
       Swal.fire('Alerta!!!', 'Projeto não possui valores para hora homem!', 'error');
-    /* } else if (tarefasComCamposVazios) {
-      Swal.fire('Alerta!!!', 'Existem tarefas com campos vazios. Não é possível iniciar o projeto.', 'error'); */
-    } else { 
+    }  /* else if (tarefasComCamposVazios) {
+      Swal.fire('Alerta!!!', 'Existem tarefas com campos vazios. Não é possível iniciar o projeto.', 'error'); 
+    } */ else { 
       // Swal.fire('Projeto iniciado com sucesso!', '', 'sucess');
       const response = await (await axios.post(`/projeto/${id}/iniciarprojeto`, data)
         .then(res => {
