@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2"
 
 import Button from "../Button"
 
@@ -30,21 +30,31 @@ function Planejamento({ idProjeto }) {
       await axios.get(`/cronograma/${idProjeto}`).then((response) => {
         let cronogramaResgatado = response.data
 
-        let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
-        cronogramaResgatado.lista_cronograma.forEach((mes) => { 
+        if (cronogramaResgatado.inicio_projeto) {
+          let anoCronograma = Number(
+            cronogramaResgatado.inicio_projeto.slice(0, 4),
+          )
+          cronogramaResgatado.lista_cronograma.forEach((mes) => {
             mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
 
-            if(mes.mes_cronograma === `Dezembro ${anoCronograma}`){
-                anoCronograma++
+            if (mes.mes_cronograma === `Dezembro ${anoCronograma}`) {
+              anoCronograma++
             }
 
             mes.niveis.forEach((nivel) => {
-              nivel.progresso_planejado = String(nivel.progresso_planejado) + "%"
+              nivel.progresso_planejado =
+                String(nivel.progresso_planejado) + "%"
               nivel.progresso_real = String(nivel.progresso_real) + "%"
             })
-            
-        
-        })
+          })
+        } else {
+          cronogramaResgatado.lista_cronograma.forEach((mes) => {
+            mes.niveis.forEach((nivel) => {
+              nivel.progresso_planejado =
+                String(nivel.progresso_planejado) + "%"
+            })
+          })
+        }
 
         setCronograma(cronogramaResgatado)
         setValue("cronograma", cronogramaResgatado.lista_cronograma)
@@ -107,19 +117,44 @@ function Planejamento({ idProjeto }) {
   const adicionarMes = () => {
     const ultimoMes =
       cronograma.lista_cronograma[cronograma.lista_cronograma.length - 1]
-    //console.log(ultimoMes)
 
-    const novoMes = {
-      mes_cronograma: `Mês ${ultimoMes.ordem_mes_cronograma + 1}`,
-      ordem_mes_cronograma: ultimoMes.ordem_mes_cronograma + 1,
-      niveis: ultimoMes.niveis,
+    if (cronograma.inicio_projeto) {
+      const mesUltimoMes = ultimoMes.mes_cronograma.split(" ")[0]
+      let anoUltimoMes = Number(ultimoMes.mes_cronograma.split(" ")[1])
+      
+      const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+
+      const indiceUltimoMes = mesesDoAno.indexOf(mesUltimoMes)
+      let mesNovoMes = mesesDoAno[indiceUltimoMes + 1]
+
+      if(mesUltimoMes === 'Dezembro'){
+        mesNovoMes = 'Janeiro'
+        anoUltimoMes++
+      }
+
+      const novoMes = {
+        mes_cronograma: `${mesNovoMes} ${anoUltimoMes}`,
+        ordem_mes_cronograma: ultimoMes.ordem_mes_cronograma + 1,
+        niveis: ultimoMes.niveis,
+      }
+
+      const novoCronograma = { ...cronograma }
+      novoCronograma.lista_cronograma.push(novoMes)
+      setCronograma(novoCronograma)
+
+    } else {
+
+      const novoMes = {
+        mes_cronograma: `Mês ${ultimoMes.ordem_mes_cronograma + 1}`,
+        ordem_mes_cronograma: ultimoMes.ordem_mes_cronograma + 1,
+        niveis: ultimoMes.niveis,
+      }
+
+      const novoCronograma = { ...cronograma }
+      novoCronograma.lista_cronograma.push(novoMes)
+      setCronograma(novoCronograma)
     }
 
-    const novoCronograma = { ...cronograma }
-    novoCronograma.lista_cronograma.push(novoMes)
-    setCronograma(novoCronograma)
-
-    //console.log(novoMes)
   }
 
   const removerMes = () => {
@@ -152,7 +187,7 @@ function Planejamento({ idProjeto }) {
     try {
       await axios.put("/cronograma/atualiza", cronograma).then((response) => {
         if (response.status === 200) {
-          Swal.fire('Planejamento salvo com sucesso!', '', 'sucess');
+          Swal.fire("Planejamento salvo com sucesso!", "", "sucess")
           // window.alert("Planejamento salvo com sucesso!")
         }
       })
@@ -168,7 +203,7 @@ function Planejamento({ idProjeto }) {
       </h1>
       <hr className="border-n90"></hr>
       <form onSubmit={handleSubmit(atualizarCronograma)}>
-        <div className="mt-5 ml-5 flex justify-start">
+        <div className="ml-5 mt-5 flex justify-start">
           <table className="mt-5 text-left">
             <thead className="bg-primary98 p-10 text-base uppercase">
               <tr>
@@ -232,7 +267,6 @@ function Planejamento({ idProjeto }) {
       </form>
     </>
   )
-
 }
 
 export default Planejamento

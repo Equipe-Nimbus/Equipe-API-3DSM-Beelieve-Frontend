@@ -25,7 +25,7 @@ function Acompanhamento({ idProjeto }) {
         let cronogramaResgatado = response.data
 
         let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
-        const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
         const dataAtual = new Date();
 
         cronogramaResgatado.lista_cronograma.forEach((mes) => { 
@@ -90,14 +90,6 @@ function Acompanhamento({ idProjeto }) {
       </tr>
     ))
   }
-  
-  const shouldHighlightColumn = (columnDate) => {
-    const currentDate = new Date(); // Obtenha a data atual
-    const columnMonth = new Date(columnDate);
-  
-    // Verifique se o mês da coluna é menor ou igual ao mês atual
-    return columnMonth <= currentDate;
-  };
 
   return (
     <>
