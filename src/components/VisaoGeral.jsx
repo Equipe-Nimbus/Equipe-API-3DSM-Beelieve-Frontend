@@ -17,34 +17,72 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
   const hora_homemNiveis = tabela.map((linha) => linha.hora_homem);
   let tarefasComCamposVazios = false;
 
-  // Verificando se subprojeto tem tarefa e se os campos tem algum valor
   for (const chaveProjeto in projeto.sub_projetos) {
     if (projeto.sub_projetos.hasOwnProperty(chaveProjeto)) {
       const subprojeto = projeto.sub_projetos[chaveProjeto];
+      
+      if (subprojeto.nivel_sub_projeto.length != 0) {
+        // Se o subprojeto tem níveis (nivelSubProjeto)
+        const niveisSubProjeto = subprojeto.nivel_sub_projeto;
+  
+        // Iterar sobre os níveis
+        for (const chaveNivel in niveisSubProjeto) {
+          if (niveisSubProjeto.hasOwnProperty(chaveNivel)) {
+            const nivelSubProjeto = niveisSubProjeto[chaveNivel];
+  
+            // Verificar se o nível (nivelSubProjeto) tem tarefas
+            if (nivelSubProjeto.tarefas && Object.keys(nivelSubProjeto.tarefas).length === 0) {
+              tarefasComCamposVazios = true;
+            }
+  
+            // Iterar sobre as tarefas do nível
+            for (const chaveTarefa in nivelSubProjeto.tarefas) {
+              if (nivelSubProjeto.tarefas.hasOwnProperty(chaveTarefa)) {
+                const tarefa = nivelSubProjeto.tarefas[chaveTarefa];
+  
+                // Verificar se algum dos campos da tarefa está vazio
+                if (!tarefa.descricao_atividade_tarefa ||
+                  !tarefa.peso_tarefa ||
+                  !tarefa.resultado_esperado_tarefa) {
+                  tarefasComCamposVazios = true;
+                  break; // Sai do loop se encontrar uma tarefa com campos vazios
+                }
+              }
+            }
+  
+            if (tarefasComCamposVazios) {
+              break; // Sai do loop se encontrar tarefas com campos vazios no nível
+            }
+          }
+        }
+      } else {
 
-      if (subprojeto.tarefas && Object.keys(subprojeto.tarefas).length === 0) {
-        tarefasComCamposVazios = true;
-        break;
-      }
-      for (const chaveTarefa in subprojeto.tarefas) {
-        if (subprojeto.tarefas.hasOwnProperty(chaveTarefa)) {
-          const tarefa = subprojeto.tarefas[chaveTarefa];
-
-          // Verificar se algum dos campos está vazio
-          if (!tarefa.descricao_atividade_tarefa ||
-            !tarefa.peso_tarefa ||
-            !tarefa.resultado_esperado_tarefa) {
-            tarefasComCamposVazios = true;
-            break; // Sai do loop se encontrar uma tarefa com campos vazios
+        if(subprojeto.tarefas && Object.keys(subprojeto.tarefas).length === 0){
+          tarefasComCamposVazios = true;
+          break;
+        }else{
+          for (const chaveTarefa in subprojeto.tarefas) {
+            if (subprojeto.tarefas.hasOwnProperty(chaveTarefa)) {
+              const tarefa = subprojeto.tarefas[chaveTarefa];
+    
+              // Verificar se algum dos campos está vazio
+              if (!tarefa.descricao_atividade_tarefa ||
+                !tarefa.peso_tarefa ||
+                !tarefa.resultado_esperado_tarefa) {
+                tarefasComCamposVazios = true;
+                break; // Sai do loop se encontrar uma tarefa com campos vazios
+              }
+            }
           }
         }
       }
+  
       if (tarefasComCamposVazios) {
-        break; // Sai do loop de projetos se encontrar tarefas com campos vazios
+        break; // Sai do loop de projetos se encontrar tarefas com campos vazios no subprojeto
       }
     }
   }
-
+  
   // pegando o mes-ano atual
   const dataAtual = new Date();
   const ano = dataAtual.getFullYear();
@@ -62,8 +100,6 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
     const data = { "data_inicio_projeto": dataInicio }
     const algumMaterialZero = MaterialoNiveis.some((valor) => valor === 0 || valor === null);
     const algumaHoraHomemZero = hora_homemNiveis.some((valor) => valor === 0 || valor === null);
-
-    console.log(hora_homemNiveis)
 
     // Validações
     if (!possuiNíveisSubNiveis(tabela)) {
