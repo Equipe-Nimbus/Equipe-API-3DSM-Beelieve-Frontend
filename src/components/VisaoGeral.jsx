@@ -60,8 +60,10 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
 
   const handleIniciarProjetoClick = async () => {
     const data = { "data_inicio_projeto": dataInicio }
-    const algumMaterialZero = MaterialoNiveis.some((valor) => valor === 0);
-    const algumaHoraHomemZero = hora_homemNiveis.some((valor) => valor === 0);
+    const algumMaterialZero = MaterialoNiveis.some((valor) => valor === 0 || valor === null);
+    const algumaHoraHomemZero = hora_homemNiveis.some((valor) => valor === 0 || valor === null);
+
+    console.log(hora_homemNiveis)
 
     // Validações
     if (!possuiNíveisSubNiveis(tabela)) {
