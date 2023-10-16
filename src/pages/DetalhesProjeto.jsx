@@ -7,6 +7,8 @@ import VisaoGeral from "../components/VisaoGeral"
 import MenuSelecao from "../components/MenuSelecao"
 import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 import FormValorHora from "../components/FormValorHora/FormValorHora"
+import Planejamento from "../components/Cronograma/Planejamento"
+import Acompanhamento from "../components/Cronograma/Acompanhamento"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
@@ -22,6 +24,7 @@ function DetalhesProjeto() {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data
+        // console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
@@ -30,9 +33,12 @@ function DetalhesProjeto() {
   const gerarTabela = () => {
     const tabela = []
     tabela.push({
-      id: 0,
+      id: projeto.id_projeto,
       nivel: "1",
       descricao: projeto.nome_projeto,
+      orcamento: projeto.orcamento_projeto,
+      hora_homem: projeto.hora_humano_total,
+      materiais: projeto.materiais_projeto,
     })
 
     projeto.sub_projetos?.forEach((subprojeto) => {
@@ -40,6 +46,9 @@ function DetalhesProjeto() {
         id: subprojeto.id_sub_projeto,
         nivel: subprojeto.ordem_sub_projeto,
         descricao: subprojeto.nome_sub_projeto,
+        orcamento: subprojeto.orcamento_sub_projeto,
+        materiais: subprojeto.materiais_sub_projeto,
+        hora_homem: subprojeto.hora_humano_sub_projeto,
       })
 
       subprojeto.nivel_sub_projeto?.forEach((nivel) => {
@@ -47,13 +56,14 @@ function DetalhesProjeto() {
           id: nivel.id_nivel_sub_projeto,
           nivel: nivel.ordem_nivel_sub_projeto,
           descricao: nivel.nome_nivel_sub_projeto,
+          orcamento: nivel.orcamento_nivel_sub_projeto,
+          hora_homem: nivel.hora_humano_nivel_sub_projeto,
+          materiais: nivel.materiais_nivel_sub_projeto,
         })
       })
     })
     return tabela
   }
-
-  //console.log("Renderizou")
 
   useEffect(() => {
     getProjeto()
@@ -77,9 +87,15 @@ function DetalhesProjeto() {
         nomeProjeto={projeto.nome_projeto}
         descricaoProjeto={projeto.descricao_projeto}
         liderProjeto={projeto.chefe_projeto}
+        DataProjetoIniciado={projeto.data_inicio_projeto}
+        camposValidados={{
+          tabela: tabela,
+          horaValorProjeto: projeto.hora_valor_projeto,
+          projeto: projeto
+        }}
       />
       <MenuSelecao
-        opcoes={["ESTRUTURA", "PACOTES"]}
+        opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
@@ -88,18 +104,30 @@ function DetalhesProjeto() {
         <VisualizarEditarWbs
           projeto={projeto}
           tabela={tabela}
-          atualizar={atualizar}
+          setTabela={setTabela}
           setAtualizar={setAtualizar}
         />
       )}
 
       {secaoAtual === "PACOTES" && (
-        <div class="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
           <FormValorHora
             tabela={tabela}
             projeto={projeto}
             setAtualizar={setAtualizar}
           />
+        </div>
+      )}
+
+      {secaoAtual === "PLANEJAMENTO" && (
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <Planejamento idProjeto={id} />
+        </div>
+      )}
+
+      {secaoAtual === "ACOMPANHAMENTO" && (
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <Acompanhamento idProjeto={id} />
         </div>
       )}
     </>

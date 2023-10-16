@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
+import Swal from 'sweetalert2'
 
 import TabelaWbs from "./TabelaWbs"
 import Button from "./Button"
@@ -7,46 +8,42 @@ import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from "../services/axios"
 
-function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar }) {
-  const [visualizacaoAtual, setVisualizacaoAtual] = useState("Árvore")
+function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
+  const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
 
   const mudarVisualizacao = (valor) => {
     const view = valor
     setVisualizacaoAtual(view)
   }
 
-  const [render, setRender] = useState(0)
-
-  const [tabelaWBS, setTabelaWBS] = useState(tabela)
-  useEffect(() => {
-    setTabelaWBS(tabela)
-    console.log(projeto)
-  }, [tabela, render])
-
   const atualizarEstruturaProjeto = async (e) => {
-    setRender(render + 1)
     e.preventDefault()
-    const novaEstrutura = formatarEstrutura(tabelaWBS)
-    projeto.sub_projetos = novaEstrutura
-    projeto.nome_projeto = tabelaWBS[0].descricao
+    projeto.nome_projeto = tabela[0].descricao
 
-    //console.log('nova estrutura: ', projeto)
+    const novaEstrutura = formatarEstrutura(projeto, tabela)
+    
+
+    //console.log('NOVO PROJETO EDITADO: ', novaEstrutura)
 
     try {
       await axios
-        .put("/projeto/atualizar/estrutura", projeto)
+        .put("/projeto/atualizar/estrutura", novaEstrutura)
         .then((response) => {
           if ((response.status = 200)) {
-            console.log("resposta: ", response)
-            window.alert("Estrutura salva com sucesso!")
+            //console.log("resposta: ", response)
+            Swal.fire('Estrutura salva com sucesso!', '', 'sucess');
+            // window.alert("Estrutura salva com sucesso!")
             setAtualizar(true)
           }
           else {
-            window.alert("Ocorreu algum problema na atualização :(")
+            Swal.fire('Ocorreu algum problema na atualização :(', '', 'error');
+            // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
     } catch (error) {}
   }
+
+  const statusInicio = projeto.data_inicio_projeto
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
@@ -96,19 +93,20 @@ function VisualizarEditarWbs({ projeto, tabela, atualizar, setAtualizar }) {
             onSubmit={(e) => atualizarEstruturaProjeto(e)}
           >
             <TabelaWbs
-              tabelaWBS={tabelaWBS}
-              setTabelaWBS={setTabelaWBS}
+              tabelaWBS={tabela}
+              setTabelaWBS={setTabela}
               edicaoNivel1={true}
+              projeto={projeto.data_inicio_projeto}
             />
-            <Button
+            {!statusInicio && <Button
               texto="Salvar"
               tipo="submit"
               className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-            />
+            />}
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (
-          <div classname="m-5 rounded-md bg-bg100 p-7 drop-shadow-md"></div>
+          <></>
         )}
       </div>
     </div>

@@ -42,7 +42,8 @@ function ListaProjeto() {
               key={projeto.id_projeto}
               titulo={projeto.nome_projeto}
               descricao={projeto.descricao_projeto}
-              estadoProjeto={false}
+              estadoProjeto={projeto.data_inicio_projeto}
+              liderProjeto={projeto.chefe_projeto}
               onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
             />
           ))}

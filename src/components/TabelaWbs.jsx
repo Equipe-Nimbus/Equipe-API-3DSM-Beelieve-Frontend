@@ -1,11 +1,13 @@
-import React, { useEffect } from "react"
+import React from "react"
 import Button from "./Button"
+
 
 import { FiPlus, FiMinus } from "react-icons/fi"
 
-function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
-	
-	
+function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
+
+  const statusInicio = projeto
+  
   const gerarTabela = (tabelaWBS) => {
     return (
       <table id="wbsTable" className="mt-5 w-1/3 text-left text-on-light">
@@ -13,12 +15,12 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
           <tr>
             <th className="w-1/6 px-4 py-2">Nível</th>
             <th className="w-3/6 px-4 py-2">Descrição</th>
-            <th className="w-2/6">Ação</th>
+           {!statusInicio && <th className="w-2/6">Ação</th>}
           </tr>
         </thead>
         <tbody className="text-lg">
           {tabelaWBS.map((linha, index) => (
-            <tr key={index}>
+            <tr key={index} className="border-b border-n90">
               <td className="w-1/4 px-4 py-1.5 font-semibold">{linha.nivel}</td>
               <td className="w-1/4 px-4 py-1.5">
               {!edicaoNivel1 && linha.nivel === "1" ?
@@ -34,11 +36,10 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
                   className="w-full"
                   value={tabelaWBS[index].descricao}
                   onChange={(e) => handleDescricaoSubProjeto(e, index)}
-                  
                 />
               }
               </td>
-              {linha.nivel.toLocaleString().split(".").length < 3 && (
+              {!statusInicio && linha.nivel.toLocaleString().split(".").length < 3 && (
                 <Button
                   iconeOpcional={FiPlus}
                   tipo="button"
@@ -47,7 +48,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
                   iconeTamanho="24px"
                 />
               )}
-              {linha.nivel !== "1" && (
+              {!statusInicio && linha.nivel !== "1" && (
                 <Button
                   iconeOpcional={FiMinus}
                   tipo="button"
@@ -74,6 +75,9 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
     const novaLinha = {
       nivel: novoNivel,
       descricao: "Nova Descrição",
+      orcamento: 0,
+      hora_homem: 0,
+      materiais: 0
     }
 
     const novaTabela = [...tabelaWBS]
@@ -175,14 +179,12 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1 }) {
           nivelQuebrado.length > 2 &&
           nivelQuebrado.slice(0, 2).toString() === nivelAntigo.toString()
         ) {
-          console.log("chegou")
           linha.nivel = `${novoNivel + "." + novaOrdemSubnivel}`
           novaOrdemSubnivel++
         }
       })
     }
-
-    setTabelaWBS(novaTabela)
+    setTabelaWBS([...novaTabela])
   }
 
   return <>{gerarTabela(tabelaWBS)}</>

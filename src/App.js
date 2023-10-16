@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="flex">
       <NavBar />
-      <div className="w-full ml-64">
+      <div className="w-full">
         <Breadcrumbs/>
         <Outlet />
       </div>

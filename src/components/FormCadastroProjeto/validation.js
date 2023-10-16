@@ -11,7 +11,12 @@ const schemaProjetoInicial = yup.object().shape({
     .required("Descrição é obrigatória"),
 
   valorHora: yup
+    .number(),
+
+  prazoProjeto: yup
     .number()
+    .nullable()
+    .moreThan(0, 'Se preenchido, deve ser maior do que 0') 
 })
 
 export default schemaProjetoInicial

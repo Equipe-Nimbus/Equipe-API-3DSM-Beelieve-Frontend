@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-function CardProjeto({ titulo, descricao, estadoProjeto, onClick }) {
+function CardProjeto({ titulo, descricao, estadoProjeto, onClick, liderProjeto }) {
   const [projetoIniciado] = useState(estadoProjeto)
 
   return (
@@ -15,6 +15,7 @@ function CardProjeto({ titulo, descricao, estadoProjeto, onClick }) {
         ) : (
           <p className="my-6 text-on-light">Não Iniciado</p>
         )}
+        <p className="text-sm text-n40">{`Responsável: ${liderProjeto}`}</p>
       </div>
     </>
   )

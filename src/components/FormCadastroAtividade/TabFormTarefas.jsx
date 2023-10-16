@@ -1,242 +1,342 @@
 import React, { useEffect, useState } from "react"
-import { BiTrash } from "react-icons/bi"
+import { useForm, useFieldArray } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import Swal from "sweetalert2"
 
-//import schemaInsercaoAtividade from './validationAtividade';
+import { BiTrash } from "react-icons/bi"
+import { AiOutlinePlus } from "react-icons/ai"
+
+import schemaInsercaoAtividade from "./validation"
+import Button from "../Button"
 import axios from "../../services/axios"
 
-const TabFormTarefas = ({ tarefas, tipo_pai, id }) => {
-  const [tarefa, setTarefa] = useState([
-    {
-      id: "",
-      descricao: "",
-      resultadoEsperado: "",
-      status: "",
-      peso: "",
-      prazo: "",
+const TabFormTarefas = ({
+  listaTarefas,
+  tipoPai,
+  idPai,
+  ordem,
+  nomePacote,
+  nomeProjeto,
+  dataInicioProjeto,
+  progressoPacote,
+}) => {
+  const [tarefas, setTarefas] = useState([])
+  const [progressoAnterior, setProgressoAnterior] = useState(progressoPacote)
+  const [progresso, setProgresso] = useState(progressoPacote)
+
+  const { register, control, handleSubmit, setValue, getValues } = useForm({
+    defaultValues: {
+      tarefas: tarefas,
     },
-  ])
+    resolver: yupResolver(schemaInsercaoAtividade),
+  })
+
+  const { fields } = useFieldArray({
+    control,
+    keyName: "customId",
+    name: "tarefas",
+  })
 
   useEffect(() => {
-    if (tarefas.length > 0) {
-      const novasTarefas = tarefas.map((atividade) => {
+    if (listaTarefas.length > 0) {
+      const novasTarefas = listaTarefas.map((atividade) => {
         const novaTarefa = {
           id: atividade.id_tarefa,
           descricao: atividade.descricao_atividade_tarefa,
           resultadoEsperado: atividade.resultado_esperado_tarefa,
-          status: atividade.status_tarefa,
-          peso: atividade.peso_tarefa,
-          prazo: atividade.prazo_tarefa,
+          status: atividade.status_tarefa === 1 ? true : false,
+          peso: atividade.peso_tarefa ? atividade.peso_tarefa : 0,
+          prazo: atividade.prazo_tarefa
+            ? atividade.prazo_tarefa.slice(0, 10)
+            : null,
         }
         return novaTarefa
       })
 
-      setTarefa(novasTarefas)
+      setTarefas(novasTarefas)
+      setValue("tarefas", tarefas)
     }
   }, [])
 
   const addRow = () => {
-    const novaTarefa = [...tarefa]
+    const novaTarefa = [...tarefas]
     const novaLinha = {
       id: "",
       descricao: "",
       resultadoEsperado: "",
-      status: "",
-      peso: "",
-      prazo: "",
+      status: false,
+      peso: 0,
+      prazo: null,
     }
 
     novaTarefa.push(novaLinha)
-    setTarefa(novaTarefa)
+    setTarefas(novaTarefa)
   }
 
-  const handleDescricao = (evento, index) => {
-    const novaDescricao = evento.target.value
-    const novaTabela = [...tarefa]
-    novaTabela[index].descricao = novaDescricao
-    setTarefa(novaTabela)
-  }
-
-  const handleResultadoEsperado = (evento, index) => {
-    const novoResultadoEsperado = evento.target.value
-    const novaTabela = [...tarefa]
-    novaTabela[index].resultadoEsperado = novoResultadoEsperado
-    setTarefa(novaTabela)
-  }
-
-  const handlePeso = (evento, index) => {
-    const novoPeso = evento.target.value
-    const novaTabela = [...tarefa]
-    novaTabela[index].peso = novoPeso
-    setTarefa(novaTabela)
-  }
-
-  const handlePrazo = (evento, index) => {
-    const novoPrazo = evento.target.value
-    const novaTabela = [...tarefa]
-    novaTabela[index].prazo = novoPrazo
-    setTarefa(novaTabela)
-  }
-
-  const handleStatus = (evento, index) => {
-    const novoStatus = evento.target.checked ? 1 : 0
-    const novaTabela = [...tarefa]
-    novaTabela[index].status = novoStatus
-    setTarefa(novaTabela)
-  }
-
-  const saveTarefa = async () => {
-
-    const geraJsonTarefas = listaTarefas()
-
-    await axios
-      .put("/tarefa/atualizar", geraJsonTarefas)
-      .then((response) => {
-        if (response.status === 200) {
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          console.error("Recurso não encontrado.")
-        } else {
-          console.error("Erro:", error)
-        }
-      })
-
-    /*schemaInsercaoAtividade.validate( tarefa )
-            .then( tarefa => {
-                axios.post( '/tarefa/cadastrar', tarefa ).then( response => setTarefa( response.tarefa ));
-            } )
-            .catch( errors => {
-                console.error( errors );
-            } );*/
-
-    console.log("Dados Salvos:", geraJsonTarefas)
-  }
-
-  const deleteRow = async (index) => {
-    const tarefasExistentes = [...tarefa]
+  const deleteRow = (index) => {
+    const tarefasExistentes = [...tarefas]
     tarefasExistentes.splice(index, 1)
 
-    setTarefa(tarefasExistentes)
+    setTarefas(tarefasExistentes)
   }
 
-  function listaTarefas() {
+  const handleStatus = (index) => {
+    const statusAtual = getValues(`tarefas[${index}].status`)
+    setValue(`tarefas[${index}].status`, statusAtual ? false : true)
+
+    const tarefasAtuais = getValues("tarefas")
+    setTarefas(tarefasAtuais)
+  }
+
+  const handleProgresso = () => {
+    const tarefasAtuais = getValues("tarefas")
+
+    const somaDosPesos = tarefasAtuais.reduce(
+      (totalPesos, item) => totalPesos + parseInt(item.peso),
+      0,
+    )
+
+    const progresso =
+      (tarefasAtuais.reduce((totalPonderado, item) => {
+        return totalPonderado + parseInt(item.peso) * item.status
+      }, 0) /
+        somaDosPesos) *
+      100
+
+    setProgresso(isNaN(progresso) ? 0 : progresso)
+  }
+
+  const handlePeso = (index, valor) => {
+    setValue(`tarefas[${index}].peso`, valor)
+
+    const tarefasAtuais = getValues("tarefas")
+    setTarefas(tarefasAtuais)
+  }
+
+  useEffect(() => {
+    setValue("tarefas", tarefas)
+    handleProgresso()
+  }, [tarefas])
+
+  function gerarJsonTarefas(tarefas) {
     const listaTarefas = {
-      tipo_pai: tipo_pai,
-      id_pai: id,
+      tipo_pai: tipoPai,
+      id_pai: idPai,
+      progresso_pai: parseFloat(progresso),
+      inicializado: dataInicioProjeto ? true : false,
       lista_tarefas: [],
     }
 
-    tarefa.forEach((atividade) => {
+    tarefas.forEach((atividade) => {
       listaTarefas.lista_tarefas.push({
         id_tarefa: atividade.id,
         descricao_atividade_tarefa: atividade.descricao,
         resultado_esperado_tarefa: atividade.resultadoEsperado,
-        peso_tarefa: atividade.peso,
-        status_tarefa: atividade.status,
-        prazo_tarefa: atividade.prazo,
+        peso_tarefa: parseInt(atividade.peso),
+        status_tarefa: atividade.status === true ? 1 : 0,
+        prazo_tarefa: atividade.prazo
+          ? `${atividade.prazo.getFullYear()}-${
+              atividade.prazo.getMonth() + 1
+            }-${atividade.prazo.getDate()}`
+          : null,
       })
     })
 
     return listaTarefas
   }
 
+  const saveTarefa = async (data) => {
+    const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
+
+    let PodeSalvar = true
+    const peloMenosUmaTarefaMarcada =
+      listaTarefasPreenchidas.lista_tarefas.some(
+        (tarefa) => tarefa.status_tarefa === 1,
+      )
+
+    if (peloMenosUmaTarefaMarcada) {
+      if (dataInicioProjeto) {
+        PodeSalvar = true
+      } else {
+        PodeSalvar = false
+      }
+    }
+
+    if (PodeSalvar) {
+      if (progresso < progressoAnterior) {
+        Swal.fire({
+          title: "As alterações diminuíram o progresso. Continuar?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Continuar",
+          cancelButtonText: "Cancelar",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await axios
+              .put("/tarefa/atualizar", listaTarefasPreenchidas)
+              .then((response) => {
+                if (response.status === 200) {
+                  Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+                }
+              })
+              .catch((error) => {
+                if (error.response.status === 404) {
+                  console.error("Recurso não encontrado.")
+                } else {
+                  console.error("Erro:", error)
+                }
+              })
+          }
+        })
+      } else {
+        await axios
+          .put("/tarefa/atualizar", listaTarefasPreenchidas)
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+            }
+          })
+          .catch((error) => {
+            if (error.response.status === 404) {
+              console.error("Recurso não encontrado.")
+            } else {
+              console.error("Erro:", error)
+            }
+          })
+      }
+    } else {
+      Swal.fire(
+        "Não é possível alterar o progresso de um projeto não iniciado!",
+        "",
+        "error",
+      )
+    }
+  }
+
   return (
     <div>
-      <button onClick={() => window.history.back()}>Voltar</button>
-      <h1>Pacote de trabalho: { }</h1>
+      <div className="mb-2 flex items-end gap-64 ">
+        <div>
+          <h1 className="mb-5 text-3xl text-complementary-20">{nomeProjeto}</h1>
+          <h2 className="text-2xl">
+            Pacote de trabalho: {`${ordem} - ${nomePacote}`}
+          </h2>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="text-2xl">
+            Progresso:{" "}
+            <span className="text-2xl text-complementary-20">{`${parseInt(progresso)}%`}</span> </span>
+          <progress
+            value={progresso}
+            max={100}
+            className="h-2 rounded bg-complementary-20"
+          ></progress>
+        </div>
+      </div>
       <hr className="border-n90" />
 
-      <div>
-        <div className="ps-48">
-          <button onClick={addRow}
-            className="mt-9 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary">
+      <div className="flex flex-col gap-2">
+        <div className="ps-40">
+          <button
+            onClick={addRow}
+            className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
+          >
             Adicionar tarefa
+            <AiOutlinePlus />
           </button>
         </div>
 
-
-        <table class="mx-auto mt-5 w-2/3">
-          <thead className="bg-primary98 p-10 text-base uppercase">
-            <tr >
-              <th class="border">Tarefa</th>
-              <th class="border">Descrição</th>
-              <th class="border">Resultado Esperado</th>
-              <th class="border">Execução</th>
-              <th class="border">Peso</th>
-              <th class="border">Previsão</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {tarefa.map((item, index) => (
-              <tr key={index}>
-                <td class="border px-4 py-1.5 text-lg font-semibold">
-                  {index + 1}
-                </td>
-                <td class="border px-4">
-                  <input
-                    type="text"
-                    className="w-full"
-                    value={tarefa[index].descricao}
-                    onChange={(e) => handleDescricao(e, index)}
-                  />
-                </td>
-                <td class="border px-4">
-                  <input
-                    type="text"
-                    className="w-full"
-                    value={tarefa[index].resultadoEsperado}
-                    onChange={(e) => handleResultadoEsperado(e, index)}
-                  />
-                </td>
-                <td class="border px-4">
-                  <input
-                    type="checkbox"
-                    checked={tarefa[index].status === 1}
-                    className="w-full"
-                    value={tarefa[index].status}
-                    onChange={(e) => handleStatus(e, index)}
-                  />
-                </td>
-                <td class="border px-4">
-                  <input
-                    type="number"
-                    className="w-full"
-                    value={tarefa[index].peso}
-                    onChange={(e) => handlePeso(e, index)}
-                  />
-                </td>
-                <td class="border px-4">
-                  <input
-                    type="date"
-                    className="w-full"
-                    value={tarefa[index].prazo}
-                    onChange={(e) => handlePrazo(e, index)}
-                  />
-                </td>
-                <td>
-                  <button onClick={() => deleteRow(index)}><BiTrash
-                    color="#000000"
-                    size={24}
-                    className="hover:fill-primary50"
-                  /></button>
-                </td>
+        <form
+          onSubmit={handleSubmit(saveTarefa)}
+          className="flex flex-col gap-10"
+        >
+          <table className="mx-auto mt-5 w-4/5">
+            <thead className="bg-primary98 p-10 text-base uppercase">
+              <tr>
+                <th className="px-6 py-3">Tarefa</th>
+                <th className="">Descrição</th>
+                <th className="">Resultado Esperado</th>
+                <th className="">Peso</th>
+                <th className="">Execução</th>
+                <th className="">Previsão</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
+            <tbody>
+              {fields.map((tarefa, index) => (
+                <tr key={index} className="border-b border-n90">
+                  <td className="px-4 py-1.5 text-center text-lg font-semibold">
+                    {index + 1}
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      {...register(`tarefas[${index}].descricao`)}
+                      defaultValue={tarefa.descricao}
+                      className="w-full"
+                      disabled={tarefa.status === true}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      {...register(`tarefas[${index}].resultadoEsperado`)}
+                      defaultValue={tarefa.resultadoEsperado}
+                      className="w-full"
+                      disabled={tarefa.status === true}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      {...register(`tarefas[${index}].peso`)}
+                      defaultValue={tarefa.peso}
+                      onBlur={(e) => handlePeso(index, e.target.value)}
+                      min={0}
+                      className="w-full"
+                      disabled={tarefa.status === true}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      {...register(`tarefas[${index}].status`)}
+                      checked={fields[index].status === true}
+                      onChange={(e) => handleStatus(index)}
+                      className="w-full"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="date"
+                      {...register(`tarefas[${index}].prazo`)}
+                      defaultValue={tarefa.prazo}
+                      className="w-full"
+                      disabled={tarefa.status === true}
+                    />
+                  </td>
+                  <td className="text-center">
+                    <Button
+                      iconeOpcional={BiTrash}
+                      tipo="button"
+                      iconeTamanho="24px"
+                      className="hover:fill-primary50"
+                      onClick={(e) => deleteRow(index)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        </table><br /><br />
-
-        <div className="absolute right-[15rem] bottom-0">
-          <button onClick={saveTarefa}
-            className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary">
-            Salvar
-          </button>
-        </div>
-
+          <div className="mr-40 place-self-end">
+            <Button
+              texto="Salvar"
+              tipo="submit"
+              className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+            />
+          </div>
+        </form>
       </div>
-
     </div>
   )
 }

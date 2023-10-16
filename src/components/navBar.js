@@ -9,14 +9,15 @@ import { BiLogOut } from "react-icons/bi"
 function NavBar() {
   return (
     <>
-      <aside className="fixed m-0 flex h-screen w-64 flex-col gap-3 bg-bg15 p-2">
+      <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
           <Link to="/projetos"> 
-            <img
+            {<img
               alt="Logo da Beelieve"
               src={Beelieve}
               className="cursor-pointer"
-            />
+              width="180px"
+            />}
           </Link>
         </div>
         <div className="flex h-full flex-col rounded bg-bg22 px-5">

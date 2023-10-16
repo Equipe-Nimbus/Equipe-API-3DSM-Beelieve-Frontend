@@ -3,16 +3,21 @@ import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import IntlCurrencyInput from "react-intl-currency-input"
+import Swal from 'sweetalert2'
 
 import schemaProjetoInicial from "./validation"
 import TabelaWbs from "../TabelaWbs"
 import Button from "../Button"
+import LerExcel from "../LerExcel"
 
 import axios from "../../services/axios"
 import { formatarEstrutura } from "../../utils/formatarEstrutura"
 import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 
-function FormCadastroProjeto() {
+
+function FormCadastroProjeto() { 
+  const [niveisExcel, setniveisExcel] = useState({})
+
   const {
     register,
     handleSubmit,
@@ -21,12 +26,13 @@ function FormCadastroProjeto() {
   } = useForm({
     defaultValues: {
       valorHora: 0,
+      prazoProjeto: null
+      
     },
     resolver: yupResolver(schemaProjetoInicial),
   })
+  
   const navigate = useNavigate()
-
-  const [render, setRender] = useState(0)
 
   const [tabelaWBS, setTabelaWBS] = useState([
     {
@@ -35,43 +41,41 @@ function FormCadastroProjeto() {
     },
   ])
 
-  useEffect(() => {}, [render])
+  useEffect(() => {}, [tabelaWBS])
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
       nome_projeto: data.nomeProjeto,
       descricao_projeto: data.descricaoProjeto,
       valor_hora_projeto: data.valorHora,
+      prazo_meses: data.prazoProjeto,
       ordem_projeto: 1,
       sub_projetos: [],
     }
 
-    const estrutura = formatarEstrutura(tabelaWBS)
-    projeto.sub_projetos = estrutura
+    const projetoFormatado = formatarEstrutura(projeto, tabelaWBS)
 
-    return projeto
+    return projetoFormatado
   }
 
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
 
-    //console.log(projeto)
     await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
-        window.alert("Cadastro realizado com sucesso!")
+        Swal.fire('Cadastro realizado com sucesso!', '', 'sucess');
         navigate("/projetos")
       }
       else {
-        window.alert("Erro ao realizar o cadastro :(")
+        Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
       }
     })
   }
 
   const handlerBlur = (evento) => {
-    let tabela = tabelaWBS
+    let tabela = [...tabelaWBS]
     tabela[0].descricao = evento.target.value
     setTabelaWBS(tabela)
-    setRender(render + 1)
   }
 
   const handleInputDinheiro = (event, value, maskedValue) => {
@@ -79,8 +83,20 @@ function FormCadastroProjeto() {
     setValue("valorHora", value)
   }
 
+  useEffect(() => {
+    if(niveisExcel.subProjeto){
+      setValue("nomeProjeto", niveisExcel.subProjeto[0].descricao)
+      let tabela = [...tabelaWBS]
+      tabela = niveisExcel.subProjeto
+      //console.log("TABELA", tabela)
+      setTabelaWBS(tabela) 
+    }
+  }, [niveisExcel])
+
   return (
     <form onSubmit={handleSubmit(cadastrarProjeto)}>
+      <LerExcel niveisExcel={niveisExcel} setniveisExcel={setniveisExcel} />
+      <hr className="border-n90" />
       <div className="mt-4 flex flex-col">
         <label
           htmlFor="nomeProjeto"
@@ -145,6 +161,28 @@ function FormCadastroProjeto() {
         {errors?.valorHora && (
           <label htmlFor="valorHora" className="text-sm font-light text-error">
             {errors.valorHora.message}
+          </label>
+        )}
+      </div>
+      <div className="mt-4 flex flex-col">
+        <label
+          htmlFor="prazoProjeto"
+          className="text-base font-medium text-on-light"
+        >
+          Prazo (meses)
+        </label>
+        <input
+          type="number"
+          min={0}
+          className="w-1/2 rounded-md border border-n70 p-1"
+          {...register("prazoProjeto")}
+        />
+        {errors?.prazoProjeto && (
+          <label
+            htmlFor="prazoProjeto"
+            className="text-sm font-light text-error"
+          >
+            {errors.prazoProjeto.message}
           </label>
         )}
       </div>
