@@ -169,6 +169,7 @@ const TabFormTarefas = ({
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Continuar",
+          confirmButtonColor: "#132431",
           cancelButtonText: "Cancelar",
         }).then(async (result) => {
           if (result.isConfirmed) {
@@ -176,7 +177,11 @@ const TabFormTarefas = ({
               .put("/tarefa/atualizar", listaTarefasPreenchidas)
               .then((response) => {
                 if (response.status === 200) {
-                  Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+                  Swal.fire({
+                    title: 'Tarefas atualizadas com sucesso!',
+                    icon: 'success',
+                    confirmButtonColor: "#132431"
+                  });
                 }
               })
               .catch((error) => {
@@ -193,7 +198,11 @@ const TabFormTarefas = ({
           .put("/tarefa/atualizar", listaTarefasPreenchidas)
           .then((response) => {
             if (response.status === 200) {
-              Swal.fire("Tarefas atualizadas com sucesso!", "", "success")
+              Swal.fire({
+                title: 'Tarefas atualizadas com sucesso!',
+                icon: 'success',
+                confirmButtonColor: "#132431"
+              });
             }
           })
           .catch((error) => {
@@ -251,14 +260,14 @@ const TabFormTarefas = ({
           className="flex flex-col gap-10"
         >
           <table className="mx-auto mt-5 w-4/5">
-            <thead className="bg-primary98 p-10 text-base uppercase">
+            <thead className="bg-primary98 p-10 text-base uppercase ">
               <tr>
-                <th className="px-6 py-3">Tarefa</th>
-                <th className="">Descrição</th>
-                <th className="">Resultado Esperado</th>
-                <th className="">Peso</th>
-                <th className="">Execução</th>
-                <th className="">Previsão</th>
+                <th className="px-6 py-3 text-center">Tarefa</th>
+                <th className="text-left">Descrição</th>
+                <th className="text-left">Resultado Esperado</th>
+                <th className="text-center">Peso</th>
+                <th className="text-center">Execução</th>
+                <th className="text-center">Previsão</th>
               </tr>
             </thead>
             <tbody>
@@ -292,7 +301,7 @@ const TabFormTarefas = ({
                       defaultValue={tarefa.peso}
                       onBlur={(e) => handlePeso(index, e.target.value)}
                       min={0}
-                      className="w-full"
+                      className="w-full text-center"
                       disabled={tarefa.status === true}
                     />
                   </td>
@@ -310,7 +319,7 @@ const TabFormTarefas = ({
                       type="date"
                       {...register(`tarefas[${index}].prazo`)}
                       defaultValue={tarefa.prazo}
-                      className="w-full"
+                      className="w-full text-center"
                       disabled={tarefa.status === true}
                     />
                   </td>

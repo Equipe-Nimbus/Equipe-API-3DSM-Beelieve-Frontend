@@ -168,7 +168,11 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
         .then((response) => {
           if (response.status === 200) {
             //console.log("resposta: ", response)
-            Swal.fire('Detalhes dos pacotes atualizados com sucesso!', '', 'sucess');
+            Swal.fire({
+              title: 'Detalhes dos pacotes salvos com sucesso!',
+              icon: 'success',
+              confirmButtonColor: "#132431"
+            });
             // window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
           } else {

@@ -31,8 +31,11 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
         .then((response) => {
           if ((response.status = 200)) {
             //console.log("resposta: ", response)
-            Swal.fire('Estrutura salva com sucesso!', '', 'sucess');
-            // window.alert("Estrutura salva com sucesso!")
+            Swal.fire({
+              title: 'Estrutura salva com sucesso!',
+              icon: 'success',
+              confirmButtonColor: "#132431"
+            });
             setAtualizar(true)
           }
           else {

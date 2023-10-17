@@ -10,7 +10,7 @@ import axios from "../services/axios"
 
 import { BsPlayFill } from "react-icons/bs"
 
-function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIniciado, camposValidados }) {
+function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIniciado, camposValidados, setAtualizar }) {
   const [projetoNaoIniciado, setProjetoNaoIniciado] = useState(!DataProjetoIniciado);
   const { tabela, horaValorProjeto, projeto } = camposValidados;
   const MaterialoNiveis = tabela.map((linha) => linha.materiais);
@@ -21,7 +21,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
     if (projeto.sub_projetos.hasOwnProperty(chaveProjeto)) {
       const subprojeto = projeto.sub_projetos[chaveProjeto];
       
-      if (subprojeto.nivel_sub_projeto.length != 0) {
+      if (subprojeto.nivel_sub_projeto.length !== 0) {
         // Se o subprojeto tem níveis (nivelSubProjeto)
         const niveisSubProjeto = subprojeto.nivel_sub_projeto;
   
@@ -103,20 +103,21 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
 
     // Validações
     if (!possuiNíveisSubNiveis(tabela)) {
-      Swal.fire('Alerta!!!', 'Projeto não possui níveis ou subníveis!', 'error');
+      Swal.fire('Alerta!', 'Projeto não possui níveis ou subníveis!', 'error');
     } else if (horaValorProjeto === 0) {
-      Swal.fire('Alerta!!!', 'Projeto não possui valor hora!', 'error');
+      Swal.fire('Alerta!', 'Projeto não possui valor hora!', 'error');
     } else if (algumMaterialZero) {
-      Swal.fire('Alerta!!!', 'Projeto não possui valores para material!', 'error');
+      Swal.fire('Alerta!', 'Projeto não possui valores para material!', 'error');
     } else if (algumaHoraHomemZero) {
-      Swal.fire('Alerta!!!', 'Projeto não possui valores para hora homem!', 'error');
+      Swal.fire('Alerta!', 'Projeto não possui valores para hora homem!', 'error');
     }  else if (tarefasComCamposVazios) {
-      Swal.fire('Alerta!!!', 'Existem tarefas com campos vazios. Não é possível iniciar o projeto.', 'error'); 
+      Swal.fire('Alerta!', 'Existem tarefas com campos vazios. Não é possível iniciar o projeto.', 'error'); 
     } else { 
       // Swal.fire('Projeto iniciado com sucesso!', '', 'sucess');
       const response = await (await axios.post(`/projeto/${id}/iniciarprojeto`, data)
         .then(res => {
           setProjetoNaoIniciado(false)
+          setAtualizar(true)
           Swal.fire('Projeto iniciado com sucesso!', '', 'sucess');
         })
         .catch(error => {
@@ -193,7 +194,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
         <span>{}</span>
       </span>
       <br />
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+      {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
         <span className="font-semibold text-complementary-20">
           Info Relevante:
         </span>
@@ -205,7 +206,7 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
           Info Relevante:
         </span>
         <span>{}</span>
-      </span>
+      </span> */}
     </div>
   )
 }

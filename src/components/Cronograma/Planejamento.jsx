@@ -187,7 +187,11 @@ function Planejamento({ idProjeto }) {
     try {
       await axios.put("/cronograma/atualiza", cronograma).then((response) => {
         if (response.status === 200) {
-          Swal.fire("Planejamento salvo com sucesso!", "", "sucess")
+          Swal.fire({
+            title: 'Planejamento salvo com sucesso!',
+            icon: 'success',
+            confirmButtonColor: "#132431"
+          });
           // window.alert("Planejamento salvo com sucesso!")
         }
       })

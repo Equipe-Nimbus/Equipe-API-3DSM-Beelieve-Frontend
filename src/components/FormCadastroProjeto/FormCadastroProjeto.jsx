@@ -63,8 +63,18 @@ function FormCadastroProjeto() {
 
     await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
-        Swal.fire('Cadastro realizado com sucesso!', '', 'sucess');
-        navigate("/projetos")
+        Swal.fire({
+          title: "Cadastro realizado com sucesso!",
+          icon: "success",
+          confirmButtonColor: "#132431",
+          allowOutsideClick: false,
+          allowEscapeKey: false
+          
+        }).then((result) => {
+          if(result.isConfirmed){
+            navigate("/projetos")
+          }
+        })
       }
       else {
         Swal.fire('Erro ao realizar o cadastro :(', '', 'error');

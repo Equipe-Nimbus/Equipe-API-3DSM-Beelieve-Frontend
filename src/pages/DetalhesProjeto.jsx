@@ -93,6 +93,7 @@ function DetalhesProjeto() {
           horaValorProjeto: projeto.hora_valor_projeto,
           projeto: projeto
         }}
+        setAtualizar={setAtualizar}
       />
       <MenuSelecao
         opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
