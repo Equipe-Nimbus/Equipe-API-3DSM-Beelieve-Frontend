@@ -21,13 +21,20 @@ function Acompanhamento({ idProjeto }) {
 
   const getCronograma = async () => {
     try {
-      await axios.get(`/cronograma/${idProjeto}`).then((response) => {
+      await axios.get(`/cronograma/${idProjeto}`).then(async (response) => {
         let cronogramaResgatado = response.data
-
+		
         let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
         const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-        const dataAtual = new Date();
-
+        let dataAtual
+        await axios.get("data/pega").then((response) => {
+			dataAtual = response.data
+		})
+        console.log(dataAtual)
+		let anoDataAtual = Number (dataAtual.slice(0, 4))
+		let mesDataAtual = (Number (dataAtual.slice(5,7)) - 1)
+		dataAtual = new Date(anoDataAtual, mesDataAtual)
+		
         cronogramaResgatado.lista_cronograma.forEach((mes) => { 
             const nomeDoMes = mes.mes_cronograma
             const indiceMes = mesesDoAno.indexOf(nomeDoMes)
