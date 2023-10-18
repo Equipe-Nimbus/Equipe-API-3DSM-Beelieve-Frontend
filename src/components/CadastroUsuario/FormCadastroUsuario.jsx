@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schemaCadastroUsuario from "./validation"
@@ -39,7 +39,6 @@ function CadastroUsuario() {
     }
 
     return (
-        <>
             <form onSubmit={handleSubmit(cadastrarUsuario)}>
                 <div className="h-14 bg-gradient-to-t from-#FFFDF2-500 to-#FFF5C2-500">
                     <div className="rounded h-14 bg-gradient-to-t from-#FFFFFF-500 to-#F5F5FD-500 w-1/2">
@@ -93,7 +92,6 @@ function CadastroUsuario() {
                     </div>
                 </div>
             </form>
-        </>
     )
 }
 
