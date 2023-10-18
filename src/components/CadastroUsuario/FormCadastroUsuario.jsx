@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import schemaCadastroUsuario from "./validation"
 import Swal from 'sweetalert2'
 
 import Button from "../Button"
