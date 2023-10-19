@@ -39,59 +39,65 @@ function CadastroUsuario() {
     }
 
     return (
-            <form onSubmit={handleSubmit(cadastrarUsuario)}>
-                <div className="h-14 bg-gradient-to-t from-#FFFDF2-500 to-#FFF5C2-500">
-                    <div className="rounded h-14 bg-gradient-to-t from-#FFFFFF-500 to-#F5F5FD-500 w-1/2">
-                        <h1
-                            className="font-bold text-center">
-                            Cadastro de Usuário
-                        </h1>
+        <form onSubmit={handleSubmit(cadastrarUsuario)}>
+            <div className="h-14 bg-gradient-to-t from-#FFFDF2-500 to-#FFF5C2-500">
+                <div className="rounded h-14 bg-gradient-to-t from-#FFFFFF-500 to-#F5F5FD-500 w-1/2">
+                    <h1
+                        className="font-bold text-center">
+                        Cadastro de Usuário
+                    </h1>
 
-                        <div>
-                            <label
-                                htmlFor="nomeUsuario"
-                                className="text-base font-medium text-on-light">
-                                Nome Completo:
-                            </label>
-                            <input type="text" className="w-1/2 rounded" />
+                    <div>
+                        <label
+                            htmlFor="nomeUsuario"
+                            className="text-base font-medium text-on-light">
+                            Nome Completo:
+                        </label>
+                        <input type="text" className="w-1/2 rounded" />
 
-                            <label
-                                htmlFor="cpfUsuario"
-                                className="text-base font-medium text-on-light">
-                                Cpf:
-                            </label>
-                            <input type="number" className="w-1/2 rounded" />
-                        </div>
-
-                        <div>
-                            <label
-                                htmlFor="emailUsuario"
-                                className="text-base font-medium text-on-light">
-                                Email:
-                            </label>
-                            <input type="text" className="w-1/3 rounded" />
-
-                            <label
-                                htmlFor="senhaUsuario"
-                                className="text-base font-medium text-on-light">
-                                Senha:
-                            </label>
-                            <input type="password" className="w-1/3 rounded" />
-                            <label
-                                htmlFor="cargoUsuario"
-                                className="text-base font-medium text-on-light">
-                                Cargo:
-                            </label>
-                            <input type="text" className="w-1/3 rounded" />
-                        </div>
-                        <Button
-                            texto="Cadastrar"
-                            tipo="submit"
-                            className="rounded bg-primary50 p-2 text-lg font-semibold text-on-primary w-full"
-                        />
+                        <label
+                            htmlFor="cpfUsuario"
+                            className="text-base font-medium text-on-light">
+                            Cpf:
+                        </label>
+                        <input type="number" className="w-1/2 rounded" />
                     </div>
+
+                    <div>
+                        <label
+                            htmlFor="emailUsuario"
+                            className="text-base font-medium text-on-light">
+                            Email:
+                        </label>
+                        <input type="text" className="w-1/3 rounded" />
+
+                        <label
+                            htmlFor="senhaUsuario"
+                            className="text-base font-medium text-on-light">
+                            Senha:
+                        </label>
+                        <input type="password" className="w-1/3 rounded" />
+                        <label
+                            htmlFor="senhaUsuario"
+                            className="text-base font-medium text-on-light">
+                            Confirme a Senha:
+                        </label>
+                        <input type="password" className="w-1/3 rounded" />
+                        <label
+                            htmlFor="cargoUsuario"
+                            className="text-base font-medium text-on-light">
+                            Cargo:
+                        </label>
+                        <input type="text" className="w-1/3 rounded" />
+                    </div>
+                    <Button
+                        texto="Cadastrar"
+                        tipo="submit"
+                        className="rounded bg-primary50 p-2 text-lg font-semibold text-on-primary w-full"
+                    />
                 </div>
-            </form>
+            </div>
+        </form>
     )
 }
 
