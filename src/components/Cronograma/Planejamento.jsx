@@ -88,7 +88,7 @@ function Planejamento({ idProjeto }) {
   const renderizarColunas = () => {
     return fields?.map((mes, indexMes) => (
       <th key={indexMes} className="px-6 py-3 text-center">
-        {mes.mes_cronograma}
+        {`Mês ${indexMes+1}`}
       </th>
     ))
   }

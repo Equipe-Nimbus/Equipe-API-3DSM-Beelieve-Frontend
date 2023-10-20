@@ -215,7 +215,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                 <td className="px-4 py-3 text-lg font-semibold">
                   {linha.nivel}
                 </td>
-                <td className="font-regular text-lg">
+                <td className="font-regular text-lg px-6">
                   {linha.nivel === "1" && linha.descricao}
 
                   {linha.nivel.length === 3 &&
@@ -267,7 +267,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                     currency="BRL"
                     config={formatacaoDinheiro}
                     disabled
-                    className="text-center"
+                    className="text-justify pl-6"
                   />
                 </td>
 
@@ -311,7 +311,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                       linha.nivel === "1"||
                       statusInicio
                     }
-                    className="text-center"
+                    className="text-justify pl-6"
                   />
                 </td>
                 <td class="break-all px-1">{}</td>
