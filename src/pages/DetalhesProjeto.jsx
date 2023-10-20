@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useLocation } from "react-router-dom"
 import axios from "../services/axios"
 
 import VisaoGeral from "../components/VisaoGeral"
@@ -20,11 +20,12 @@ function DetalhesProjeto() {
   }
 
   const { id } = useParams()
+  const location = useLocation()
   const getProjeto = async () => {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data
-        // console.log("projeto resgatado: ", dados)
+        //console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
@@ -78,6 +79,10 @@ function DetalhesProjeto() {
     if (Object.keys(projeto).length > 0) {
       const novaTabela = gerarTabela()
       setTabela(novaTabela)
+      
+      if(location.state && location.state.tela === 'pacotes'){
+        setSecaoAtual("PACOTES")
+      }
     }
   }, [projeto, atualizar])
 

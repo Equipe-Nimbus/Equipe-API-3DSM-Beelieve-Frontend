@@ -231,7 +231,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                               subprojeto.id_sub_projeto === linha.id,
                           ),
                           nomeProjeto: projeto.nome_projeto,
-                          dataInicioProjeto: projeto.data_inicio_projeto
+                          dataInicioProjeto: projeto.data_inicio_projeto,
+                          idProjeto: projeto.id_projeto
                         }}
                       >
                         {linha.descricao}
@@ -250,7 +251,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                             subprojeto.id_nivel_sub_projeto === linha.id,
                         ),
                         nomeProjeto: projeto.nome_projeto,
-                        dataInicioProjeto: projeto.data_inicio_projeto
+                        dataInicioProjeto: projeto.data_inicio_projeto,
+                        idProjeto: projeto.id_projeto
                       }}
                     >
                       {linha.descricao}
