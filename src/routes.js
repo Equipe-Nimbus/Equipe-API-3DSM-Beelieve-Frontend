@@ -6,6 +6,8 @@ import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto'
 import MudaData from "./pages/MudaData";
 
+import NovoUsuario from "./pages/NovoUsuario";
+
 const router = [
     {
         path: "/",
@@ -40,7 +42,23 @@ const router = [
 
         ]
     },
-    
+    {   
+        path: "/usuarios",
+        element: <App />,
+        children: [
+            {   path: "lista-usuario",
+                element: <ListaUsuario/>,
+            },
+            {
+                path: "novo-usuario",
+                element: <NovoUsuario/>,
+            },
+            {
+                path: ":id",
+                element: <AlterarUsuario/>,
+            },
+        ]
+    },
 ]
 
 export default router

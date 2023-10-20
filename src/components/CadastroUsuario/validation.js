@@ -20,7 +20,12 @@ const schemaCadastroUsuario = yup.object().shape({
   
     cargoUsuario: yup
       .string()
-      .required("")
+      .required("Por favor, selecione o Cargo"),
+
+    telefoneUsuario: yup
+      .number()
+      .max(11, ("Máximo de 11 números"))
+      .required("Por favor, digite o número de telefone")
   })
 
 export default schemaCadastroUsuario
