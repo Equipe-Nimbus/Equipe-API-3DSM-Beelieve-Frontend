@@ -46,7 +46,7 @@ const router = [
         path: "/usuarios",
         element: <App />,
         children: [
-            {   path: "lista-usuario",
+            {   path: "",
                 element: <ListaUsuario/>,
             },
             {
