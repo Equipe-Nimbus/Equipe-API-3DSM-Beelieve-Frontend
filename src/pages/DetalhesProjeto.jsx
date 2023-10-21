@@ -92,6 +92,7 @@ function DetalhesProjeto() {
         nomeProjeto={projeto.nome_projeto}
         descricaoProjeto={projeto.descricao_projeto}
         liderProjeto={projeto.chefe_projeto}
+        progressoProjeto={projeto.progresso_projeto}
         DataProjetoIniciado={projeto.data_inicio_projeto}
         camposValidados={{
           tabela: tabela,

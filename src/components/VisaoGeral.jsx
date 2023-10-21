@@ -10,7 +10,7 @@ import axios from "../services/axios"
 
 import { BsPlayFill } from "react-icons/bs"
 
-function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIniciado, camposValidados, setAtualizar }) {
+function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, progressoProjeto, DataProjetoIniciado, camposValidados, setAtualizar }) {
   const [projetoNaoIniciado, setProjetoNaoIniciado] = useState(!DataProjetoIniciado);
   const { tabela, horaValorProjeto, projeto } = camposValidados;
   const MaterialoNiveis = tabela.map((linha) => linha.materiais);
@@ -183,6 +183,18 @@ function VisaoGeral({ nomeProjeto, descricaoProjeto, liderProjeto, DataProjetoIn
                 className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
               />
             </>
+          )}
+          {!projetoNaoIniciado && (
+            <div className="flex items-center gap-1 mr-96">
+            <span className="text-2xl">
+              Progresso:{" "}
+              <span className="text-2xl text-complementary-20">{`${parseInt(progressoProjeto)}%`}</span> </span>
+            <progress
+              value={progressoProjeto}
+              max={100}
+              className="h-2 rounded bg-complementary-20"
+            ></progress>
+          </div>
           )}
         </div>
       </div>
