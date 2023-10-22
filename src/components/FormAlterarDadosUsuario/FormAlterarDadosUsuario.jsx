@@ -110,6 +110,36 @@ function AlterarUsuario() {
                     </label>
                 )}
             </div>
+            <div className="mt-4 flex flex-col">
+                <select className="" name="cargoUsuario" id="" required
+                    value={cargo}
+                    onChange={(e) => setFuncao(e.target.value)}>
+                    <option value="selecione" selected>Selecione</option>
+                    <option value="EngenheiroChefe">Engenheiro Chefe</option>
+                    <option value="LiderProjeto">Líder de Projeto</option>
+                </select>
+            </div>
+            <div className="mt-4 flex flex-col">
+                <label
+                    htmlFor="telefoneUsuario"
+                    className="text-base font-medium text-on-light"
+                >
+                    Telefone:
+                </label>
+                <input
+                    type="password"
+                    className="w-1/2 rounded-md border border-n70 p-1"
+                    {...register("usuarioTelefone")}
+                />
+                {errors?.usuarioTelefone && (
+                    <label
+                        htmlFor="telefoneUsuario"
+                        className="text-sm font-light text-error"
+                    >
+                        {errors.usuarioTelefone.message}
+                    </label>
+                )}
+            </div>
         </form>
 
     )
