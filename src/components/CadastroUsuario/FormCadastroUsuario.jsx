@@ -8,13 +8,6 @@ import Button from "../Button"
 import axios from "../../services/axios"
 
 function CadastroUsuario() {
-    const [nome, setNome] = useState('')
-    const [cpf, setCPF] = useState('')
-    const [cargo, setCargo] = useState('')
-    const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')
-    const [telefone, setTelefone] = useState('')
-
     const cadastrarUsuario = async (data) => {
         const usuario = gerarJsonUsuario(data)
 
@@ -55,7 +48,8 @@ function CadastroUsuario() {
                         Nome Completo:
                     </label>
                     <input type="text" className="w-1/2 rounded" />
-
+                </div>
+                <div className="justify-between flex-col">
                     <label
                         htmlFor="emailUsuario"
                         className="text-base font-medium text-on-light">
@@ -71,13 +65,16 @@ function CadastroUsuario() {
                         CPF:
                     </label>
                     <input type="text" className="w-1/3 rounded" />
-
+                </div>
+                <div className="justify-between flex-col">
                     <label
                         htmlFor="senhaUsuario"
                         className="text-base font-medium text-on-light">
                         Senha:
                     </label>
                     <input type="password" className="w-1/3 rounded" />
+                </div>
+                <div className="justify-between flex-col">
                     <label
                         htmlFor="senhaUsuario"
                         className="text-base font-medium text-on-light">
@@ -85,24 +82,31 @@ function CadastroUsuario() {
                     </label>
                     <input type="password" className="w-1/3 rounded" />
                 </div>
-                <div className="justify-between items-center flex-col">
+                <div className="justify-between flex-col">
                     <div className="mt-4 flex flex-col">
-                        <select className="" name="cargoUsuario" id="" required
-                            value={cargo}
-                            onChange={(e) => setFuncao(e.target.value)}>
-                            <option value="selecione" selected>Selecione</option>
-                            <option value="EngenheiroChefe">Engenheiro Chefe</option>
-                            <option value="LiderProjeto">Líder de Projeto</option>
-                        </select>
+                        <label
+                            htmlFor="telefoneUsuario"
+                            className="text-base font-medium text-on-light">
+                            Telefone:
+                        </label>
+                        <input type="text" className="w-1/2 rounded" />
                     </div>
-
-                    <label
-                        htmlFor="telefoneUsuario"
-                        className="text-base font-medium text-on-light">
-                        Telefone:
-                    </label>
-                    <input type="text" className="w-1/2 rounded" />
                 </div>
+                <div className="justify-between flex-col">
+                    <select className="" name="cargoUsuario" id="" required
+                        value={cargo}
+                        onChange={(e) => setCargo(e.target.value)}>
+                        <option value="selecione" selected>Selecione</option>
+                        <option value="EngenheiroChefe">Engenheiro Chefe</option>
+                        <option value="LiderProjeto">Líder de Projeto</option>
+                    </select>
+                </div>
+                <Button
+                    texto="Cancelar"
+                    tipo="button"
+                    className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
+                    onClick={() => navigate("/usuarios")}
+                />
                 <Button
                     texto="Cadastrar"
                     tipo="submit"
