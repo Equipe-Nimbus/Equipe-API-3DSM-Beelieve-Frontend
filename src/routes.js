@@ -40,6 +40,24 @@ const router = [
 
         ]
     },
+    {   
+        path: "/usuarios",
+        element: <App />,
+        children: [
+            {   path: "",
+                element: <ListaUsuario/>,
+            },
+            {
+                path: "novo-usuario",
+                element: <NovoUsuario/>,
+            },
+            {
+                path: ":id",
+                element: <AlterarUsuario/>,
+            }
+
+        ]
+    },
     
 ]
 
