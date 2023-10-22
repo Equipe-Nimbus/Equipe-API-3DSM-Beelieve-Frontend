@@ -13,6 +13,7 @@ function CadastroUsuario() {
     const [cargo, setCargo] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+    const [telefone, setTelefone] = useState('')
 
     const cadastrarUsuario = async (data) => {
         const usuario = gerarJsonUsuario(data)
@@ -47,7 +48,7 @@ function CadastroUsuario() {
                     Cadastro de Usuário
                 </h1>
 
-                <div className="justify-between mt-1.5 items-center flex-col">
+                <div className="justify-between mt-1.5 flex-col">
                     <label
                         htmlFor="nomeUsuario"
                         className="text-base font-medium text-on-light">
