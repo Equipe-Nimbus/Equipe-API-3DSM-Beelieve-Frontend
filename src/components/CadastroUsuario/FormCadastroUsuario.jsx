@@ -86,19 +86,22 @@ function CadastroUsuario() {
                     <input type="password" className="w-1/3 rounded" />
                 </div>
                 <div className="justify-between items-center flex-col">
-                    <label
-                        htmlFor="cargoUsuario"
-                        className="text-base font-medium text-on-light">
-                        Cargo:
-                    </label>
-                    <input type="text" className="w-1/2 rounded" />
+                    <div className="mt-4 flex flex-col">
+                        <select className="" name="cargoUsuario" id="" required
+                            value={cargo}
+                            onChange={(e) => setFuncao(e.target.value)}>
+                            <option value="selecione" selected>Selecione</option>
+                            <option value="EngenheiroChefe">Engenheiro Chefe</option>
+                            <option value="LiderProjeto">Líder de Projeto</option>
+                        </select>
+                    </div>
 
                     <label
                         htmlFor="telefoneUsuario"
                         className="text-base font-medium text-on-light">
                         Telefone:
                     </label>
-                    <input type="text" className="w-1/2 rounded" /> 
+                    <input type="text" className="w-1/2 rounded" />
                 </div>
                 <Button
                     texto="Cadastrar"
