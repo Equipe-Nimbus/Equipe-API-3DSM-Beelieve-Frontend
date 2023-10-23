@@ -103,7 +103,7 @@ const TabFormTarefas = ({
         somaDosPesos) *
       100
 
-    setProgresso(isNaN(progresso) ? 0 : progresso)
+    setProgresso(isNaN(progresso) ? 0 : parseFloat(progresso.toFixed(2)))
   }
 
   const handlePeso = (index, valor) => {
@@ -122,7 +122,7 @@ const TabFormTarefas = ({
     const listaTarefas = {
       tipo_pai: tipoPai,
       id_pai: idPai,
-      progresso_pai: parseFloat(progresso),
+      progresso_pai: progresso,
       inicializado: dataInicioProjeto ? true : false,
       lista_tarefas: [],
     }
@@ -178,10 +178,10 @@ const TabFormTarefas = ({
               .then((response) => {
                 if (response.status === 200) {
                   Swal.fire({
-                    title: 'Tarefas atualizadas com sucesso!',
-                    icon: 'success',
-                    confirmButtonColor: "#132431"
-                  });
+                    title: "Tarefas atualizadas com sucesso!",
+                    icon: "success",
+                    confirmButtonColor: "#132431",
+                  })
                 }
               })
               .catch((error) => {
@@ -199,10 +199,10 @@ const TabFormTarefas = ({
           .then((response) => {
             if (response.status === 200) {
               Swal.fire({
-                title: 'Tarefas atualizadas com sucesso!',
-                icon: 'success',
-                confirmButtonColor: "#132431"
-              });
+                title: "Tarefas atualizadas com sucesso!",
+                icon: "success",
+                confirmButtonColor: "#132431",
+              })
             }
           })
           .catch((error) => {
@@ -234,7 +234,8 @@ const TabFormTarefas = ({
         <div className="flex items-center gap-1">
           <span className="text-2xl">
             Progresso:{" "}
-            <span className="text-2xl text-complementary-20">{`${parseInt(progresso)}%`}</span> </span>
+            <span className="text-2xl text-complementary-20">{`${progresso}%`}</span>{" "}
+          </span>
           <progress
             value={progresso}
             max={100}
