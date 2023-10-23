@@ -63,11 +63,11 @@ function CadastroUsuario() {
             <hr className="border-n90" />
             <div className="mt-4 flex flex-col">
                 <h1
-                    className="font-bold text-center">
+                    className="font-semibold text-2xl text-center">
                     Cadastro de Usuário
                 </h1>
 
-                <div className="justify-between mt-1.5 flex-col">
+                <div className="mt-8 flex flex-col">
                     <label
                         htmlFor="nomeUsuario"
                         className="text-base font-medium text-on-light">
@@ -79,7 +79,7 @@ function CadastroUsuario() {
                         {...register("nomeUsuario")}
                     />
                 </div>
-                <div className="justify-between flex-col">
+                <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="emailUsuario"
                         className="text-base font-medium text-on-light">
@@ -91,7 +91,7 @@ function CadastroUsuario() {
                         {...register("emailUsuario")}
                     />
                 </div>
-                <div className="justify-between items-center flex-col">
+                <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="cpfUsuario"
                         className="text-base font-medium text-on-light">
@@ -103,7 +103,7 @@ function CadastroUsuario() {
                         {...register("cpfUsuario")}
                     />
                 </div>
-                <div className="justify-between flex-col">
+                <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="senhaUsuario"
                         className="text-base font-medium text-on-light">
@@ -115,7 +115,7 @@ function CadastroUsuario() {
                         {...register("senhaUsuario")}
                     />
                 </div>
-                <div className="justify-between flex-col">
+                <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="confirmarSenhaUsuario"
                         className="text-base font-medium text-on-light">
@@ -141,9 +141,14 @@ function CadastroUsuario() {
                         />
                     </div>
                 </div>
-                <div className="justify-between flex-col">
-                    <select className="" name="cargoUsuario" required {...register("cargoUsuario", { required: true })}>
-                        <option value="EngenheiroChefe">Engenheiro Chefe</option>
+                <div className="mt-4 flex flex-col">
+                    <label
+                        htmlFor="cargoUsuario"
+                        className="text-base font-medium text-on-light">
+                        Cargo:
+                    </label>
+                    <select className="w-1/2 border rounded border-n70 p-1" name="cargoUsuario" required {...register("cargoUsuario", { required: true })}>
+                        <option className="bg-primary98" value="EngenheiroChefe">Engenheiro Chefe</option>
                         <option value="LiderProjeto">Líder de Projeto</option>
                     </select>
                 </div>
@@ -157,7 +162,7 @@ function CadastroUsuario() {
                     <Button
                         texto="Cadastrar"
                         tipo="submit"
-                        className="rounded bg-primary50 p-2 text-lg font-semibold text-on-primary w-full"
+                        className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
                     />
                 </div>
             </div>
