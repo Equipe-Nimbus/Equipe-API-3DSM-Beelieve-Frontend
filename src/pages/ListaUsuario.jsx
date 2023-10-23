@@ -41,9 +41,9 @@ function ListaUsuario() {
                         <thead className="bg-primary98 p-10 text-base uppercase">
                             <tr>
                                 <th class="px-12 py-3">Matricula</th>
-                                <th class="px-12 py-3">Usuários</th>
                                 <th class="px-12 py-3">Cargo</th>
-                                <th class="px-12 py-3">Visualizar</th>
+                                <th class="px-12 py-3">Departamento</th>
+                                <th class="px-12 py-3">Usuários</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,25 +53,16 @@ function ListaUsuario() {
                                         {linha.matricula}
                                     </td>
                                     <td className="px-4 py-3 text-lg font-semibold">
-                                        {linha.nome}
-                                    </td>
-                                    <td className="px-4 py-3 text-lg font-semibold">
                                         {linha.cargo}
                                     </td>
                                     <td className="px-4 py-3 text-lg font-semibold">
-                                        
+                                        {linha.departamento}
+                                    </td>
+                                    <td className="px-4 py-3 text-lg font-semibold">
                                         <Link
                                             to={`/usuario/listar/${linha.id_usuario}`}
-                                            state={{
-                                                
-                                            }}
                                         >
-                                            {<Button
-                                            iconeOpcional={FiEye}
-                                            tipo="button"
-                                            className="m-2 rounded-full"
-                                            iconeTamanho="24px"
-                                        />}
+                                            {linha.nome}
                                         </Link>
                                     </td>
                                 </tr>
