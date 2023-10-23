@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 import Beelieve from "../assets/images/Beelieve-yellow.png"
 import { PiProjectorScreenChart } from "react-icons/pi"
+import { FiUser } from "react-icons/fi"
 import { LiaUserTieSolid } from "react-icons/lia"
 import { BiLogOut } from "react-icons/bi"
 
@@ -30,6 +31,16 @@ function NavBar() {
                   className="hover:fill-primary50"
                 />
                 <Link to="/projetos">Projetos</Link>
+              </li>
+            </ul>
+            <ul className="my-10 flex flex-col gap-3">
+              <li className="flex cursor-pointer flex-row items-center gap-1 p-1.5 text-xl font-medium text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
+                <FiUser
+                  color="#DADDE6"
+                  size={24}
+                  className="hover:fill-primary50"
+                />
+                <Link to="/usuario">Usuários</Link>
               </li>
             </ul>
           </div>
