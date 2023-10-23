@@ -101,17 +101,19 @@ function CadastroUsuario() {
                         <option value="LiderProjeto">Líder de Projeto</option>
                     </select>
                 </div>
-                <Button
-                    texto="Cancelar"
-                    tipo="button"
-                    className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
-                    onClick={() => navigate("/usuarios")}
-                />
-                <Button
-                    texto="Cadastrar"
-                    tipo="submit"
-                    className="rounded bg-primary50 p-2 text-lg font-semibold text-on-primary w-full"
-                />
+                <div className="mt-5 flex justify-end gap-5">
+                    <Button
+                        texto="Cancelar"
+                        tipo="button"
+                        className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
+                        onClick={() => navigate("/usuarios")}
+                    />
+                    <Button
+                        texto="Cadastrar"
+                        tipo="submit"
+                        className="rounded bg-primary50 p-2 text-lg font-semibold text-on-primary w-full"
+                    />
+                </div>
             </div>
         </form>
     )
