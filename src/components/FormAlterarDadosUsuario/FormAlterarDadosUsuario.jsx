@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
-import PropTypes from "prop-types"
 import Button from "./Button"
-
-import Swal from 'sweetalert2'
-import axios from "../services/axios"
 
 import { BsPlayFill } from "react-icons/bs"
 
 function AlterarUsuario() {
     return (
-        <form onSubmit={handleSubmit(alterarUsuario)}>
+        <form>
             <Button
                 texto="Excluir usuário"
                 iconeOpcional={BsPlayFill}
                 iconeTamanho="20px"
-                onClick={handleExcluirUsuarioClick}
                 className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
             />
             <hr className="border-n90" />
@@ -132,9 +125,14 @@ function AlterarUsuario() {
                 )}
             </div>
             <div className="mt-4 flex flex-col">
+                <label
+                    htmlFor="senhaConfirmeUsuario"
+                    className="text-base font-medium text-on-light"
+                >
+                    Confirmar Senha:
+                </label>
                 <select className="" name="cargoUsuario" id="" required
-                    value={cargo}
-                    onChange={(e) => setFuncao(e.target.value)}>
+                    value="Cargo">
                     <option value="selecione" selected>Selecione</option>
                     <option value="EngenheiroChefe">Engenheiro Chefe</option>
                     <option value="LiderProjeto">Líder de Projeto</option>
