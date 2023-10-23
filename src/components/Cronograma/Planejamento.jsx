@@ -67,28 +67,29 @@ function Planejamento({ idProjeto }) {
   }, [])
 
   const blurPorcentagem = (valor, mes, nivel) => {
-    if (valor.slice(-1) !== "%") {
-      const regexNumeros = /^[-+]?\d+(\.\d+)?$/
+    const regexNumeros = /^[-+]?\d+(\.\d+)?$/
+    if (valor.slice(-1) === "%") {
+      valor = valor.slice(0, -1)
+    }
 
-      if (!regexNumeros.test(valor)) {
-        setValue(
-          `cronograma[${mes}].niveis[${nivel}].progresso_planejado`,
-          "0%",
-        )
-      } else {
-        valor = valor + "%"
-        setValue(
-          `cronograma[${mes}].niveis[${nivel}].progresso_planejado`,
-          valor,
-        )
+    if (!regexNumeros.test(valor)) {
+      setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, "0%")
+    } else {
+      if (valor.length > 1 && valor[0] === "0") {
+        while (valor.length > 1 && valor[0] === "0") {
+          valor = valor.substring(1)
+        }
       }
+
+      valor = valor + "%"
+      setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, valor)
     }
   }
 
   const renderizarColunas = () => {
     return fields?.map((mes, indexMes) => (
       <th key={indexMes} className="px-6 py-3 text-center">
-        {`Mês ${indexMes+1}`}
+        {`Mês ${indexMes + 1}`}
       </th>
     ))
   }
@@ -121,14 +122,27 @@ function Planejamento({ idProjeto }) {
     if (cronograma.inicio_projeto) {
       const mesUltimoMes = ultimoMes.mes_cronograma.split(" ")[0]
       let anoUltimoMes = Number(ultimoMes.mes_cronograma.split(" ")[1])
-      
-      const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+
+      const mesesDoAno = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ]
 
       const indiceUltimoMes = mesesDoAno.indexOf(mesUltimoMes)
       let mesNovoMes = mesesDoAno[indiceUltimoMes + 1]
 
-      if(mesUltimoMes === 'Dezembro'){
-        mesNovoMes = 'Janeiro'
+      if (mesUltimoMes === "Dezembro") {
+        mesNovoMes = "Janeiro"
         anoUltimoMes++
       }
 
@@ -141,9 +155,7 @@ function Planejamento({ idProjeto }) {
       const novoCronograma = { ...cronograma }
       novoCronograma.lista_cronograma.push(novoMes)
       setCronograma(novoCronograma)
-
     } else {
-
       const novoMes = {
         mes_cronograma: `Mês ${ultimoMes.ordem_mes_cronograma + 1}`,
         ordem_mes_cronograma: ultimoMes.ordem_mes_cronograma + 1,
@@ -154,7 +166,6 @@ function Planejamento({ idProjeto }) {
       novoCronograma.lista_cronograma.push(novoMes)
       setCronograma(novoCronograma)
     }
-
   }
 
   const removerMes = () => {
@@ -188,10 +199,10 @@ function Planejamento({ idProjeto }) {
       await axios.put("/cronograma/atualiza", cronograma).then((response) => {
         if (response.status === 200) {
           Swal.fire({
-            title: 'Planejamento salvo com sucesso!',
-            icon: 'success',
-            confirmButtonColor: "#132431"
-          });
+            title: "Planejamento salvo com sucesso!",
+            icon: "success",
+            confirmButtonColor: "#132431",
+          })
           // window.alert("Planejamento salvo com sucesso!")
         }
       })
