@@ -64,7 +64,7 @@ function CadastroUsuario() {
                         className="text-base font-medium text-on-light">
                         CPF:
                     </label>
-                    <input type="text" className="w-1/3 rounded" />
+                    <input type="text" className="w-1/2 rounded" />
                 </div>
                 <div className="justify-between flex-col">
                     <label
@@ -72,7 +72,7 @@ function CadastroUsuario() {
                         className="text-base font-medium text-on-light">
                         Senha:
                     </label>
-                    <input type="password" className="w-1/3 rounded" />
+                    <input type="password" className="w-1/2 rounded" />
                 </div>
                 <div className="justify-between flex-col">
                     <label
@@ -80,7 +80,7 @@ function CadastroUsuario() {
                         className="text-base font-medium text-on-light">
                         Confirme a Senha:
                     </label>
-                    <input type="password" className="w-1/3 rounded" />
+                    <input type="password" className="w-1/2 rounded" />
                 </div>
                 <div className="justify-between flex-col">
                     <div className="mt-4 flex flex-col">
