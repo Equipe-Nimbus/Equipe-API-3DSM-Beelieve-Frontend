@@ -1,5 +1,5 @@
 import React from "react";
-import FormCadastroUsuario from "../components/CadastroUsuario/FormCadastroUsuario.jsx";
+import FormCadastroUsuario from "../components/FormCadastroUsuario/FormCadastroUsuario"
 
 
 function NovoUsuario() {

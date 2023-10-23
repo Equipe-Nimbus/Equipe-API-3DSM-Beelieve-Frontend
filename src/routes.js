@@ -2,7 +2,7 @@ import App from "./App";
 import ListaProjeto from "./pages/ListaProjeto";
 import ListaUsuario from "./pages/ListaUsuario";
 import NovoProjeto from "./pages/NovoProjeto";
-// import NovoUsuario from "./pages/NovoUsuario";
+import NovoUsuario from "./pages/NovoUsuario";
 
 import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto';
@@ -51,8 +51,8 @@ const router = [
                 element: <ListaUsuario/>,
             },
             {   path: "novo-usuario",
-                // element: <NovoUsuario/>,
-                element: <ListaUsuario/>,
+                element: <NovoUsuario/>,
+                // element: <ListaUsuario/>,
             },
             {   path: "listar/:idUsuario",
                 element: <DetalhesUsuario/>,
