@@ -10,16 +10,100 @@ import { BsPlusCircle } from "react-icons/bs"
 function ListaUsuario() {
     const [usuarios, setUsuarios] = useState([])
     const navigate = useNavigate()
+    const [departamentoFiltro, setDepartamentoFiltro] = useState()
+    const [nomeFiltro, setNomeFiltro] = useState()
+    const [cargoFiltro, setCargoFiltro] = useState()
+    const [emailFiltro, setEmailFiltro] = useState()
+    const [pagina, setPagina] = useState(0)
+    const [totalPagina, setTotalPagina] = useState()
+    const [render, setRender] = useState(0)
 
     useEffect(() => {
         getUsuarios()
     }, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
 
+
+	
+
+	function montaRequisicaoFiltragem(){
+		let requisicao = ""
+		if(departamentoFiltro != null && departamentoFiltro !== ""){
+			if(requisicao !== ""){
+				requisicao = requisicao + "departamento=" + departamentoFiltro
+			}
+			else{
+				requisicao = requisicao + "&departamento=" + departamentoFiltro
+			}
+		}
+		if(nomeFiltro != null && nomeFiltro !== ""){
+			if(requisicao !== ""){
+				requisicao = requisicao + "nome=" + nomeFiltro
+			}
+			else{
+				requisicao = requisicao + "&nome=" + nomeFiltro
+			}
+		}
+		if(emailFiltro != null && emailFiltro !== ""){
+			if(requisicao !== ""){
+				requisicao = requisicao + "email=" + emailFiltro
+			}
+			else{
+				requisicao = requisicao + "&email=" + emailFiltro
+			}
+		}
+		if(cargoFiltro != null && cargoFiltro !== ""){
+			if(requisicao !== ""){
+				requisicao = requisicao + "cargo=" + cargoFiltro
+			}
+			else{
+				requisicao = requisicao + "&cargo=" + cargoFiltro
+			}
+		}
+		
+		
+		return requisicao
+	}
+
+	async function getUsuarioFiltro(evento){
+		evento.preventDefault()
+		let requisicao = montaRequisicaoFiltragem()
+		requisicao = requisicao + `&page=0&size=10`
+		console.log("Requisição: " + requisicao)
+		try {
+            await axios.get(`/usuario/lista/paginada?${requisicao}`).then((response) => {
+                const data = response.data.content
+                setUsuarios(data)
+                const total = response.data.totalPages
+                setTotalPagina(total)
+                console.log(response)
+            })
+        } catch (erro) { }
+		
+	}
+	
+	async function mudaPagina(paginaMudada){
+		console.log("Pagina Mudada: " + paginaMudada)
+		let requisicao = montaRequisicaoFiltragem()
+		setPagina(paginaMudada)
+		requisicao = requisicao + `&page=${paginaMudada}&size=10`
+		console.log("Requisição: " + requisicao)
+		try{
+			await axios.get(`/usuario/lista/paginada?${requisicao}`).then((response) =>{
+				console.log(response)
+				const data = response.data.content
+				setUsuarios(data)
+			})
+		} catch (erro) {}
+	}
+
     async function getUsuarios() {
         try {
-            await axios.get("/usuario/listar").then((response) => {
-                const data = response.data
+            await axios.get("/usuario/lista/paginada?page=0&size=10").then((response) => {
+                console.log(response)
+				const data = response.data.content
                 setUsuarios(data)
+                const total = response.data.totalPages
+                setTotalPagina(total)
             })
         } catch (erro) { }
     }
@@ -36,6 +120,20 @@ function ListaUsuario() {
                     onClick={() => navigate("/usuario/novo-usuario")}
                 />
                 <hr className="border-n90"></hr>
+                <form
+                	onSubmit={(e)=>{getUsuarioFiltro(e)}}
+                >
+                	<label>Nome:</label>
+                	<input type="text" value={nomeFiltro} onChange={(e)=>{setNomeFiltro(e.target.value)}}/>
+                	<label>Cargo:</label>
+                	<input type="text" value={cargoFiltro} onChange={(e)=>{setCargoFiltro(e.target.value)}}/>
+                	<label>Departamento:</label>
+                	<input type="text" value={departamentoFiltro} onChange={(e)=>{setDepartamentoFiltro(e.target.value)}}/>
+                	<label>E-mail:</label>
+                	<input type="text" value={emailFiltro} onChange={(e)=>{setEmailFiltro(e.target.value)}}/>
+                	
+                	<button type="submit">Filtrar</button>
+                </form>
                 <div className="mx-10 flex flex-row flex-wrap gap-10 my-10 gap-2 overflow-x-auto pb-5">
                     <table className="mx-auto rounded px-16">
                         <thead className="bg-primary98 p-10 text-base uppercase">
@@ -68,7 +166,14 @@ function ListaUsuario() {
                                 </tr>
                             ))}
                         </tbody>
+                        
                     </table>
+                    <div>
+                    	<button onClick={(e)=>{mudaPagina(pagina-1)}}>Anterior</button>
+                    	<input type="number" min={1} max={totalPagina} onChange={(e)=>{mudaPagina(e.target.value-1)}} value={pagina+1}/>
+                    	<span>/{totalPagina}</span>
+                    	<button onClick={(e)=>{mudaPagina(pagina+1)}}>Proxima</button>
+                    </div>
                 </div>
             </div>
         </div>
