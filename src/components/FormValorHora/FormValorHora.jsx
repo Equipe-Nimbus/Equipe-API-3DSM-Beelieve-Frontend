@@ -146,6 +146,19 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
     setEstruturaDetalhes(valores)
   }
 
+  const blurHoraHomem = (index, valor) => {
+    while (valor.length > 1 && valor[0] === "0") {
+      valor = valor.substring(1)
+    }
+
+    setValue(`estruturaDetalhes[${index}].hora_homem`, valor)
+  }
+
+  const handleHoraHomem = (index, nivel, valor) => {
+    blurHoraHomem(index, valor)
+    handleOrcamento(index, nivel)
+  }
+
   useEffect(() => {
     setValue(`estruturaDetalhes`, estruturaDetalhes)
   }, [estruturaDetalhes])
@@ -279,7 +292,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                     {...register(`estruturaDetalhes[${index}].hora_homem`)}
                     defaultValue={linha.hora_homem}
                     type="number"
-                    onBlur={(e) => handleOrcamento(index, linha.nivel)}
+                    onBlur={(e) => handleHoraHomem(index, linha.nivel, e.target.value)}
                     className="text-center disabled:text-n40"
                     disabled={
                       (linha.nivel.length === 3 &&

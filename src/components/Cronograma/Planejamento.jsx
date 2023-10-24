@@ -95,11 +95,9 @@ function Planejamento({ idProjeto }) {
     if (!regexNumeros.test(valor)) {
       setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, "0%")
     } else {
-      if (valor.length > 1 && valor[0] === "0") {
         while (valor.length > 1 && valor[0] === "0") {
           valor = valor.substring(1)
         }
-      }
 
       valor = valor + "%"
       setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, valor)
