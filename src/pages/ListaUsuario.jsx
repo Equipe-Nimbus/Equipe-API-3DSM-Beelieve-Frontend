@@ -134,7 +134,11 @@ function ListaUsuario() {
                 	<label>Nome:</label>
                 	<input type="text" value={nomeFiltro} onChange={(e)=>{setNomeFiltro(e.target.value)}}/>
                 	<label>Cargo:</label>
-                	<input type="text" value={cargoFiltro} onChange={(e)=>{setCargoFiltro(e.target.value)}}/>
+                	<select value={cargoFiltro} onChange={(e)=>{setCargoFiltro(e.target.value)}}>
+                		<option value={""}></option>
+                		<option value="EngenheiroChefe">Engenheiro Chefe</option>
+                        <option value="LiderProjeto">Líder de Projeto</option>
+                	</select>
                 	<label>Departamento:</label>
                 	<input type="text" value={departamentoFiltro} onChange={(e)=>{setDepartamentoFiltro(e.target.value)}}/>
                 	<label>E-mail:</label>
