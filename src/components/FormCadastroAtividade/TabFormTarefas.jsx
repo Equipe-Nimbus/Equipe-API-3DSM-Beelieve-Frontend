@@ -49,6 +49,9 @@ const TabFormTarefas = ({
           prazo: atividade.prazo_tarefa
             ? atividade.prazo_tarefa.slice(0, 10)
             : null,
+          tendencia: atividade.tendencia_tarefa
+            ? atividade.tendencia_tarefa.slice(0, 10)
+            : null,
         }
         return novaTarefa
       })
@@ -67,6 +70,7 @@ const TabFormTarefas = ({
       status: false,
       peso: 0,
       prazo: null,
+      tendencia: null
     }
 
     novaTarefa.push(novaLinha)
@@ -138,6 +142,11 @@ const TabFormTarefas = ({
           ? `${atividade.prazo.getFullYear()}-${
               atividade.prazo.getMonth() + 1
             }-${atividade.prazo.getDate()}`
+          : null,
+        tendencia_tarefa: atividade.tendencia
+          ? `${atividade.tendencia.getFullYear()}-${
+              atividade.tendencia.getMonth() + 1
+            }-${atividade.tendencia.getDate()}`
           : null,
       })
     })
@@ -246,7 +255,7 @@ const TabFormTarefas = ({
       <hr className="border-n90" />
 
       <div className="flex flex-col gap-2">
-        <div className="ps-40">
+        <div className="ms-16">
           <button
             onClick={addRow}
             className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
@@ -260,21 +269,22 @@ const TabFormTarefas = ({
           onSubmit={handleSubmit(saveTarefa)}
           className="flex flex-col gap-10"
         >
-          <table className="mx-auto mt-5 w-4/5">
+          <table className="mx-auto mt-5 w-11/12">
             <thead className="bg-primary98 p-10 text-base uppercase ">
               <tr>
-                <th className="px-6 py-3 text-center">Tarefa</th>
+                <th className="w-1/12 py-3 text-center">Tarefa</th>
                 <th className="text-left">Descrição</th>
                 <th className="text-left">Resultado Esperado</th>
-                <th className="text-center">Peso</th>
-                <th className="text-center">Execução</th>
-                <th className="text-center">Previsão</th>
+                <th className="w-1/12 text-center">Peso</th>
+                <th className="w-1/12 text-center">Execução</th>
+                <th className="w-1/12 text-center">Prazo</th>
+                <th className="w-1/12 text-center">Tendência</th>
               </tr>
             </thead>
             <tbody>
               {fields.map((tarefa, index) => (
                 <tr key={index} className="border-b border-n90">
-                  <td className="px-4 py-1.5 text-center text-lg font-semibold">
+                  <td className="py-1.5 text-center text-lg font-semibold">
                     {index + 1}
                   </td>
                   <td>
@@ -282,27 +292,26 @@ const TabFormTarefas = ({
                       type="text"
                       {...register(`tarefas[${index}].descricao`)}
                       defaultValue={tarefa.descricao}
-                      className="w-full"
+                      className="w-11/12 border border-n90 rounded pl-1 disabled:text-n40 truncate"
                       disabled={tarefa.status === true}
                     />
                   </td>
-                  <td>
-                    <input
-                      type="text"
+                  <td className="pt-2">
+                    <textarea
                       {...register(`tarefas[${index}].resultadoEsperado`)}
                       defaultValue={tarefa.resultadoEsperado}
-                      className="w-full"
+                      className="w-full border border-n90 rounded disabled:text-n40 min-h-fit pl-2"
                       disabled={tarefa.status === true}
                     />
                   </td>
-                  <td>
+                  <td className="text-center">
                     <input
                       type="number"
                       {...register(`tarefas[${index}].peso`)}
                       defaultValue={tarefa.peso}
                       onBlur={(e) => handlePeso(index, e.target.value)}
                       min={0}
-                      className="w-full text-center"
+                      className="w-1/2 text-center border border-n90 rounded disabled:text-n40"
                       disabled={tarefa.status === true}
                     />
                   </td>
@@ -320,8 +329,17 @@ const TabFormTarefas = ({
                       type="date"
                       {...register(`tarefas[${index}].prazo`)}
                       defaultValue={tarefa.prazo}
-                      className="w-full text-center"
+                      className="w-full text-center disabled:text-n40"
                       disabled={tarefa.status === true}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="date"
+                      {...register(`tarefas[${index}].tendencia`)}
+                      defaultValue={tarefa.tendencia}
+                      className="w-full text-center disabled:text-n40"
+                      disabled={tarefa.status === true  || !dataInicioProjeto}
                     />
                   </td>
                   <td className="text-center">
@@ -338,7 +356,7 @@ const TabFormTarefas = ({
             </tbody>
           </table>
 
-          <div className="mr-40 place-self-end">
+          <div className="me-16 place-self-end">
             <Button
               texto="Salvar"
               tipo="submit"
