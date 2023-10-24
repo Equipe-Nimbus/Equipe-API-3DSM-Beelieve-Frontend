@@ -23,6 +23,10 @@ const schemaInsercaoAtividade = yup.object().shape({
       prazo: yup
         .date()
         .nullable(),
+
+      tendencia: yup
+        .date()
+        .nullable(),
     }),
   ),
 })
