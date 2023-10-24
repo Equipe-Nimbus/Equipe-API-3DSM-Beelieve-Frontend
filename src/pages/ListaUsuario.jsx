@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom"
 import axios from "../services/axios"
 import { FiEye } from "react-icons/fi"
 
+import InputPaginacao from "../components/InputPaginacao.jsx"
 import Button from "../components/Button.jsx"
 
 import { BsPlusCircle } from "react-icons/bs"
@@ -22,8 +23,14 @@ function ListaUsuario() {
         getUsuarios()
     }, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
 
-
+	useEffect(() => {
+        console.log("renderizou")
+    }, [render])
 	
+	async function mudaInputPagina(valor){
+		console.log(valor)
+		await mudaPagina(valor-1)
+	}
 
 	function montaRequisicaoFiltragem(){
 		let requisicao = ""
@@ -94,6 +101,7 @@ function ListaUsuario() {
 				setUsuarios(data)
 			})
 		} catch (erro) {}
+		setRender(render+1)
 	}
 
     async function getUsuarios() {
@@ -169,10 +177,22 @@ function ListaUsuario() {
                         
                     </table>
                     <div>
+                    	{pagina != 0 ?
                     	<button onClick={(e)=>{mudaPagina(pagina-1)}}>Anterior</button>
-                    	<input type="number" min={1} max={totalPagina} onChange={(e)=>{mudaPagina(e.target.value-1)}} value={pagina+1}/>
+                    	:
+                    	<button onClick={(e)=>{mudaPagina(pagina-1)}} disabled>Anterior</button>
+                    	}
+                    	
+                    	<InputPaginacao min={1} max={totalPagina} paginaAtual={pagina+1} onValueChange={(valor)=>{mudaInputPagina(valor)
+                    	}}/>
                     	<span>/{totalPagina}</span>
+                    	
+                    	{pagina < totalPagina-1 ?
                     	<button onClick={(e)=>{mudaPagina(pagina+1)}}>Proxima</button>
+                    	:
+                    	<button onClick={(e)=>{mudaPagina(pagina+1)}} disabled>Proxima</button>
+                    	}
+                    	
                     </div>
                 </div>
             </div>
