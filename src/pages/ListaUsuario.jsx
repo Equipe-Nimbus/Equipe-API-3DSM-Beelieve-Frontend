@@ -116,21 +116,21 @@ function ListaUsuario() {
 					tipo="button"
 					iconeOpcional={BsPlusCircle}
 					iconeTamanho="20px"
-					className="mb-5 flex items-center  gap-0.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+					className="flex items-center  gap-0.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
 					onClick={() => navigate("/usuario/novo-usuario")}
 				/>
 				<form
-					className="mb-5" onSubmit={(e) => { getUsuarioFiltro(e) }}
+					className="mx-12 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
 				>
-					<input placeholder="Nome:" className="w-32 ml-96 rounded-md border border-n70 p-1" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-					<select className="ml-3 rounded-md border border-n70 p-1" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
+					<input placeholder="Nome:" className="w-32 ml-96 my-px rounded-md border border-n70 p-1" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+					<select className="my-0 ml-3 rounded-md border border-n70 p-1" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
 						<option value={""}></option>
 						<option value="EngenheiroChefe">Engenheiro Chefe</option>
 						<option value="LiderProjeto">Líder de Projeto</option>
 					</select>
 					<input placeholder="Departamento:" className="ml-3 rounded-md border border-n70 p-1" type="text" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }} />
 
-					<button className="w-32 border border-n70 rounded-md ml-3" type="submit">Filtrar<RiFilter2Fill className="ml-3" /></button>
+					<button className="w-24 border inline-flex border-n70 rounded-md p-1 ml-2" type="submit"><RiFilter2Fill className="ml-3" />Filtrar</button>
 				</form>
 				<hr className="border-n90"></hr>
 				<div className="mx-10 flex flex-row flex-wrap gap-10 my-10 gap-2 overflow-x-auto pb-5">

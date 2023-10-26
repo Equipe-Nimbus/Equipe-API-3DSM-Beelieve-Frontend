@@ -43,6 +43,7 @@ const InputPaginacao = ({ min, max, onValueChange, paginaAtual }) => {
         type="text"
         id="number"
         name="number"
+        className='rounded-md border border-n70 p-1 items-center text-center w-32'
         onChange={handleValueChange}
         value={formik.values.number}
       />
