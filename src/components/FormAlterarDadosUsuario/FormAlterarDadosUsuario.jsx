@@ -4,12 +4,33 @@ import Button from "./Button"
 import { BsPlayFill } from "react-icons/bs"
 
 function AlterarUsuario() {
+    const handleExcluirUsuarioClick = async () => {
+        const confirmacao = await Swal.fire({
+            icon: "warning",
+            title: "Cuidado!",
+            text: "Tem certeza que deseja excluir esse usuário?",
+            showDenyButton: true,
+            confirmButtonText: "Sim",
+            denyButtonText: `Não`,
+        })
+
+        if (confirmacao.isConfirmed) {
+            try {
+                const response = await axios.delete(`/usuario/deletar/${id}`)
+                Swal.fire("Excluído com sucesso!", "", "success")
+                navigate("/usuario")
+            } catch (error) {
+                console.error("Erro ao excluir o usuário:", error)
+            }
+        }
+    }
     return (
         <form>
             <Button
                 texto="Excluir usuário"
                 iconeOpcional={BsPlayFill}
                 iconeTamanho="20px"
+                onClick={handleExcluirUsuarioClick}
                 className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
             />
             <hr className="border-n90" />
