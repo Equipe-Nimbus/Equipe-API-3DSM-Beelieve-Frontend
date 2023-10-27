@@ -24,11 +24,12 @@ function CadastroUsuario() {
         const usuario = {
             nome: data.nomeUsuario,
             email: data.emailUsuario,
-            cpf_usuario: data.cpfUsuario,
+            cpf: data.cpfUsuario,
             senha: data.senhaUsuario,
-            confirmar_senha_usuario: data.confirmarSenhaUsuario,
-            telefone_usuario: data.telefoneUsuario,
-            cargo: data.cargoUsuario
+            telefone: data.telefoneUsuario,
+            cargo: data.cargoUsuario,
+            matricula: data.matriculaUsuario,
+            departamento: data.departamentoUsuario
         }
 
         return usuario
@@ -79,6 +80,18 @@ function CadastroUsuario() {
                         {...register("nomeUsuario")}
                     />
                 </div>
+                <div className="mt-8 flex flex-col">
+                    <label
+                        htmlFor="matriculaUsuario"
+                        className="text-base font-medium text-on-light">
+                        Matrícula:
+                    </label>
+                    <input
+                        type="text"
+                        className="w-1/2 rounded-md border border-n70 p-1"
+                        {...register("matriculaUsuario")}
+                    />
+                </div>
                 <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="emailUsuario"
@@ -110,7 +123,7 @@ function CadastroUsuario() {
                         Senha:
                     </label>
                     <input
-                        type="text"
+                        type="password"
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("senhaUsuario")}
                     />
@@ -122,7 +135,7 @@ function CadastroUsuario() {
                         Confirme a Senha:
                     </label>
                     <input
-                        type="text"
+                        type="password"
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("confirmarSenhaUsuario")}
                     />
@@ -138,6 +151,20 @@ function CadastroUsuario() {
                             type="text"
                             className="w-1/2 rounded-md border border-n70 p-1"
                             {...register("telefoneUsuario")}
+                        />
+                    </div>
+                </div>
+                <div className="justify-between flex-col">
+                    <div className="mt-4 flex flex-col">
+                        <label
+                            htmlFor="departamentoUsuario"
+                            className="text-base font-medium text-on-light">
+                            Departamento:
+                        </label>
+                        <input
+                            type="text"
+                            className="w-1/2 rounded-md border border-n70 p-1"
+                            {...register("departamentoUsuario")}
                         />
                     </div>
                 </div>
