@@ -116,26 +116,26 @@ function ListaUsuario() {
 					tipo="button"
 					iconeOpcional={BsPlusCircle}
 					iconeTamanho="20px"
-					className="flex items-center  gap-0.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+					className="mb-5 flex items-center  gap-0.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
 					onClick={() => navigate("/usuario/novo-usuario")}
 				/>
 				<form
-					className="mx-12 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
+					className="mx-48 mt-8 absolute inset-x-0 top-0 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
 				>
-					<input placeholder="Nome:" className="w-32 ml-96 my-px rounded-md border border-n70 p-1" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-					<select className="my-0 ml-3 rounded-md border border-n70 p-1" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
+					<input placeholder="Nome:" className="w-64 my-px rounded-md border border-n70 p-1 ml-3" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1 ml-2" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
 						<option value={""}></option>
 						<option value="EngenheiroChefe">Engenheiro Chefe</option>
 						<option value="LiderProjeto">Líder de Projeto</option>
 					</select>
-					<input placeholder="Departamento:" className="ml-3 rounded-md border border-n70 p-1" type="text" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }} />
+					<input placeholder="Departamento:" className="ml-1 w-64 rounded-md border border-n70 p-1 ml-4" type="text" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }} />
 
 					<button className="w-24 border inline-flex border-n70 rounded-md p-1 ml-2" type="submit"><RiFilter2Fill className="ml-3" />Filtrar</button>
 				</form>
 				<hr className="border-n90"></hr>
 				<div className="mx-10 flex flex-row flex-wrap gap-10 my-10 gap-2 overflow-x-auto pb-5">
 					<table className="mx-auto rounded px-16">
-						<thead className="bg-primary98 p-10 text-base uppercase">
+						<thead className="bg-primary98 p-10 text-base uppercase text-center">
 							<tr>
 								<th class="px-12 py-3">Matricula</th>
 								<th class="px-12 py-3">Cargo</th>
@@ -146,16 +146,16 @@ function ListaUsuario() {
 						<tbody>
 							{usuarios.map((linha, index) => (
 								<tr key={index} className="border-b border-n90">
-									<td className="px-4 py-3 text-lg font-semibold">
+									<td className="px-4 py-3 text-lg font-semibold text-center">
 										{linha.matricula}
 									</td>
-									<td className="px-4 py-3 text-lg font-semibold">
+									<td className="px-4 py-3 text-lg font-semibold text-center">
 										{linha.cargo}
 									</td>
-									<td className="px-4 py-3 text-lg font-semibold">
+									<td className="px-4 py-3 text-lg font-semibold text-center">
 										{linha.departamento}
 									</td>
-									<td className="px-4 py-3 text-lg font-semibold">
+									<td className="px-4 py-3 text-lg font-semibold text-center">
 										<Link
 											to={`/usuario/listar/${linha.id_usuario}`}
 										>
@@ -167,11 +167,11 @@ function ListaUsuario() {
 						</tbody>
 
 					</table>
-					<div>
+					<div className="ml-auto mt-12">
 						{pagina != 0 ?
-							<button onClick={(e) => { mudaPagina(pagina - 1) }}>Anterior</button>
+							<button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }}>Anterior</button>
 							:
-							<button onClick={(e) => { mudaPagina(pagina - 1) }} disabled>Anterior</button>
+							<button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }} disabled>Anterior</button>
 						}
 
 						<InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
@@ -180,11 +180,10 @@ function ListaUsuario() {
 						<span>/{totalPagina}</span>
 
 						{pagina < totalPagina - 1 ?
-							<button onClick={(e) => { mudaPagina(pagina + 1) }}>Proxima</button>
+							<button className="ml-4" onClick={(e) => { mudaPagina(pagina + 1) }}>Proxima</button>
 							:
-							<button onClick={(e) => { mudaPagina(pagina + 1) }} disabled>Proxima</button>
+							<button className="ml-4" onClick={(e) => { mudaPagina(pagina + 1) }} disabled>Proxima</button>
 						}
-
 					</div>
 				</div>
 			</div>
