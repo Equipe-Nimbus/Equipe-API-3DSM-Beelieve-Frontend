@@ -13,6 +13,8 @@ import Acompanhamento from "../components/Cronograma/Acompanhamento"
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
   const [projeto, setProjeto] = useState({})
+  const [nodes, setNodes] = useState([])
+  const [edges, setEdges] = useState([])
   const [tabela, setTabela] = useState([])
   const [secaoAtual, setSecaoAtual] = useState("ESTRUTURA")
   const mudarSecao = (secao) => {
@@ -24,12 +26,32 @@ function DetalhesProjeto() {
   const getProjeto = async () => {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
-        const dados = response.data
+        const dados = response.data.projeto
         //console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
   }
+  
+  const getNodes = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data.listaNodes
+        setNodes(dados)
+      })
+    } catch (error) {}
+  }
+  
+  const getEdges = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data.listaEdges
+        setEdges(dados)
+      })
+    } catch (error) {}
+  }
+  
+  
 
   const gerarTabela = () => {
     const tabela = []
@@ -85,7 +107,20 @@ function DetalhesProjeto() {
       }
     }
   }, [projeto, atualizar])
-
+    
+  useEffect(() => {
+	  getNodes()
+  }, [])
+  
+  useEffect(() => {
+	  getEdges()
+  }, [])
+  
+  useEffect(() => {
+	  console.log(nodes)
+	  console.log(edges)
+  })
+  
   return (
     <>
       <VisaoGeral
@@ -111,6 +146,8 @@ function DetalhesProjeto() {
         <VisualizarEditarWbs
           projeto={projeto}
           tabela={tabela}
+          nodes={nodes}
+          edges={edges}
           setTabela={setTabela}
           setAtualizar={setAtualizar}
         />

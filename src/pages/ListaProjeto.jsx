@@ -18,11 +18,12 @@ function ListaProjeto() {
   async function getProjetos() {
     try {
       await axios.get("/projeto/listar").then((response) => {
-        const data = response.data
+        const data = response.data        
         setProjetos(data)
       })
     } catch (erro) {}
   }
+  
 
   return (
     <div>
