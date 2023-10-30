@@ -3,15 +3,18 @@ import * as XLSX from "xlsx";
 
 function CriarExcel({projeto}){
 
-    const excelData = [
-        {   "Ordem Projeto": projeto.ordem_projeto,
-            "Projeto": projeto.nome_projeto }
-    ].concat(
-        projeto.sub_projetos.map(sub_projeto => ({
-            "Ordem Sub-projeto": sub_projeto.ordem_sub_projeto,
-            "Sub-projeto": sub_projeto.nome_sub_projeto,
-        }))
-    );
+    const excelData = projeto && projeto.sub_projetos ? 
+[
+    {   
+        "Ordem Projeto": projeto.ordem_projeto,
+        "Projeto": projeto.nome_projeto 
+    }
+].concat(
+    projeto.sub_projetos.map(sub_projeto => ({
+        "Ordem Sub-projeto": sub_projeto.ordem_sub_projeto,
+        "Sub-projeto": sub_projeto.nome_sub_projeto,
+    }))
+) : [];
 
     const gerarExcel = (data) =>{
         const worksheet = XLSX.utils.json_to_sheet(data);
