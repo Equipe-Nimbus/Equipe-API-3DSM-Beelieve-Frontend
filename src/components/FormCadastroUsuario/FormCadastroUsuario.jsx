@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schemaCadastroUsuario from "./validation"
@@ -204,7 +204,7 @@ function CadastroUsuario() {
                         texto="Cancelar"
                         tipo="button"
                         className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
-                        onClick={() => navigate("/usuarios")}
+                        onClick={() => navigate("/usuario")}
                     />
                     <Button
                         texto="Cadastrar"

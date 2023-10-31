@@ -49,7 +49,7 @@ function ListaUsuario() {
 				requisicao = requisicao + "&nome=" + nomeFiltro
 			}
 		}
-		
+
 		if (cargoFiltro != null && cargoFiltro !== "") {
 			if (requisicao !== "") {
 				requisicao = requisicao + "cargo=" + cargoFiltro
