@@ -1,24 +1,16 @@
 import * as yup from "yup"
-import { isValidCPF } from './cpfValidation';
 
-const schemaCadastroUsuario = yup.object().shape({
+const schemaAtualizarUsuario = yup.object().shape({
 
     nomeUsuario: yup
         .string()
-        .required("O campo Nome Completo é obrigatório"),
+        .required("O campo Nome Completo é obrigatório")
+        .nullable(),
 
     emailUsuario: yup
         .string()
         .required("O campo Email é obrigatório")
         .email("Email inválido"),
-
-    cpfUsuario: yup
-        .string()
-        .required("O campo CPF é obrigatório")
-        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
-        .test('cpf-valido', 'CPF inválido', (value) => {
-            return isValidCPF(value);
-        }),
 
     senhaUsuario: yup
         .string()
@@ -39,4 +31,4 @@ const schemaCadastroUsuario = yup.object().shape({
         ),
 })
 
-export default schemaCadastroUsuario
+export default schemaAtualizarUsuario

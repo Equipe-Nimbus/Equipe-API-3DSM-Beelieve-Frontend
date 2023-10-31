@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schemaCadastroUsuario from "./validation"
 import Swal from 'sweetalert2'
 import { useNavigate } from "react-router-dom"
+import InputMask from "react-input-mask";
 
 import Button from "../Button"
 import axios from "../../services/axios"
@@ -14,10 +15,9 @@ function CadastroUsuario() {
     const {
         register,
         handleSubmit,
-        setValue,
         formState: { errors },
     } = useForm({
-
+        resolver: yupResolver(schemaCadastroUsuario),
     })
 
     const gerarJsonUsuario = (data) => {
@@ -28,7 +28,6 @@ function CadastroUsuario() {
             senha: data.senhaUsuario,
             telefone: data.telefoneUsuario,
             cargo: data.cargoUsuario,
-            matricula: data.matriculaUsuario,
             departamento: data.departamentoUsuario
         }
 
@@ -67,7 +66,6 @@ function CadastroUsuario() {
                     className="font-semibold text-2xl text-center">
                     Cadastro de Usuário
                 </h1>
-
                 <div className="mt-8 flex flex-col">
                     <label
                         htmlFor="nomeUsuario"
@@ -79,18 +77,11 @@ function CadastroUsuario() {
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("nomeUsuario")}
                     />
-                </div>
-                <div className="mt-8 flex flex-col">
-                    <label
-                        htmlFor="matriculaUsuario"
-                        className="text-base font-medium text-on-light">
-                        Matrícula:
-                    </label>
-                    <input
-                        type="text"
-                        className="w-1/2 rounded-md border border-n70 p-1"
-                        {...register("matriculaUsuario")}
-                    />
+                    {errors.nomeUsuario && (
+                        <label className="text-sm font-light text-error">
+                            {errors.nomeUsuario.message}
+                        </label>
+                    )}
                 </div>
                 <div className="mt-4 flex flex-col">
                     <label
@@ -103,6 +94,11 @@ function CadastroUsuario() {
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("emailUsuario")}
                     />
+                    {errors.emailUsuario && (
+                        <label className="text-sm font-light text-error">
+                            {errors.emailUsuario.message}
+                        </label>
+                    )}
                 </div>
                 <div className="mt-4 flex flex-col">
                     <label
@@ -110,11 +106,17 @@ function CadastroUsuario() {
                         className="text-base font-medium text-on-light">
                         CPF:
                     </label>
-                    <input
-                        type="text"
+                    <InputMask
+                        mask="999.999.999-99"
+                        maskChar=" "
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("cpfUsuario")}
                     />
+                    {errors.cpfUsuario && (
+                        <label className="text-sm font-light text-error">
+                            {errors.cpfUsuario.message}
+                        </label>
+                    )}
                 </div>
                 <div className="mt-4 flex flex-col">
                     <label
@@ -127,6 +129,11 @@ function CadastroUsuario() {
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("senhaUsuario")}
                     />
+                    {errors.senhaUsuario && (
+                        <label className="text-sm font-light text-error">
+                            {errors.senhaUsuario.message}
+                        </label>
+                    )}
                 </div>
                 <div className="mt-4 flex flex-col">
                     <label
@@ -139,6 +146,11 @@ function CadastroUsuario() {
                         className="w-1/2 rounded-md border border-n70 p-1"
                         {...register("confirmarSenhaUsuario")}
                     />
+                    {errors.confirmarSenhaUsuario && (
+                        <label className="text-sm font-light text-error">
+                            {errors.confirmarSenhaUsuario.message}
+                        </label>
+                    )}
                 </div>
                 <div className="justify-between flex-col">
                     <div className="mt-4 flex flex-col">
@@ -147,11 +159,17 @@ function CadastroUsuario() {
                             className="text-base font-medium text-on-light">
                             Telefone:
                         </label>
-                        <input
-                            type="text"
+                        <InputMask
+                            mask="(99) 99999-9999"
+                            maskChar="_"
                             className="w-1/2 rounded-md border border-n70 p-1"
                             {...register("telefoneUsuario")}
                         />
+                        {errors.telefoneUsuario && (
+                            <label className="text-sm font-light text-error">
+                                {errors.telefoneUsuario.message}
+                            </label>
+                        )}
                     </div>
                 </div>
                 <div className="justify-between flex-col">
@@ -161,11 +179,13 @@ function CadastroUsuario() {
                             className="text-base font-medium text-on-light">
                             Departamento:
                         </label>
-                        <input
-                            type="text"
-                            className="w-1/2 rounded-md border border-n70 p-1"
-                            {...register("departamentoUsuario")}
-                        />
+                        <select className="w-1/2 border rounded border-n70 p-1" {...register("departamentoUsuario")}>
+                            <option className="bg-primary98" value="Departamento 1">Departamento 1</option>
+                            <option value="Departamento 2">Departamento 2</option>
+                            <option value="Departamento 3">Departamento 3</option>
+                            <option value="Departamento 4">Departamento 4</option>
+                            <option value="Departamento 5">Departamento 5</option>
+                        </select>
                     </div>
                 </div>
                 <div className="mt-4 flex flex-col">
@@ -184,7 +204,7 @@ function CadastroUsuario() {
                         texto="Cancelar"
                         tipo="button"
                         className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
-                        onClick={() => navigate("/usuarios")}
+                        onClick={() => navigate("/usuario")}
                     />
                     <Button
                         texto="Cadastrar"
