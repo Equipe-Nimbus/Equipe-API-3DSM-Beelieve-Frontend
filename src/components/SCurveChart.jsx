@@ -1,16 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { Chart, LinearScale, LineController, PointElement, CategoryScale, LineElement } from 'chart.js';
+import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
 
-Chart.register(LinearScale, LineController, PointElement, CategoryScale, LineElement);
+Chart.register(zoomPlugin);
 
 function SCurveChart({ cronograma }) {
   const chartRef = useRef(null);
 
   useEffect(() => {
     if (cronograma.lista_cronograma) {
-        const ctx = document.getElementById('sCurveChart').getContext('2d');
+      const ctx = document.getElementById('sCurveChart').getContext('2d');
 
-      
       if (chartRef.current) {
         chartRef.current.destroy();
       }
@@ -18,23 +18,16 @@ function SCurveChart({ cronograma }) {
       const progressoRealData = cronograma.lista_cronograma.map(mes => {
         let nivelCorrespondente = mes.niveis.find(nivel => nivel.progresso_real !== '-');
         return nivelCorrespondente ? parseInt(nivelCorrespondente.progresso_real) : 0;
-        });
-        const progressoPlanejadoData = cronograma.lista_cronograma.map(mes => {
-            let nivelCorrespondente = mes.niveis.find(nivel => nivel.progresso_planejado);
-            return nivelCorrespondente ? parseInt(nivelCorrespondente.progresso_planejado) : 0;});
+      });
 
+      const progressoPlanejadoData = cronograma.lista_cronograma.map(mes => {
+        let nivelCorrespondente = mes.niveis.find(nivel => nivel.progresso_planejado);
+        return nivelCorrespondente ? parseInt(nivelCorrespondente.progresso_planejado) : 0;
+      });
 
       const data = {
         labels: cronograma.lista_cronograma.map(mes => mes.mes_cronograma),
-        datasets: [ 
-          {
-            label: 'Progresso Cumulativo',
-            data: cronograma.lista_cronograma.map(mes => mes.valor),
-            fill: false,
-            backgroundColor: 'rgba(59, 130, 246, 0.2)',
-            borderColor: 'rgba(59, 130, 246, 1)',
-            borderWidth: 3
-          },
+        datasets: [
           {
             label: 'Linha de Meta',
             data: progressoPlanejadoData,
@@ -60,40 +53,38 @@ function SCurveChart({ cronograma }) {
         type: 'line',
         data: data,
         options: {
-          interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false
-          },
           scales: {
             y: {
               beginAtZero: true,
               max: 100
+            },
+            x: {
+              beginAtZero: true,
+              max: data.labels.length - 1
             }
           },
           plugins: {
             zoom: {
-              pan: {
-                enabled: true,
-                mode: 'x'
-              },
               zoom: {
-                enabled: true,
-                mode: 'x',
-                speed: 0.1
+                wheel: {
+                  enabled: true
+                },
+                pinch: {
+                  enabled: true
+                },
+                mode: 'x'
               }
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-                labels: {
-                    color: 'rgb(255, 99, 132)'}
-            }},
-          tooltips: {
-            callbacks: {
-              label: function(tooltipItem, data) {
-                return data.datasets[tooltipItem.datasetIndex].label + ": " + tooltipItem.yLabel + "%";
-              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            axis: 'x'
+          },
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              color: 'rgb(255, 99, 132)'
             }
           }
         }
@@ -102,7 +93,6 @@ function SCurveChart({ cronograma }) {
   }, [cronograma]);
 
   return <canvas id="sCurveChart" style={{ height: '100px', width: '300px' }}></canvas>;
-
 }
 
 export default SCurveChart;

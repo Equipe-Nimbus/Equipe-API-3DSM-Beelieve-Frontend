@@ -3,6 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import SCurveChart from "../SCurveChart.jsx";
 import Button from "../Button";
 import axios from "../../services/axios";
+import Hammer from 'hammerjs';
 
 
 function Acompanhamento({ idProjeto }) {
