@@ -49,7 +49,7 @@ function ListaUsuario() {
 				requisicao = requisicao + "&nome=" + nomeFiltro
 			}
 		}
-		
+
 		if (cargoFiltro != null && cargoFiltro !== "") {
 			if (requisicao !== "") {
 				requisicao = requisicao + "cargo=" + cargoFiltro
@@ -137,17 +137,17 @@ function ListaUsuario() {
 					<table className="mx-auto rounded px-16">
 						<thead className="bg-primary98 p-10 text-base uppercase text-center">
 							<tr>
-								<th class="px-12 py-3">Matricula</th>
-								<th class="px-12 py-3">Cargo</th>
-								<th class="px-12 py-3">Departamento</th>
-								<th class="px-12 py-3">Usuários</th>
+								<th className="px-12 py-3">Matricula</th>
+								<th className="px-12 py-3">Cargo</th>
+								<th className="px-12 py-3">Departamento</th>
+								<th className="px-12 py-3">Usuários</th>
 							</tr>
 						</thead>
 						<tbody>
 							{usuarios.map((linha, index) => (
 								<tr key={index} className="border-b border-n90">
 									<td className="px-4 py-3 text-lg font-semibold text-center">
-										{linha.matricula}
+										{linha.id_usuario}
 									</td>
 									<td className="px-4 py-3 text-lg font-semibold text-center">
 										{linha.cargo}

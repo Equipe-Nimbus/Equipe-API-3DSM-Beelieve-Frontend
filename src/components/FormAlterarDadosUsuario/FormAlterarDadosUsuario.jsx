@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { useParams, useLocation } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import Button from "../Button"
 import axios from "../../services/axios"
 import Swal from 'sweetalert2'
 import { useNavigate } from "react-router-dom"
+import schemaAtualizarUsuario from "./validation"
+import InputMask from "react-input-mask";
 
 import { BsPlayFill } from "react-icons/bs"
 
@@ -19,6 +22,10 @@ function AlterarUsuario() {
         setValue,
         formState: { errors },
     } = useForm({
+        resolver: yupResolver(schemaAtualizarUsuario),
+        defaultValues: {
+            nomeUsuario: usuario.nome,
+        },
     })
 
     function updateFieldsWithDefaults(fieldsDefaults, data) {
@@ -47,8 +54,19 @@ function AlterarUsuario() {
             await axios.get(`/usuario/listar/${idUsuario}`).then((response) => {
                 const data = response.data
                 setUsuario(data)
+
+                setValue("nomeUsuario", data.nome);
+                setValue("emailUsuario", data.email);
+                setValue("senhaUsuario", data.senha);
+                setValue("confirmarSenhaUsuario", data.senha);
+                if (data && data.telefone) {
+                    setValue("telefoneUsuario", data.telefone);
+                }
+                setValue("cargoUsuario", data.cargo);
             })
-        } catch (erro) { }
+        } catch (erro) {
+            console.log('aaaaa')
+        }
     }
 
     const alterarUsuario = async (data) => {
@@ -97,8 +115,9 @@ function AlterarUsuario() {
         })
 
         if (confirmacao.isConfirmed) {
+            console.log(idUsuario)
             try {
-                const response = await axios.delete(`/usuario/deletar/${idUsuario}`)
+                await axios.delete(`/usuario/deletar/${idUsuario}`)
                 Swal.fire("Excluído com sucesso!", "", "success")
                 navigate("/usuario")
             } catch (error) {
@@ -128,7 +147,6 @@ function AlterarUsuario() {
                     <div className="mt-4 flex flex-col">
                         <h1 className="font-semibold text-2xl text-center">Alteração de Dados Usuario</h1>
                     </div>
-
                     <div className="mt-5 flex flex-col">
                         <label
                             htmlFor="nomeUsuario"
@@ -140,15 +158,14 @@ function AlterarUsuario() {
                             type="text"
                             className="w-1/2 rounded-md border border-n70 p-1"
                             id="nomeUsuario"
-                            defaultValue={usuario.nome}
                             {...register(`nomeUsuario`)}
                         />
-                        {errors?.nomeUsuario && (
+                        {errors.nomeUsuario && (
                             <label
                                 htmlFor="nomeUsuario"
                                 className="text-sm font-light text-error"
                             >
-                                {errors.nomePUsuario.message}
+                                {errors.nomeUsuario.message}
                             </label>
                         )}
                     </div>
@@ -162,15 +179,14 @@ function AlterarUsuario() {
                         <input
                             type="text"
                             className="w-1/2 rounded-md border border-n70 p-1"
-                            defaultValue={usuario.email}
                             {...register("emailUsuario")}
                         />
-                        {errors?.usuarioEmail && (
+                        {errors.emailUsuario && (
                             <label
                                 htmlFor="emailUsuario"
                                 className="text-sm font-light text-error"
                             >
-                                {errors.usuarioEmail.message}
+                                {errors.emailUsuario.message}
                             </label>
                         )}
                     </div>
@@ -182,17 +198,16 @@ function AlterarUsuario() {
                             Senha:
                         </label>
                         <input
-                            type="text"
+                            type="password"
                             className="w-1/2 rounded-md border border-n70 p-1"
-                            defaultValue={usuario.senha}
                             {...register("senhaUsuario")}
                         />
-                        {errors?.usuarioSenha && (
+                        {errors.senhaUsuario && (
                             <label
                                 htmlFor="senhaUsuario"
                                 className="text-sm font-light text-error"
                             >
-                                {errors.usuarioSenha.message}
+                                {errors.senhaUsuario.message}
                             </label>
                         )}
                     </div>
@@ -207,12 +222,12 @@ function AlterarUsuario() {
                             className="w-1/2 rounded-md border border-n70 p-1"
                             {...register("confirmarSenhaUsuario")}
                         />
-                        {errors?.usuarioSenha && (
+                        {errors.confirmarSenhaUsuario && (
                             <label
-                                htmlFor="senhaConfirmeUsuario"
+                                htmlFor="confirmarSenhaUsuario"
                                 className="text-sm font-light text-error"
                             >
-                                {errors.usuarioConfirmeSenha.message}
+                                {errors.confirmarSenhaUsuario.message}
                             </label>
                         )}
                     </div>
@@ -223,18 +238,18 @@ function AlterarUsuario() {
                         >
                             Telefone:
                         </label>
-                        <input
-                            type="number"
+                        <InputMask
+                            mask="(99) 99999-9999"
+                            maskChar="_"
                             className="w-1/2 rounded-md border border-n70 p-1"
-                            defaultValue={usuario.telefone}
                             {...register("telefoneUsuario")}
                         />
-                        {errors?.usuarioTelefone && (
+                        {errors.telefoneUsuario && (
                             <label
                                 htmlFor="telefoneUsuario"
                                 className="text-sm font-light text-error"
                             >
-                                {errors.usuarioTelefone.message}
+                                {errors.telefoneUsuario.message}
                             </label>
                         )}
                     </div>
@@ -245,19 +260,18 @@ function AlterarUsuario() {
                         >
                             Cargo:
                         </label>
-                        <select className="w-1/2 border rounded border-n70 p-1" name="cargoUsuario" required
-                            defaultValue={usuario.cargo}>
+                        <select className="w-1/2 border rounded border-n70 p-1" {...register("cargoUsuario")}>
                             <option className="bg-primary98" value="EngenheiroChefe">Engenheiro Chefe</option>
                             <option value="LiderProjeto">Líder de Projeto</option>
                         </select>
                     </div>
 
                     <div className="mt-5 flex justify-end">
-                    <Button
-                        texto="Salvar"
-                        tipo="submit"
-                        className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary mt-10"
-                    />
+                        <Button
+                            texto="Salvar"
+                            tipo="submit"
+                            className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary mt-10"
+                        />
                     </div>
                 </form>
             </div>
