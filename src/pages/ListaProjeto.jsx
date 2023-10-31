@@ -4,6 +4,7 @@ import axios from "../services/axios"
 import InputPaginacao from "../components/InputPaginacao"
 import Button from "../components/Button.jsx"
 import CardProjeto from "../components/CardProjeto.jsx"
+import { RiFilter2Fill } from "react-icons/ri";
 
 import { BsPlusCircle } from "react-icons/bs"
 
@@ -21,70 +22,70 @@ function ListaProjeto() {
   }, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
 
   useEffect(() => {
-        console.log("renderizou")
-    }, [render])
+    console.log("renderizou")
+  }, [render])
 
-  async function mudaInputPagina(valor){
-		console.log(valor)
-		await mudaPagina(valor-1)
+  async function mudaInputPagina(valor) {
+    console.log(valor)
+    await mudaPagina(valor - 1)
   }
-	
-  function montaRequisicaoFiltragem(){
-		let requisicao = ""
-		if(nomeFiltro != null && nomeFiltro !== ""){
-			requisicao = requisicao + "&nome=" + nomeFiltro
-		}
-		if(chefeFiltro != null && chefeFiltro !== ""){
-			requisicao = requisicao + "&chefe=" + chefeFiltro
-		}
-		
-		return requisicao
-	}
-	
-  async function mudaPagina(paginaMudada){
-		console.log("Pagina Mudada: " + paginaMudada)
-		let requisicao = montaRequisicaoFiltragem()
-		setPagina(paginaMudada)
-		requisicao = requisicao + `&page=${paginaMudada}&size=10`
-		console.log("Requisição: " + requisicao)
-		try{
-			await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) =>{
-				console.log(response)
-				const data = response.data.content
-				setProjetos(data)
-			})
-		} catch (erro) {}
-		setRender(render+1)
-	}
 
-  async function getProdutoFiltro(evento){
-		evento.preventDefault()
-		let requisicao = montaRequisicaoFiltragem()
-		requisicao = requisicao + `&page=0&size=10`
-		console.log("Requisição: " + requisicao)
-		try {
-            await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
-                const data = response.data.content
-                setProjetos(data)
-                const total = response.data.totalPages
-                setTotalPagina(total)
-                console.log(response)
-            })
-        } catch (erro) { }
-		
-	}
-	  
-  async function getProjetos() {
-        try {
-            await axios.get("/projeto/lista/paginada?page=0&size=10").then((response) => {
-                console.log(response)
-				const data = response.data.content
-                setProjetos(data)
-                const total = response.data.totalPages
-                setTotalPagina(total)
-            })
-        } catch (erro) { }
+  function montaRequisicaoFiltragem() {
+    let requisicao = ""
+    if (nomeFiltro != null && nomeFiltro !== "") {
+      requisicao = requisicao + "&nome=" + nomeFiltro
     }
+    if (chefeFiltro != null && chefeFiltro !== "") {
+      requisicao = requisicao + "&chefe=" + chefeFiltro
+    }
+
+    return requisicao
+  }
+
+  async function mudaPagina(paginaMudada) {
+    console.log("Pagina Mudada: " + paginaMudada)
+    let requisicao = montaRequisicaoFiltragem()
+    setPagina(paginaMudada)
+    requisicao = requisicao + `&page=${paginaMudada}&size=10`
+    console.log("Requisição: " + requisicao)
+    try {
+      await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
+        console.log(response)
+        const data = response.data.content
+        setProjetos(data)
+      })
+    } catch (erro) { }
+    setRender(render + 1)
+  }
+
+  async function getProdutoFiltro(evento) {
+    evento.preventDefault()
+    let requisicao = montaRequisicaoFiltragem()
+    requisicao = requisicao + `&page=0&size=10`
+    console.log("Requisição: " + requisicao)
+    try {
+      await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
+        const data = response.data.content
+        setProjetos(data)
+        const total = response.data.totalPages
+        setTotalPagina(total)
+        console.log(response)
+      })
+    } catch (erro) { }
+
+  }
+
+  async function getProjetos() {
+    try {
+      await axios.get("/projeto/lista/paginada?page=0&size=10").then((response) => {
+        console.log(response)
+        const data = response.data.content
+        setProjetos(data)
+        const total = response.data.totalPages
+        setTotalPagina(total)
+      })
+    } catch (erro) { }
+  }
 
   return (
     <div>
@@ -98,14 +99,12 @@ function ListaProjeto() {
           onClick={() => navigate("/projetos/novo-projeto")}
         />
         <form
-        	onSubmit={(e)=>{getProdutoFiltro(e)}}
+          className="mx-72 mt-8 absolute inset-x-0 top-0 mb-0 gap-0.5 h-16" onSubmit={(e) => { getProdutoFiltro(e) }}
         >
-        	<label>Nome:</label>
-        	<input type="text" value={nomeFiltro} onChange={(e)=>{setNomeFiltro(e.target.value)}}/>
-        	<label>Lider de Projeto:</label>
-        	<input type="text" value={chefeFiltro} onChange={(e)=>{setChefeFiltro(e.target.value)}}/>
-        	
-        	<button type="submit">Filtrar</button>
+          <input className="w-64 my-px rounded-md border border-n70 p-1 ml-3" placeholder="Nome do Projeto:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+          <input className="ml-1 w-64 rounded-md border border-n70 p-1 ml-4" type="text" placeholder="Líder do Projeto:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
+
+          <button className="w-24 border inline-flex border-n70 rounded-md p-1 ml-2" type="submit"><RiFilter2Fill className="ml-3" />Filtrar</button>
         </form>
         <hr className="border-n90"></hr>
         <div className="mx-10 flex flex-row flex-wrap gap-10">
@@ -120,23 +119,24 @@ function ListaProjeto() {
             />
           ))}
         </div>
-        <div>
-        	{pagina != 0 ?
-        	<button onClick={(e)=>{mudaPagina(pagina-1)}}>Anterior</button>
-        	:
-        	<button onClick={(e)=>{mudaPagina(pagina-1)}} disabled>Anterior</button>
-        	}
-        	
-        	<InputPaginacao min={1} max={totalPagina} paginaAtual={pagina+1} onValueChange={(valor)=>{mudaInputPagina(valor)
-        	}}/>
-        	<span>/{totalPagina}</span>
-       	
-        	{pagina < totalPagina-1 ?
-        	<button onClick={(e)=>{mudaPagina(pagina+1)}}>Proxima</button>
-        	:
-        	<button onClick={(e)=>{mudaPagina(pagina+1)}} disabled>Proxima</button>
-        	}
-        	
+        <div className="ml-96 mt-12">
+          {pagina != 0 ?
+            <button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }}>Anterior</button>
+            :
+            <button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }} disabled>Anterior</button>
+          }
+
+          <InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
+            mudaInputPagina(valor)
+          }} />
+          <span>/{totalPagina}</span>
+
+          {pagina < totalPagina - 1 ?
+            <button className="ml-4" onClick={(e) => { mudaPagina(pagina + 1) }}>Proxima</button>
+            :
+            <button className="ml-4" onClick={(e) => { mudaPagina(pagina + 1) }} disabled>Proxima</button>
+          }
+
         </div>
       </div>
     </div>
