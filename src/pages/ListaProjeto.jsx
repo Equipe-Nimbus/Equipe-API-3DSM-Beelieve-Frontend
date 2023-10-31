@@ -119,7 +119,7 @@ function ListaProjeto() {
             />
           ))}
         </div>
-        <div className="ml-96 mt-12">
+        <div className="ml-auto mt-12">
           {pagina != 0 ?
             <button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }}>Anterior</button>
             :
