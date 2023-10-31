@@ -115,12 +115,7 @@ function DetalhesProjeto() {
   useEffect(() => {
 	  getEdges()
   }, [])
-  
-  useEffect(() => {
-	  console.log(nodes)
-	  console.log(edges)
-  })
-  
+
   return (
     <>
       <VisaoGeral
