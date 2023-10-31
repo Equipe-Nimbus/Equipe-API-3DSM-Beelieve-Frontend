@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Swal from 'sweetalert2'
 
 import TabelaWbs from "./TabelaWbs"
@@ -7,8 +7,9 @@ import Button from "./Button"
 import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from "../services/axios"
+import ArvoreProjeto from "./ArvoreProjeto"
 
-function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
+function VisualizarEditarWbs({ projeto, tabela, nodes, edges, setTabela, setAtualizar }) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
 
   const mudarVisualizacao = (valor) => {
@@ -45,6 +46,11 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
         })
     } catch (error) {}
   }
+  
+  useEffect(() => {
+	  console.log('Nodes do VisualizarEditarWbs: ', nodes)
+	  console.log('Edges do VisualizarEditarWbs: ', edges)
+  })
 
   const statusInicio = projeto.data_inicio_projeto
 
@@ -109,7 +115,10 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (
-          <></>
+          <ArvoreProjeto
+          	listaNodes={nodes}
+          	listaEdges={edges}
+          />
         )}
       </div>
     </div>

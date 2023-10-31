@@ -115,6 +115,11 @@ function DetalhesProjeto() {
   useEffect(() => {
 	  getEdges()
   }, [])
+  
+  useEffect(() => {
+	  console.log('Nodes do DetalhesProjeto: ', nodes)
+	  console.log('Edges do DetalhesProjeto: ', edges)
+  })
 
   return (
     <>
@@ -136,7 +141,6 @@ function DetalhesProjeto() {
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
-
       {secaoAtual === "ESTRUTURA" && (
         <VisualizarEditarWbs
           projeto={projeto}
