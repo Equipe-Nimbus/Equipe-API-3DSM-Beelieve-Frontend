@@ -90,9 +90,13 @@ function DetalhesProjeto() {
 
   useEffect(() => {
     getProjeto()
+    getNodes()
+    getEdges()
 
     if (atualizar) {
       getProjeto()
+      getNodes()
+      getEdges()
       setAtualizar(false)
     }
   }, [atualizar])
@@ -107,15 +111,7 @@ function DetalhesProjeto() {
       }
     }
   }, [projeto, atualizar])
-    
-  useEffect(() => {
-	  getNodes()
-  }, [])
-  
-  useEffect(() => {
-	  getEdges()
-  }, [])
-  
+     
   useEffect(() => {
 	  console.log('Nodes do DetalhesProjeto: ', nodes)
 	  console.log('Edges do DetalhesProjeto: ', edges)
