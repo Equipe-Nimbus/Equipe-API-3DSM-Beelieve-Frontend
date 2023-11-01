@@ -120,7 +120,7 @@ function ListaUsuario() {
 					onClick={() => navigate("/usuario/novo-usuario")}
 				/>
 				<form
-					className="mx-48 mt-8 absolute inset-x-0 top-0 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
+					className="mx-40 mt-8 absolute inset-x-0 top-0 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
 				>
 					<input placeholder="Nome:" className="w-64 my-px rounded-md border border-n70 p-1 ml-3" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
 					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1 ml-2" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
