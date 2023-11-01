@@ -28,7 +28,8 @@ function CadastroUsuario() {
             senha: data.senhaUsuario,
             telefone: data.telefoneUsuario,
             cargo: data.cargoUsuario,
-            departamento: data.departamentoUsuario
+            departamento: data.departamentoUsuario,
+            is_active: true,
         }
 
         return usuario

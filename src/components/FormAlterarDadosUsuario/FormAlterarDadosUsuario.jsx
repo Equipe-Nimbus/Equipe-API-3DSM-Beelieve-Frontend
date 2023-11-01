@@ -49,6 +49,15 @@ function AlterarUsuario() {
         return usuario
     }
 
+    const gerarJsonDeleteUsuario = (data) => {
+        const usuario = {
+            id_usuario: data.id_usuario,
+            is_active: false
+        }
+
+        return usuario
+    }
+
     async function getUsuario() {
         try {
             await axios.get(`/usuario/listar/${idUsuario}`).then((response) => {
@@ -115,9 +124,10 @@ function AlterarUsuario() {
         })
 
         if (confirmacao.isConfirmed) {
-            console.log(idUsuario)
+            const usuarioJson = gerarJsonDeleteUsuario(usuario)
+            console.log(usuarioJson)
             try {
-                await axios.delete(`/usuario/deletar/${idUsuario}`)
+                await axios.put(`/usuario/deletar`, usuarioJson)
                 Swal.fire("Excluído com sucesso!", "", "success")
                 navigate("/usuario")
             } catch (error) {
