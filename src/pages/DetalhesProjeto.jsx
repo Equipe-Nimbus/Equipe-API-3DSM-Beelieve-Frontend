@@ -103,8 +103,6 @@ function DetalhesProjeto() {
         setAtualizar={setAtualizar}
       />
 
-      <CriarExcel projeto={projeto}/>
-
       <MenuSelecao
         opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
         secaoAtual={secaoAtual}
