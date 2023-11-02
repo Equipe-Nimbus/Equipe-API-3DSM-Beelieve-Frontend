@@ -73,12 +73,19 @@ function SCurveChart({ cronograma }) {
                   enabled: true
                 },
                 mode: 'x'
+              },
+              pan: {
+                enabled: true,
+                mode: 'x',
+                onPan: function ({ chart }) {
+
+                }
               }
             }
           },
           interaction: {
             intersect: false,
-            axis: 'x'
+            axis: 'xy'
           },
           legend: {
             display: true,
@@ -92,7 +99,11 @@ function SCurveChart({ cronograma }) {
     }
   }, [cronograma]);
 
-  return <canvas id="sCurveChart" style={{ height: '100px', width: '300px' }}></canvas>;
+  return (
+    <div style={{ width: '60%', height:'60%'}}>
+      <canvas id="sCurveChart"></canvas>
+    </div>
+  );
 }
 
 export default SCurveChart;
