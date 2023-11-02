@@ -181,7 +181,8 @@ function CadastroUsuario() {
                             Departamento:
                         </label>
                         <select className="w-1/2 border rounded border-n70 p-1" {...register("departamentoUsuario")}>
-                            <option className="bg-primary98" value="Departamento 1">Departamento 1</option>
+                            <option disabled selected value="">Departamento</option>
+                            <option value="Departamento 1">Departamento 1</option>
                             <option value="Departamento 2">Departamento 2</option>
                             <option value="Departamento 3">Departamento 3</option>
                             <option value="Departamento 4">Departamento 4</option>
@@ -196,8 +197,11 @@ function CadastroUsuario() {
                         Cargo:
                     </label>
                     <select className="w-1/2 border rounded border-n70 p-1" name="cargoUsuario" required {...register("cargoUsuario", { required: true })}>
-                        <option className="bg-primary98" value="EngenheiroChefe">Engenheiro Chefe</option>
-                        <option value="LiderProjeto">Líder de Projeto</option>
+                        <option disabled selected value="">Cargo</option>
+                        <option value="Gerente">Gerente</option>
+                        <option value="EngenheiroChefe">Engenheiro Chefe</option>
+                        <option value="LiderPacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+                        <option value="Analista">Analista</option>
                     </select>
                 </div>
                 <div className="mt-5 flex justify-end gap-5">
