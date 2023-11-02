@@ -34,29 +34,14 @@ function ListaUsuario() {
 	function montaRequisicaoFiltragem() {
 		let requisicao = ""
 		if (departamentoFiltro != null && departamentoFiltro !== "") {
-			if (requisicao !== "") {
-				requisicao = requisicao + "departamento=" + departamentoFiltro
-			}
-			else {
 				requisicao = requisicao + "&departamento=" + departamentoFiltro
-			}
 		}
 		if (nomeFiltro != null && nomeFiltro !== "") {
-			if (requisicao !== "") {
-				requisicao = requisicao + "nome=" + nomeFiltro
-			}
-			else {
 				requisicao = requisicao + "&nome=" + nomeFiltro
-			}
 		}
 
 		if (cargoFiltro != null && cargoFiltro !== "") {
-			if (requisicao !== "") {
-				requisicao = requisicao + "cargo=" + cargoFiltro
-			}
-			else {
-				requisicao = requisicao + "&cargo=" + cargoFiltro
-			}
+			requisicao = requisicao + "&cargo=" + cargoFiltro
 		}
 
 
