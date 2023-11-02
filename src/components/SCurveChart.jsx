@@ -10,6 +10,22 @@ function SCurveChart({ cronograma }) {
   const [nivelSelecionado, setNivelSelecionado] = useState()
   const [progressoDosNiveis] = useState({})
 
+  const [scrollPosition, setScrollPosition] = useState(0)
+
+  useEffect(() => {
+      const handleScroll = () => {
+        setScrollPosition(window.scrollY);
+      }
+
+      window.addEventListener('scroll', handleScroll)
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      }
+    }, [])
+
+
+
   useEffect(() => {
     if (cronograma.lista_cronograma) {
       cronograma.lista_cronograma.forEach((mes) => {
@@ -121,6 +137,7 @@ function SCurveChart({ cronograma }) {
 
   useEffect(() => {
     filtrarGrafico()
+    window.scrollTo(0, scrollPosition)
   }, [nivelSelecionado])
 
   const handleNivelSelecionadoChange = (event) => {
