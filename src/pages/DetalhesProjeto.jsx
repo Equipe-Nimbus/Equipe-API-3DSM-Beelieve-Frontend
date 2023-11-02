@@ -25,7 +25,7 @@ function DetalhesProjeto() {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data
-        //console.log("projeto resgatado: ", dados)
+        console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
@@ -81,6 +81,7 @@ function DetalhesProjeto() {
       setTabela(novaTabela)
       
       if(location.state && location.state.tela === 'pacotes'){
+        location.state = null
         setSecaoAtual("PACOTES")
       }
     }
