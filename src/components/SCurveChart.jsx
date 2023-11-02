@@ -1,36 +1,56 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(zoomPlugin);
 
 function SCurveChart({ cronograma }) {
-  const chartRef = useRef(null);
+  const chartRef = useRef(null)
+  const [niveis, setNiveis] = useState([])
+  const [nivelSelecionado, setNivelSelecionado] = useState()
+  const [progressoDosNiveis] = useState({})
 
   useEffect(() => {
     if (cronograma.lista_cronograma) {
+      cronograma.lista_cronograma.forEach((mes) => {
+        mes.niveis.forEach((nivel) => {
+          if (!progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`]) {
+            progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`] = {
+              planejado: [],
+              real: []
+            }
+          }
+          progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].planejado.push(parseFloat(nivel.progresso_planejado.slice(0, -1)))
+          progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].real.push(nivel.progresso_real !== '-' ? parseFloat(nivel.progresso_real.slice(0, -1)) : 0)
+        })
+      })
+
+      const niveis = Object.keys(progressoDosNiveis)
+      if (niveis.length > 0) {
+        setNiveis(niveis)
+        setNivelSelecionado(niveis[0]);
+      }
+    }
+    
+  }, [cronograma])
+
+  const filtrarGrafico = () => {
+    if (!progressoDosNiveis || !cronograma.lista_cronograma || !nivelSelecionado) {
+      return
+    } else {
+
       const ctx = document.getElementById('sCurveChart').getContext('2d');
 
       if (chartRef.current) {
         chartRef.current.destroy();
       }
 
-      const progressoRealData = cronograma.lista_cronograma.map(mes => {
-        let nivelCorrespondente = mes.niveis.find(nivel => nivel.progresso_real !== '-');
-        return nivelCorrespondente ? parseInt(nivelCorrespondente.progresso_real) : 0;
-      });
-
-      const progressoPlanejadoData = cronograma.lista_cronograma.map(mes => {
-        let nivelCorrespondente = mes.niveis.find(nivel => nivel.progresso_planejado);
-        return nivelCorrespondente ? parseInt(nivelCorrespondente.progresso_planejado) : 0;
-      });
-
       const data = {
         labels: cronograma.lista_cronograma.map(mes => mes.mes_cronograma),
         datasets: [
           {
             label: 'Linha de Meta',
-            data: progressoPlanejadoData,
+            data: progressoDosNiveis[nivelSelecionado].planejado,
             fill: false,
             backgroundColor: 'rgba(220, 38, 38, 0.2)',
             borderColor: 'rgba(220, 38, 38, 1)',
@@ -38,7 +58,7 @@ function SCurveChart({ cronograma }) {
           },
           {
             label: 'Progresso Real',
-            data: progressoRealData,
+            data: progressoDosNiveis[nivelSelecionado].real,
             fill: false,
             backgroundColor: 'rgba(100, 100, 100, 0.2)',
             borderColor: 'rgba(100, 100, 100, 1)',
@@ -97,13 +117,31 @@ function SCurveChart({ cronograma }) {
         }
       });
     }
-  }, [cronograma]);
+  }
+
+  useEffect(() => {
+    filtrarGrafico()
+  }, [nivelSelecionado])
+
+  const handleNivelSelecionadoChange = (event) => {
+    setNivelSelecionado(event.target.value);
+  }
 
   return (
-    <div style={{ width: '60%', height:'60%'}}>
-      <canvas id="sCurveChart"></canvas>
+    <div>
+      <div className="ml-4 mt-5 text-lg">
+        <label className='font-medium'>Nível atual: </label>
+        <select value={nivelSelecionado} onChange={handleNivelSelecionadoChange} className='border p-2 rounded-lg border-n90'>
+          {niveis.map((nivel) => (
+            <option key={nivel} value={nivel}>
+              {nivel}
+            </option>
+          ))}
+        </select>
+      </div>
+      <canvas id="sCurveChart" style={{ height: '100px', width: '300px' }}></canvas>
     </div>
-  );
+  )
 }
 
 export default SCurveChart;

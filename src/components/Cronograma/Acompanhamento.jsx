@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+
+import TabelaProgresso from "../TabelaProgresso.jsx";
 import SCurveChart from "../SCurveChart.jsx";
-import Button from "../Button";
+
 import axios from "../../services/axios";
-import Hammer from 'hammerjs';
+
+import { PiGridNineFill } from 'react-icons/pi'
+import { GoGraph } from 'react-icons/go'
 
 
 function Acompanhamento({ idProjeto }) {
-  const [cronograma, setCronograma] = useState({});
-
-  const { register, control, setValue } = useForm({
-    defaultValues: {
-      cronograma: cronograma.lista_cronograma,
-      
-    },
-    
-  });
-
-  const { fields } = useFieldArray({
-    control,
-    name: "cronograma",
-  });
+  const [cronograma, setCronograma] = useState({})
+  const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
+  const mudarVisualizacao = (valor) => {
+    const view = valor
+    setVisualizacaoAtual(view)
+  }
 
   const getCronograma = async () => {
     try {
@@ -33,7 +28,6 @@ function Acompanhamento({ idProjeto }) {
         await axios.get("data/pega").then((response) => {
 			dataAtual = response.data
 		})
-        console.log(dataAtual)
 		let anoDataAtual = Number (dataAtual.slice(0, 4))
 		let mesDataAtual = (Number (dataAtual.slice(5,7)) - 1)
 		dataAtual = new Date(anoDataAtual, mesDataAtual)
@@ -65,84 +59,68 @@ function Acompanhamento({ idProjeto }) {
 
 
         setCronograma(cronogramaResgatado);
-        setValue("cronograma", cronogramaResgatado.lista_cronograma);
       });
     } catch (error) {
       console.error("Erro ao obter cronograma:", error);
     }
-  };
+  }
 
   useEffect(() => {
     getCronograma();
-  }, [idProjeto]);
+  }, [idProjeto])
 
-  const renderizarColunas = () => {
-    return fields?.map((mes, indexMes) => (
-      <th key={indexMes} className="px-6 py-3 text-center">
-        {mes.mes_cronograma}
-      </th>
-    ));
-  };
-
-  const renderizarLinhas = () => {
-    return fields[0]?.niveis.map((nivel, indexNivel) => (
-      <tr key={indexNivel} className="even:bg-amber-100 odd:bg-blue-100">
-        {renderizarColunas().map((coluna, indexMes) => (
-          <td key={indexMes} className="px-1 py-5 text-lg">
-            <input
-              type="text"
-              {...register(`cronograma[${indexMes}].niveis[${indexNivel}].progresso_real`)}
-              className="text-center"
-              disabled
-            />
-          </td>
-        ))}
-      </tr>
-    ));
-  };
+  
   return (
-    <>
-      <h1 className="ml-5 text-xl font-semibold text-on-light">
-        Acompanhamento de progresso
-      </h1>
-      <hr className="border-n90"></hr>
-      <div className="mt-5 ml-5 flex justify-start">
-        <table className="mt-5 text-left">
-          <thead className="bg-primary98 p-10 text-base uppercase">
-            <tr>
-              <th className="px-6 py-3">Nível</th>
-              <th className="px-6 py-3">Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fields[0]?.niveis.map((nivel, indexNivel) => (
-              <tr key={indexNivel}>
-                <td className="px-4 py-2 text-lg font-semibold">
-                  {nivel.ordem_nivel}
-                </td>
-                <td className="font-regular px-6 text-lg">
-                  {nivel.nome_nivel}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="max-w-6xl overflow-x-auto ">
-          <table className="mt-5 text-left">
-            <thead className="bg-primary98 p-10 text-base uppercase">
-              <tr>{renderizarColunas()}</tr>
-            </thead>
-            <tbody>{renderizarLinhas()}</tbody>
-          </table>
+    <div>
+      <div className="mx-5 mb-2 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-on-light">
+          Visualizar/Editar
+        </h3>
+        <div className="flex cursor-pointer">
+          <div
+            className={
+              visualizacaoAtual === "Tabela"
+                ? "flex items-center gap-1 rounded-l-lg border-2 border-n90 bg-primary91 p-2 font-semibold text-primary20"
+                : "flex items-center gap-1 rounded-l-lg border-2 border-n90 p-2 text-n40"
+            }
+            onClick={(e) => mudarVisualizacao("Tabela")}
+          >
+            {" "}
+            {visualizacaoAtual === "Tabela" ? (
+              <PiGridNineFill size={20} color="#675600" />
+            ) : (
+              <PiGridNineFill size={20} color="#666666" />
+            )}
+            <span>Tabela</span>
           </div>
-          <div className="p-4">
+          <div
+            className={
+              visualizacaoAtual === "Gráfico"
+                ? "flex items-center gap-1 rounded-r-lg border-2 border-n90 bg-primary91 p-2 font-semibold text-primary20"
+                : "flex items-center gap-1 rounded-r-lg border-2 border-n90 p-2 text-n40"
+            }
+            onClick={(e) => mudarVisualizacao("Gráfico")}
+          >
+            {visualizacaoAtual === "Gráfico" ? (
+              <GoGraph size={20} color="#675600" />
+            ) : (
+              <GoGraph size={20} color="#666666" />
+            )}
+            <span>Curva S</span>
+          </div>
         </div>
       </div>
-      <SCurveChart cronograma={cronograma}/>
-    </>
-  );
-}
+      
+      <hr className="border-n90"></hr>
+      
+      {visualizacaoAtual === 'Tabela' && (
+        <TabelaProgresso cronograma={cronograma}/>
+      )}
 
+      {visualizacaoAtual === 'Gráfico' && (
+        <SCurveChart cronograma={cronograma}/>
+      )}
+    </div>
+  )
+};
 export default Acompanhamento;
-
