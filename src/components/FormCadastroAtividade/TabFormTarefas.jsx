@@ -132,6 +132,9 @@ const TabFormTarefas = ({
     }
 
     tarefas.forEach((atividade) => {
+      atividade.prazo = atividade.prazo ? atividade.prazo.toLocaleString() : null
+      atividade.tendencia = atividade.tendencia ? atividade.tendencia.toLocaleString() : null
+
       listaTarefas.lista_tarefas.push({
         id_tarefa: atividade.id,
         descricao_atividade_tarefa: atividade.descricao,
@@ -139,15 +142,15 @@ const TabFormTarefas = ({
         peso_tarefa: parseInt(atividade.peso),
         status_tarefa: atividade.status === true ? 1 : 0,
         prazo_tarefa: atividade.prazo
-          ? `${atividade.prazo.getFullYear()}-${
-              atividade.prazo.getMonth() + 1
-            }-${atividade.prazo.getDate()}`
+          ? `${atividade.prazo.slice(6,10)}-${
+              atividade.prazo.slice(3,5)
+            }-${atividade.prazo.slice(0, 2)}`
           : null,
         tendencia_tarefa: atividade.tendencia
-          ? `${atividade.tendencia.getFullYear()}-${
-              atividade.tendencia.getMonth() + 1
-            }-${atividade.tendencia.getDate()}`
-          : null,
+          ? `${atividade.tendencia.slice(6,10)}-${
+            atividade.tendencia.slice(3,5)
+          }-${atividade.tendencia.slice(0, 2)}`
+        : null,
       })
     })
 
@@ -156,6 +159,7 @@ const TabFormTarefas = ({
 
   const saveTarefa = async (data) => {
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
+    
 
     let PodeSalvar = true
     const peloMenosUmaTarefaMarcada =
