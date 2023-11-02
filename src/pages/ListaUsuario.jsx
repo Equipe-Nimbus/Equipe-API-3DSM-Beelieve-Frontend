@@ -108,12 +108,22 @@ function ListaUsuario() {
 					className="mx-40 mt-8 absolute inset-x-0 top-0 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
 				>
 					<input placeholder="Nome:" className="w-64 my-px rounded-md border border-n70 p-1 ml-3" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1 ml-2" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
-						<option value={""}></option>
+					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
+						<option disabled selected value="">Cargo</option>
+						<option value="Gerente">Gerente</option>
 						<option value="EngenheiroChefe">Engenheiro Chefe</option>
-						<option value="LiderProjeto">Líder de Projeto</option>
+						<option value="LiderDePacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+						<option value="Analista">Analista</option>
 					</select>
-					<input placeholder="Departamento:" className="ml-1 w-64 rounded-md border border-n70 p-1 ml-4" type="text" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }} />
+					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }}>
+						<option disabled selected value="">Departamento</option>
+						<option value="Departamento 1">Departamento 1</option>
+						<option value="Departamento 2">Departamento 2</option>
+						<option value="Departamento 3">Departamento 3</option>
+						<option value="Departamento 4">Departamento 4</option>
+						<option value="Departamento 5">Departamento 5</option>
+					</select>
+					{/* <input placeholder="Departamento:" className="ml-1 w-64 rounded-md border border-n70 p-1 ml-4" type="text" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }} /> */}
 
 					<button className="w-24 border inline-flex border-n70 rounded-md p-1 ml-2" type="submit"><RiFilter2Fill className="ml-3" />Filtrar</button>
 				</form>
@@ -153,7 +163,7 @@ function ListaUsuario() {
 
 					</table>
 					<div className="ml-auto mt-12">
-						{pagina != 0 ?
+						{pagina !== 0 ?
 							<button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }}>Anterior</button>
 							:
 							<button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }} disabled>Anterior</button>
