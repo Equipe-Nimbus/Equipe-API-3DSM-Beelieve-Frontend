@@ -9,6 +9,7 @@ import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 import FormValorHora from "../components/FormValorHora/FormValorHora"
 import Planejamento from "../components/Cronograma/Planejamento"
 import Acompanhamento from "../components/Cronograma/Acompanhamento"
+import CriarExcel from "../components/CriarExcel"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
@@ -102,6 +103,7 @@ function DetalhesProjeto() {
         }}
         setAtualizar={setAtualizar}
       />
+
       <MenuSelecao
         opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
         secaoAtual={secaoAtual}
@@ -137,7 +139,7 @@ function DetalhesProjeto() {
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
           <Acompanhamento idProjeto={id} />
         </div>
-      )}
+      )}     
     </>
   )
 }

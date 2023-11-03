@@ -7,6 +7,7 @@ import Button from "./Button"
 
 import Swal from "sweetalert2"
 import axios from "../services/axios"
+import CriarExcel from "./CriarExcel"
 
 import { BsPlayFill } from "react-icons/bs"
 
@@ -196,6 +197,7 @@ function VisaoGeral({
           <p className="text-n20">{descricaoProjeto}</p>
         </div>
         <div className="flex flex-col gap-5">
+        <CriarExcel projeto={projeto}/>
           {projetoNaoIniciado && (
             <>
               <Button
