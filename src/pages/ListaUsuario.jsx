@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
+
 import axios from "../services/axios"
-import { RiFilter2Fill } from "react-icons/ri";
 
 import InputPaginacao from "../components/InputPaginacao.jsx"
 import Button from "../components/Button.jsx"
 
 import { BsPlusCircle } from "react-icons/bs"
+import { BiFilter } from "react-icons/bi";
 
 function ListaUsuario() {
 	const [usuarios, setUsuarios] = useState([])
@@ -94,94 +95,83 @@ function ListaUsuario() {
 	}
 
 	return (
-		<div>
-			<div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-				<Button
-					texto="Novo"
-					tipo="button"
-					iconeOpcional={BsPlusCircle}
-					iconeTamanho="20px"
-					className="mb-5 flex items-center  gap-0.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-					onClick={() => navigate("/usuario/novo-usuario")}
-				/>
-				<form
-					className="mx-40 mt-8 absolute inset-x-0 top-0 mb-0 gap-0.5 h-16" onSubmit={(e) => { getUsuarioFiltro(e) }}
-				>
-					<input placeholder="Nome:" className="w-64 my-px rounded-md border border-n70 p-1 ml-3" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
-						<option disabled selected value="">Cargo</option>
-						<option value="Gerente">Gerente</option>
-						<option value="EngenheiroChefe">Engenheiro Chefe</option>
-						<option value="LiderDePacoteDeTrabalho">Líder de Pacote de Trabalho</option>
-						<option value="Analista">Analista</option>
-					</select>
-					<select className="my-0 w-48 ml-4 rounded-md border border-n70 p-1" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }}>
-						<option disabled selected value="">Departamento</option>
-						<option value="Departamento 1">Departamento 1</option>
-						<option value="Departamento 2">Departamento 2</option>
-						<option value="Departamento 3">Departamento 3</option>
-						<option value="Departamento 4">Departamento 4</option>
-						<option value="Departamento 5">Departamento 5</option>
-					</select>
-					{/* <input placeholder="Departamento:" className="ml-1 w-64 rounded-md border border-n70 p-1 ml-4" type="text" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }} /> */}
+		<div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+			<Button
+				texto="Novo"
+				tipo="button"
+				iconeOpcional={BsPlusCircle}
+				iconeTamanho="20px"
+				className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+				onClick={() => navigate("/usuarios/novo-usuario")}
+			/>
+			<hr className="border-n90"></hr>
+			<form
+				className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getUsuarioFiltro(e) }}
+			>
+				<input placeholder="Nome:" className="w-64 rounded-md border border-n70 p-0.5 pl-2" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+				<select className="w-48 rounded-md border border-n70 p-0.5" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
+					<option selected value="">Cargo</option>
+					<option value="Gerente">Gerente</option>
+					<option value="EngenheiroChefe">Engenheiro Chefe</option>
+					<option value="LiderDePacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+					<option value="Analista">Analista</option>
+				</select>
+				<select className="w-48 rounded-md border border-n70 p-0.5" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }}>
+					<option selected value="">Departamento</option>
+					<option value="Departamento 1">Departamento 1</option>
+					<option value="Departamento 2">Departamento 2</option>
+					<option value="Departamento 3">Departamento 3</option>
+					<option value="Departamento 4">Departamento 4</option>
+					<option value="Departamento 5">Departamento 5</option>
+				</select>
 
-					<button className="w-24 border inline-flex border-n70 rounded-md p-1 ml-2" type="submit"><RiFilter2Fill className="ml-3" />Filtrar</button>
-				</form>
-				<hr className="border-n90"></hr>
-				<div className="mx-10 flex flex-row flex-wrap gap-10 my-10 gap-2 overflow-x-auto pb-5">
-					<table className="mx-auto rounded px-16">
-						<thead className="bg-primary98 p-10 text-base uppercase text-center">
-							<tr>
-								<th className="px-12 py-3">Matricula</th>
-								<th className="px-12 py-3">Cargo</th>
-								<th className="px-12 py-3">Departamento</th>
-								<th className="px-12 py-3">Usuários</th>
+				<button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter/>Filtrar</button>
+			</form>
+			
+			<div className="mx-10 flex flex-col gap-20 overflow-x-auto pb-5">
+				<table className="w-12/12">
+					<thead className="bg-primary98 p-10 text-base uppercase text-center">
+						<tr>
+							<th className="w-2/12 py-3">Matricula</th>
+							<th className="w-4/12 py-3 text-left">Nome</th>
+							<th className="w-4/12 py-3 text-left">Cargo</th>
+							<th className="w-2/12 py-3">Departamento</th>	
+						</tr>
+					</thead>
+					<tbody>
+						{usuarios.map((linha, index) => (
+							<tr key={index} className="border-b border-n90">
+								<td className="py-3 text-lg font-semibold text-center">
+									{linha.id_usuario}
+								</td>
+								<td className="text-lg text-left underline underline-offset-4 decoration-n70">
+									<Link
+										to={`/usuarios/editar-informacoes/${linha.id_usuario}`}
+									>
+										{linha.nome}
+									</Link>
+								</td>
+								<td className="text-lg text-left">
+									{linha.cargo}
+								</td>
+								<td className="text-lg text-center">
+									{linha.departamento}
+								</td>
+								
 							</tr>
-						</thead>
-						<tbody>
-							{usuarios.map((linha, index) => (
-								<tr key={index} className="border-b border-n90">
-									<td className="px-4 py-3 text-lg font-semibold text-center">
-										{linha.id_usuario}
-									</td>
-									<td className="px-4 py-3 text-lg font-semibold text-center">
-										{linha.cargo}
-									</td>
-									<td className="px-4 py-3 text-lg font-semibold text-center">
-										{linha.departamento}
-									</td>
-									<td className="px-4 py-3 text-lg font-semibold text-center">
-										<Link
-											to={`/usuario/editar-informacoes/${linha.id_usuario}`}
-										>
-											{linha.nome}
-										</Link>
-									</td>
-								</tr>
-							))}
-						</tbody>
+						))}
+					</tbody>
 
-					</table>
-					<div className="ml-auto mt-12">
-						{pagina !== 0 ?
-							<button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }}>Anterior</button>
-							:
-							<button className="mr-4" onClick={(e) => { mudaPagina(pagina - 1) }} disabled>Anterior</button>
-						}
-
-						<InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
-							mudaInputPagina(valor)
-						}} />
-						<span>/{totalPagina}</span>
-
-						{pagina < totalPagina - 1 ?
-							<button className="ml-4" onClick={(e) => { mudaPagina(pagina + 1) }}>Proxima</button>
-							:
-							<button className="ml-4" onClick={(e) => { mudaPagina(pagina + 1) }} disabled>Proxima</button>
-						}
+				</table>
+				<div className="flex justify-center items-center">
+					<button className="mr-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina - 1) }} disabled={pagina === 0}>Anterior</button>
+					<InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
+						mudaInputPagina(valor)
+					}} />
+					<span className="ml-1 text-n40">/ {totalPagina}</span>
+					<button className="ml-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina + 1) }} disabled={!(pagina < totalPagina - 1)}>Próxima</button>
 					</div>
 				</div>
-			</div>
 		</div>
 	)
 }

@@ -1,5 +1,4 @@
 import { useFormik } from 'formik';
-import { number } from 'prop-types';
 import { useEffect } from 'react';
 import * as Yup from 'yup';
 
@@ -43,7 +42,7 @@ const InputPaginacao = ({ min, max, onValueChange, paginaAtual }) => {
         type="text"
         id="number"
         name="number"
-        className='rounded-md border border-n70 p-1 items-center text-center w-32'
+        className='rounded-md border border-n70 p-1 text-center w-8'
         onChange={handleValueChange}
         value={formik.values.number}
       />

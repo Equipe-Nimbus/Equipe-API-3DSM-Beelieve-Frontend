@@ -301,7 +301,7 @@ function AlterarUsuario() {
                             texto="Cancelar"
                             tipo="button"
                             className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
-                            onClick={() => navigate("/usuario")}
+                            onClick={() => navigate("/usuarios")}
                         />
                         <Button
                             texto="Cadastrar"

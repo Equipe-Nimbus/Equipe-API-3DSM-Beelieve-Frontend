@@ -29,7 +29,7 @@ function CriarExcel({projeto}){
       )
   ) : [];
 
-  console.log(projeto)
+  //console.log(projeto)
 
   const compareOrdemProjeto = (a, b) => {
       const orderA = a["Ordem Projeto"].replace(/\.+$/, '');
@@ -83,8 +83,8 @@ const gerarExcel = (wbsData, tarefasData) => {
 
 return (
   <button onClick={() => gerarExcel(excelData, tarefasData)}
-  className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary">
-    Download Excel</button>
+  className="flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 py-1 px-2 text-lg font-semibold text-on-primary">
+    Gerar planilha</button>
 );
 }
 

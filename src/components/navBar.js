@@ -40,7 +40,7 @@ function NavBar() {
                   size={24}
                   className="hover:fill-primary50"
                 />
-                <Link to="/usuario">Usuários</Link>
+                <Link to="/usuarios">Usuários</Link>
               </li>
             </ul>
           </div>

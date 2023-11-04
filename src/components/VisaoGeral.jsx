@@ -186,7 +186,7 @@ function VisaoGeral({
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
-      <h2 className="text-xl font-medium text-on-light">Visão Geral</h2>
+      <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
       <hr className="border-n90" />
 
       <div className="my-3 flex justify-between">
@@ -197,7 +197,6 @@ function VisaoGeral({
           <p className="text-n20">{descricaoProjeto}</p>
         </div>
         <div className="flex flex-col gap-5">
-        <CriarExcel projeto={projeto}/>
           {projetoNaoIniciado && (
             <>
               <Button
@@ -236,7 +235,7 @@ function VisaoGeral({
         <span className="font-semibold text-complementary-20">
           Líder do projeto:
         </span>
-        <span>{}</span>
+        <span>{liderProjeto? liderProjeto : "Não atribuído"}</span>
       </span>
       <br />
       {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
@@ -252,6 +251,8 @@ function VisaoGeral({
         </span>
         <span>{}</span>
       </span> */}
+      <hr className="border-n90 my-4" />
+      <CriarExcel projeto={projeto}/>
     </div>
   )
 }

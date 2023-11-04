@@ -61,7 +61,6 @@ function CadastroUsuario() {
 
     return (
         <form onSubmit={handleSubmit(cadastrarUsuario)}>
-            <hr className="border-n90" />
             <div className="mt-4 flex flex-col">
                 <h1
                     className="font-semibold text-2xl text-center">
@@ -209,7 +208,7 @@ function CadastroUsuario() {
                         texto="Cancelar"
                         tipo="button"
                         className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
-                        onClick={() => navigate("/usuario")}
+                        onClick={() => navigate("/usuarios")}
                     />
                     <Button
                         texto="Cadastrar"
