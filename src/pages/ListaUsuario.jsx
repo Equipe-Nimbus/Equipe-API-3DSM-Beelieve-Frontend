@@ -152,7 +152,7 @@ function ListaUsuario() {
 									</td>
 									<td className="px-4 py-3 text-lg font-semibold text-center">
 										<Link
-											to={`/usuario/listar/${linha.id_usuario}`}
+											to={`/usuario/editar-informacoes/${linha.id_usuario}`}
 										>
 											{linha.nome}
 										</Link>

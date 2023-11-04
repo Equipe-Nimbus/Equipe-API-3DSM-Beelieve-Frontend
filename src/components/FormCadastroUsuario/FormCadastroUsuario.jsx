@@ -199,8 +199,8 @@ function CadastroUsuario() {
                     <select className="w-1/2 border rounded border-n70 p-1" name="cargoUsuario" required {...register("cargoUsuario", { required: true })}>
                         <option disabled selected value="">Cargo</option>
                         <option value="Gerente">Gerente</option>
-                        <option value="EngenheiroChefe">Engenheiro Chefe</option>
-                        <option value="LiderPacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+                        <option value="Engenheiro Chefe">Engenheiro Chefe</option>
+                        <option value="Lider de Pacote de Trabalho">Líder de Pacote de Trabalho</option>
                         <option value="Analista">Analista</option>
                     </select>
                 </div>

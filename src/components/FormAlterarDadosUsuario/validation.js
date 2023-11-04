@@ -4,8 +4,7 @@ const schemaAtualizarUsuario = yup.object().shape({
 
     nomeUsuario: yup
         .string()
-        .required("O campo Nome Completo é obrigatório")
-        .nullable(),
+        .required("O campo Nome Completo é obrigatório"),
 
     emailUsuario: yup
         .string()
@@ -28,7 +27,7 @@ const schemaAtualizarUsuario = yup.object().shape({
         .matches(
             /\(\d{2}\) \d{5}-\d{4}/,
             "O telefone deve estar no formato (99) 99999-9999"
-        ),
+        )
 })
 
 export default schemaAtualizarUsuario

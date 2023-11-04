@@ -43,6 +43,7 @@ function AlterarUsuario() {
             email: data.emailUsuario,
             senha: data.senhaUsuario,
             telefone: data.telefoneUsuario,
+            departamento: data.departamentoUsuario,
             cargo: data.cargoUsuario
         }
 
@@ -71,6 +72,7 @@ function AlterarUsuario() {
                 if (data && data.telefone) {
                     setValue("telefoneUsuario", data.telefone);
                 }
+                setValue("departamentoUsuario", data.departamento)
                 setValue("cargoUsuario", data.cargo);
             })
         } catch (erro) {
@@ -262,25 +264,49 @@ function AlterarUsuario() {
                                 {errors.telefoneUsuario.message}
                             </label>
                         )}
+                    </div>        
+                    <div className="justify-between flex-col">
+                        <div className="mt-4 flex flex-col">
+                            <label
+                                htmlFor="departamentoUsuario"
+                                className="text-base font-medium text-on-light">
+                                Departamento:
+                            </label>
+                            <select className="w-1/2 border rounded border-n70 p-1" {...register("departamentoUsuario")}>
+                                <option disabled selected value="">Departamento</option>
+                                <option value="Departamento 1">Departamento 1</option>
+                                <option value="Departamento 2">Departamento 2</option>
+                                <option value="Departamento 3">Departamento 3</option>
+                                <option value="Departamento 4">Departamento 4</option>
+                                <option value="Departamento 5">Departamento 5</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="mt-4 flex flex-col">
                         <label
                             htmlFor="cargoUsuario"
-                            className="text-base font-medium text-on-light"
-                        >
+                            className="text-base font-medium text-on-light">
                             Cargo:
                         </label>
-                        <select className="w-1/2 border rounded border-n70 p-1" {...register("cargoUsuario")}>
-                            <option className="bg-primary98" value="EngenheiroChefe">Engenheiro Chefe</option>
-                            <option value="LiderProjeto">Líder de Projeto</option>
+                        <select className="w-1/2 border rounded border-n70 p-1" name="cargoUsuario" required {...register("cargoUsuario", { required: true })}>
+                            <option disabled selected value="">Cargo</option>
+                            <option value="Gerente">Gerente</option>
+                            <option value="Engenheiro Chefe">Engenheiro Chefe</option>
+                            <option value="Lider de Pacote de Trabalho">Líder de Pacote de Trabalho</option>
+                            <option value="Analista">Analista</option>
                         </select>
                     </div>
-
-                    <div className="mt-5 flex justify-end">
+                    <div className="mt-5 flex justify-end gap-5">
                         <Button
-                            texto="Salvar"
+                            texto="Cancelar"
+                            tipo="button"
+                            className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
+                            onClick={() => navigate("/usuario")}
+                        />
+                        <Button
+                            texto="Cadastrar"
                             tipo="submit"
-                            className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary mt-10"
+                            className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
                         />
                     </div>
                 </form>

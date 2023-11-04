@@ -53,7 +53,7 @@ const router = [
             {   path: "novo-usuario",
                 element: <NovoUsuario/>,
             },
-            {   path: "listar/:idUsuario",
+            {   path: "editar-informacoes/:idUsuario",
                 element: <FormAlterarDadosUsuario/>,
             },
         ]
