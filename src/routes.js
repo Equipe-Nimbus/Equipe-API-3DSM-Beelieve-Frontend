@@ -1,9 +1,12 @@
 import App from "./App";
 import ListaProjeto from "./pages/ListaProjeto";
+import ListaUsuario from "./pages/ListaUsuario";
 import NovoProjeto from "./pages/NovoProjeto";
+import NovoUsuario from "./pages/NovoUsuario";
 
 import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
-import DetalhesProjeto from './pages/DetalhesProjeto'
+import DetalhesProjeto from './pages/DetalhesProjeto';
+import FormAlterarDadosUsuario from './components/FormAlterarDadosUsuario/FormAlterarDadosUsuario';
 import MudaData from "./pages/MudaData";
 
 const router = [
@@ -40,7 +43,21 @@ const router = [
 
         ]
     },
-    
+    {   
+        path: "/usuarios",
+        element: <App />,
+        children: [
+            {   path: "",
+                element: <ListaUsuario/>,
+            },
+            {   path: "novo-usuario",
+                element: <NovoUsuario/>,
+            },
+            {   path: "editar-informacoes/:idUsuario",
+                element: <FormAlterarDadosUsuario/>,
+            },
+        ]
+    },
 ]
 
 export default router

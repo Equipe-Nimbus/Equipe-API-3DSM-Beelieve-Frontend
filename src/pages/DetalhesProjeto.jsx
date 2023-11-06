@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useLocation } from "react-router-dom"
 import axios from "../services/axios"
 
 import VisaoGeral from "../components/VisaoGeral"
@@ -9,6 +9,7 @@ import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 import FormValorHora from "../components/FormValorHora/FormValorHora"
 import Planejamento from "../components/Cronograma/Planejamento"
 import Acompanhamento from "../components/Cronograma/Acompanhamento"
+import CriarExcel from "../components/CriarExcel"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
@@ -20,11 +21,12 @@ function DetalhesProjeto() {
   }
 
   const { id } = useParams()
+  const location = useLocation()
   const getProjeto = async () => {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data
-        // console.log("projeto resgatado: ", dados)
+        console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {}
@@ -78,6 +80,11 @@ function DetalhesProjeto() {
     if (Object.keys(projeto).length > 0) {
       const novaTabela = gerarTabela()
       setTabela(novaTabela)
+      
+      if(location.state && location.state.tela === 'pacotes'){
+        location.state = null
+        setSecaoAtual("PACOTES")
+      }
     }
   }, [projeto, atualizar])
 
@@ -87,13 +94,16 @@ function DetalhesProjeto() {
         nomeProjeto={projeto.nome_projeto}
         descricaoProjeto={projeto.descricao_projeto}
         liderProjeto={projeto.chefe_projeto}
+        progressoProjeto={projeto.progresso_projeto}
         DataProjetoIniciado={projeto.data_inicio_projeto}
         camposValidados={{
           tabela: tabela,
           horaValorProjeto: projeto.hora_valor_projeto,
           projeto: projeto
         }}
+        setAtualizar={setAtualizar}
       />
+
       <MenuSelecao
         opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
         secaoAtual={secaoAtual}
@@ -129,7 +139,7 @@ function DetalhesProjeto() {
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
           <Acompanhamento idProjeto={id} />
         </div>
-      )}
+      )}     
     </>
   )
 }

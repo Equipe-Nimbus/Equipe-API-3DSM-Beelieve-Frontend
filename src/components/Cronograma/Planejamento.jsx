@@ -12,8 +12,9 @@ import { FiPlus, FiMinus } from "react-icons/fi"
 
 function Planejamento({ idProjeto }) {
   const [cronograma, setCronograma] = useState({})
+  const [subProjetosEditaveis, setSubProjetosEditaveis] = useState([])
 
-  const { register, handleSubmit, control, setValue } = useForm({
+  const { register, handleSubmit, control, setValue, getValues } = useForm({
     defaultValues: {
       cronograma: cronograma.lista_cronograma,
     },
@@ -29,7 +30,6 @@ function Planejamento({ idProjeto }) {
     try {
       await axios.get(`/cronograma/${idProjeto}`).then((response) => {
         let cronogramaResgatado = response.data
-
         if (cronogramaResgatado.inicio_projeto) {
           let anoCronograma = Number(
             cronogramaResgatado.inicio_projeto.slice(0, 4),
@@ -44,7 +44,6 @@ function Planejamento({ idProjeto }) {
             mes.niveis.forEach((nivel) => {
               nivel.progresso_planejado =
                 String(nivel.progresso_planejado) + "%"
-              nivel.progresso_real = String(nivel.progresso_real) + "%"
             })
           })
         } else {
@@ -58,8 +57,29 @@ function Planejamento({ idProjeto }) {
 
         setCronograma(cronogramaResgatado)
         setValue("cronograma", cronogramaResgatado.lista_cronograma)
+        setSubProjetosEditaveis(checarNivelSubProjeto(cronogramaResgatado.lista_cronograma[0].niveis))
       })
     } catch (error) {}
+  }
+
+  const checarNivelSubProjeto = (subprojetos) => {
+    const subProjetosFiltrados = []
+
+    subprojetos.forEach((subprojeto) => {
+      if (subprojeto.tipo === 'nivelsubprojeto') {
+        subProjetosFiltrados.push(subprojeto.ordem_nivel)
+      } 
+      else if(subprojeto.tipo === 'subprojeto'){
+
+        const nivelSubProjeto = subprojeto.ordem_nivel
+        if(!subprojetos.some((subProjetoAnalisado) => subProjetoAnalisado !== subprojeto && subProjetoAnalisado.ordem_nivel.startsWith(nivelSubProjeto))){
+          subProjetosFiltrados.push(nivelSubProjeto)
+        }
+      }
+    })
+
+    //console.log("subprojetos alteraveis: ", subProjetosFiltrados)
+    return subProjetosFiltrados
   }
 
   useEffect(() => {
@@ -67,22 +87,74 @@ function Planejamento({ idProjeto }) {
   }, [])
 
   const blurPorcentagem = (valor, mes, nivel) => {
-    if (valor.slice(-1) !== "%") {
-      const regexNumeros = /^[-+]?\d+(\.\d+)?$/
-
-      if (!regexNumeros.test(valor)) {
-        setValue(
-          `cronograma[${mes}].niveis[${nivel}].progresso_planejado`,
-          "0%",
-        )
-      } else {
-        valor = valor + "%"
-        setValue(
-          `cronograma[${mes}].niveis[${nivel}].progresso_planejado`,
-          valor,
-        )
-      }
+    const regexNumeros = /^[-+]?\d+(\.\d+)?$/
+    if (valor.slice(-1) === "%") {
+      valor = valor.slice(0, -1)
     }
+
+    if (!regexNumeros.test(valor)) {
+      setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, "0%")
+    } else {
+        while (valor.length > 1 && valor[0] === "0") {
+          valor = valor.substring(1)
+        }
+
+      valor = valor + "%"
+      setValue(`cronograma[${mes}].niveis[${nivel}].progresso_planejado`, valor)
+    }
+  }
+
+  const calcularProgresso = (mes, nivel) => {
+    const ordemNivel = getValues(`cronograma[${mes}].niveis[${nivel}].ordem_nivel`)
+    const cronogramaAtual = getValues(`cronograma[${mes}]`)
+
+    if(ordemNivel.length > 3){
+      const nivelPai = ordemNivel.slice(0, 3)
+      const indexPai = cronogramaAtual.niveis.findIndex((subprojeto) => subprojeto.ordem_nivel === nivelPai)
+      
+      let contadorNiveisSubProjeto = 0
+      let progressoSomadoNiveis = 0
+      cronogramaAtual.niveis.forEach((nivel) => {
+        if(nivel.ordem_nivel.startsWith(nivelPai) && nivel.ordem_nivel !== nivelPai){
+          contadorNiveisSubProjeto++
+          progressoSomadoNiveis = progressoSomadoNiveis + Number(nivel.progresso_planejado.slice(0, -1))
+        }
+      })
+      
+      let progressoCalculado = (progressoSomadoNiveis / contadorNiveisSubProjeto)
+      if(Number.isInteger(progressoCalculado)){
+        progressoCalculado = String(progressoCalculado) + '%'
+      } else {
+        progressoCalculado = progressoCalculado.toFixed(2) + '%'
+      }
+
+      setValue(`cronograma[${mes}].niveis[${indexPai}].progresso_planejado`, progressoCalculado)
+    }
+
+    const indexProjeto = cronogramaAtual.niveis.findIndex((nivel) => nivel.tipo === 'projeto')
+    let contadorSubProjetos = 0
+    let progressoSomadoSubProjetos = 0
+    cronogramaAtual.niveis.forEach((subprojeto) => {
+      
+      if(subprojeto.ordem_nivel.length === 3){
+        contadorSubProjetos++
+        progressoSomadoSubProjetos = progressoSomadoSubProjetos + Number(subprojeto.progresso_planejado.slice(0, -1))
+      }
+    })
+
+    let progressoCalculado = (progressoSomadoSubProjetos / contadorSubProjetos)
+      if(Number.isInteger(progressoCalculado)){
+        progressoCalculado = String(progressoCalculado) + '%'
+      } else {
+        progressoCalculado = progressoCalculado.toFixed(2) + '%'
+      }
+    
+    setValue(`cronograma[${mes}].niveis[${indexProjeto}].progresso_planejado`, progressoCalculado)
+  }
+
+  const handleInput = (valor, mes, nivel) => {
+    blurPorcentagem(valor, mes, nivel)
+    calcularProgresso(mes, nivel)
   }
 
   const renderizarColunas = () => {
@@ -95,7 +167,7 @@ function Planejamento({ idProjeto }) {
 
   const renderizarLinhas = () => {
     return fields[0]?.niveis.map((nivel, indexNivel) => (
-      <tr key={indexNivel} className="even:bg-amber-100 odd:bg-blue-100">
+      <tr key={indexNivel} className={subProjetosEditaveis.includes(nivel.ordem_nivel) ? "" : ""}>
         {renderizarColunas().map((coluna, indexMes) => (
           <td key={indexMes} className="px-1 py-5 text-lg">
             <input
@@ -104,9 +176,10 @@ function Planejamento({ idProjeto }) {
                 `cronograma[${indexMes}].niveis[${indexNivel}].progresso_planejado`,
               )}
               onBlur={(e) =>
-                blurPorcentagem(e.target.value, indexMes, indexNivel)
+                handleInput(e.target.value, indexMes, indexNivel)
               }
-              className="text-center"
+              className={`text-center disabled:text-n40`}
+              disabled={!subProjetosEditaveis.includes(nivel.ordem_nivel)}
             />
           </td>
         ))}
@@ -121,14 +194,27 @@ function Planejamento({ idProjeto }) {
     if (cronograma.inicio_projeto) {
       const mesUltimoMes = ultimoMes.mes_cronograma.split(" ")[0]
       let anoUltimoMes = Number(ultimoMes.mes_cronograma.split(" ")[1])
-      
-      const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+
+      const mesesDoAno = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ]
 
       const indiceUltimoMes = mesesDoAno.indexOf(mesUltimoMes)
       let mesNovoMes = mesesDoAno[indiceUltimoMes + 1]
 
-      if(mesUltimoMes === 'Dezembro'){
-        mesNovoMes = 'Janeiro'
+      if (mesUltimoMes === "Dezembro") {
+        mesNovoMes = "Janeiro"
         anoUltimoMes++
       }
 
@@ -141,9 +227,7 @@ function Planejamento({ idProjeto }) {
       const novoCronograma = { ...cronograma }
       novoCronograma.lista_cronograma.push(novoMes)
       setCronograma(novoCronograma)
-
     } else {
-
       const novoMes = {
         mes_cronograma: `Mês ${ultimoMes.ordem_mes_cronograma + 1}`,
         ordem_mes_cronograma: ultimoMes.ordem_mes_cronograma + 1,
@@ -154,7 +238,6 @@ function Planejamento({ idProjeto }) {
       novoCronograma.lista_cronograma.push(novoMes)
       setCronograma(novoCronograma)
     }
-
   }
 
   const removerMes = () => {
@@ -169,7 +252,8 @@ function Planejamento({ idProjeto }) {
   }, [cronograma])
 
   const atualizarCronograma = async (data) => {
-    data.cronograma.forEach((mes) =>
+    data.cronograma.forEach((mes) => {
+      mes.mes_cronograma = mes.mes_cronograma.split(" ")[0]
       mes.niveis.forEach((nivel) => {
         if (nivel.progresso_planejado.slice(-1) === "%") {
           nivel.progresso_planejado = parseFloat(
@@ -178,8 +262,8 @@ function Planejamento({ idProjeto }) {
         } else {
           nivel.progresso_planejado = parseFloat(nivel.progresso_planejado)
         }
-      }),
-    )
+      })
+    })
 
     cronograma.lista_cronograma = data.cronograma
     //console.log("cronograma mudado: ", cronograma)
@@ -187,7 +271,11 @@ function Planejamento({ idProjeto }) {
     try {
       await axios.put("/cronograma/atualiza", cronograma).then((response) => {
         if (response.status === 200) {
-          Swal.fire("Planejamento salvo com sucesso!", "", "sucess")
+          Swal.fire({
+            title: "Planejamento salvo com sucesso!",
+            icon: "success",
+            confirmButtonColor: "#132431",
+          })
           // window.alert("Planejamento salvo com sucesso!")
         }
       })

@@ -1,10 +1,15 @@
+import React, {useState} from 'react';
 import * as XLSX from "xlsx";
 import Swal from 'sweetalert2'
+import { GrUploadOption } from 'react-icons/gr'
+
 
 function LerExcel({ niveisExcel, setniveisExcel }) {
+    const [arquivoSelecionado, setArquivoSelecionado] = useState(null)
 
     const handleFileUpload = (e) => {
-        const file = e.target.files[0];
+        const file = e.target.files[0]
+        setArquivoSelecionado(file)
         if (file) {
             const fileName = file.name;
             const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
@@ -73,13 +78,20 @@ function LerExcel({ niveisExcel, setniveisExcel }) {
     }
 
     return (
-        <div>
+        <div className='flex gap-2 items-center mb-5'>
+            <label className="relative inline-flex items-center space-x-2 px-4 py-2 bg-primary50 text-on-primary rounded-lg cursor-pointer">
+            <span className="text-lg font-semibold">Subir um arquivo</span>
             <input
                 type="file"
                 accept=".xlsx, .xls"
                 onChange={handleFileUpload}
-                className="bg-primary50 text-on-primary mb-5 flex items-center gap-0.5 rounded-[10px] p-2 text-lg font-semibold"
+                className="hidden"
             />
+            <GrUploadOption size='20px'/>
+            </label>
+            {arquivoSelecionado && (
+                <p className="text-base font-medium text-on-light">Arquivo selecionado: {arquivoSelecionado.name}</p>
+            )}
         </div>
     )
 }

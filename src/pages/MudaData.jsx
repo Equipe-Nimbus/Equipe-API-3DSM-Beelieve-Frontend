@@ -9,7 +9,7 @@ function MudaData() {
 	const handleSubmit = async (evento) => {
 		evento.preventDefault();
 		let data = {
-			data:dataNova
+			dataNova:dataNova
 		}
 		
 		try{

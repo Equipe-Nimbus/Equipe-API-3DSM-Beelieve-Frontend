@@ -146,6 +146,19 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
     setEstruturaDetalhes(valores)
   }
 
+  const blurHoraHomem = (index, valor) => {
+    while (valor.length > 1 && valor[0] === "0") {
+      valor = valor.substring(1)
+    }
+
+    setValue(`estruturaDetalhes[${index}].hora_homem`, valor)
+  }
+
+  const handleHoraHomem = (index, nivel, valor) => {
+    blurHoraHomem(index, valor)
+    handleOrcamento(index, nivel)
+  }
+
   useEffect(() => {
     setValue(`estruturaDetalhes`, estruturaDetalhes)
   }, [estruturaDetalhes])
@@ -168,7 +181,11 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
         .then((response) => {
           if (response.status === 200) {
             //console.log("resposta: ", response)
-            Swal.fire('Detalhes dos pacotes atualizados com sucesso!', '', 'sucess');
+            Swal.fire({
+              title: 'Detalhes dos pacotes salvos com sucesso!',
+              icon: 'success',
+              confirmButtonColor: "#132431"
+            });
             // window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
           } else {
@@ -180,7 +197,6 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
   }
 
   const statusInicio = projeto.data_inicio_projeto
-  console.log()
 
   return (
     <div>
@@ -197,12 +213,12 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
         <table className="mx-auto rounded px-16">
           <thead className="bg-primary98 p-10 text-base uppercase">
             <tr>
-              <th class="px-12 py-3">Nível</th>
-              <th class="px-12 py-3">Descrição</th>
-              <th class="px-12 py-3">Orçamento</th>
-              <th class="px-6 py-3">Hora Homem</th>
-              <th class="">Materiais</th>
-              <th class="px-12 py-3">Atribuição</th>
+              <th className="px-12 py-3">Nível</th>
+              <th className="pr-32 text-justify">Descrição</th>
+              <th className="pl-8 text-justify">Orçamento</th>
+              <th className="">Hora Homem</th>
+              <th className="pl-24 text-justify">Materiais</th>
+              <th className="px-10">Atribuição</th>
             </tr>
           </thead>
           <tbody>
@@ -211,7 +227,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                 <td className="px-4 py-3 text-lg font-semibold">
                   {linha.nivel}
                 </td>
-                <td className="font-regular text-lg">
+                <td className="font-regular text-lg pr-32">
                   {linha.nivel === "1" && linha.descricao}
 
                   {linha.nivel.length === 3 &&
@@ -227,7 +243,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                               subprojeto.id_sub_projeto === linha.id,
                           ),
                           nomeProjeto: projeto.nome_projeto,
-                          dataInicioProjeto: projeto.data_inicio_projeto
+                          dataInicioProjeto: projeto.data_inicio_projeto,
+                          idProjeto: projeto.id_projeto
                         }}
                       >
                         {linha.descricao}
@@ -246,7 +263,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                             subprojeto.id_nivel_sub_projeto === linha.id,
                         ),
                         nomeProjeto: projeto.nome_projeto,
-                        dataInicioProjeto: projeto.data_inicio_projeto
+                        dataInicioProjeto: projeto.data_inicio_projeto,
+                        idProjeto: projeto.id_projeto
                       }}
                     >
                       {linha.descricao}
@@ -254,7 +272,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                   )}
                 </td>
 
-                <td class="px-4">
+                <td class="pl-8">
                   <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].orcamento`}
                     {...register(`estruturaDetalhes[${index}].orcamento`)}
@@ -263,7 +281,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                     currency="BRL"
                     config={formatacaoDinheiro}
                     disabled
-                    className="text-center"
+                    className="text-justify disabled:text-n40"
                   />
                 </td>
 
@@ -274,8 +292,8 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                     {...register(`estruturaDetalhes[${index}].hora_homem`)}
                     defaultValue={linha.hora_homem}
                     type="number"
-                    onBlur={(e) => handleOrcamento(index, linha.nivel)}
-                    className="text-center"
+                    onBlur={(e) => handleHoraHomem(index, linha.nivel, e.target.value)}
+                    className="text-center disabled:text-n40"
                     disabled={
                       (linha.nivel.length === 3 &&
                         !subProjetosAcessiveis.some(
@@ -288,7 +306,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                   />
                 </td>
 
-                <td class="px-4">
+                <td className="pl-24">
                   <IntlCurrencyInput
                     name={`estruturaDetalhes[${index}].materiais`}
                     {...register(`estruturaDetalhes[${index}].materiais`)}
@@ -307,7 +325,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                       linha.nivel === "1"||
                       statusInicio
                     }
-                    className="text-center"
+                    className="text-justify disabled:text-n40"
                   />
                 </td>
                 <td class="break-all px-1">{}</td>

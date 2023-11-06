@@ -1,13 +1,17 @@
 import React from "react"
-import { useLocation, useParams } from "react-router"
-import { AiOutlineArrowLeft } from "react-icons/ai"
 import TabFormTarefas from "./TabFormTarefas"
 
+import { useLocation, useParams, useNavigate } from "react-router"
+
+import { AiOutlineArrowLeft } from "react-icons/ai"
+
+
 function NovaTarefa() {
+  const navigate = useNavigate()
   const { idTarefa } = useParams()
 
   const location = useLocation()
-  const { tipo_pai, subprojeto, nomeProjeto, dataInicioProjeto } = location.state
+  const { tipo_pai, subprojeto, nomeProjeto, dataInicioProjeto, idProjeto } = location.state
 
   let ordemSubProjeto = ""
   let nomeSubProjeto = ""
@@ -26,7 +30,7 @@ function NovaTarefa() {
   return (
     <>
       <button
-        onClick={() => window.history.back()}
+        onClick={() => navigate(`/projetos/${idProjeto}`, {state: {tela: "pacotes"}})}
         className="text-gray-50 ml-10 flex items-center font-semibold underline"
       >
         <AiOutlineArrowLeft className="mr-2" />
