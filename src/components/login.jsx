@@ -12,7 +12,7 @@ function Login() {
             alt="beelieveLogo"
             className="mb-4 mr-2 w-2/4"
           />
-          <img src={detalhe} alt="" className="w-full" />
+          <img src={detalhe} alt="" className="h-96" />
         </div>
         <form className="flex w-2/3 flex-col items-center justify-center p-4">
           <h2 className="text-gray-600 mb-4 text-center text-4xl font-extrabold">
