@@ -49,7 +49,7 @@ function CadastroUsuario() {
 
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate("/usuario")
+                        navigate("/usuarios")
                     }
                 })
             }

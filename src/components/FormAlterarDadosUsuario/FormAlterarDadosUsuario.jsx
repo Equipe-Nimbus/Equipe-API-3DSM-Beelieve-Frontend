@@ -105,7 +105,7 @@ function AlterarUsuario() {
 
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate("/usuario")
+                        navigate("/usuarios")
                     }
                 })
             }
@@ -131,7 +131,7 @@ function AlterarUsuario() {
             try {
                 await axios.put(`/usuario/deletar`, usuarioJson)
                 Swal.fire("Excluído com sucesso!", "", "success")
-                navigate("/usuario")
+                navigate("/usuarios")
             } catch (error) {
                 console.error("Erro ao excluir o usuário:", error)
             }
