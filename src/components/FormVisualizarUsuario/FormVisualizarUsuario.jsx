@@ -23,7 +23,7 @@ function FormVisualizarUsuario() {
                     <input
                         type="text"
                         className="w-1/2 rounded-md border border-n70 p-1"
-                        {...register("nomeUsuario")}
+                        defaultValue={usuario.nome}
                         disabled
                     />
                 </div>
@@ -36,7 +36,7 @@ function FormVisualizarUsuario() {
                     <input
                         type="text"
                         className="w-1/2 rounded-md border border-n70 p-1"
-                        {...register("emailUsuario")}
+                        defaultValue={usuario.email}
                         disabled
                     />
                 </div>
@@ -50,7 +50,7 @@ function FormVisualizarUsuario() {
                         mask="999.999.999-99"
                         maskChar=" "
                         className="w-1/2 rounded-md border border-n70 p-1"
-                        {...register("cpfUsuario")}
+                        defaultValue={usuario.cpf}
                         disabled
                     />
                 </div>
@@ -66,13 +66,9 @@ function FormVisualizarUsuario() {
                             mask="(99) 99999-9999"
                             maskChar="_"
                             className="w-1/2 rounded-md border border-n70 p-1"
-                            {...register("telefoneUsuario")}
+                            defaultValue={usuario.telefone}
+                            disabled
                         />
-                        {errors.telefoneUsuario && (
-                            <label className="text-sm font-light text-error">
-                                {errors.telefoneUsuario.message}
-                            </label>
-                        )}
                     </div>
                 </div>
                 <div className="justify-between flex-col">
@@ -82,14 +78,12 @@ function FormVisualizarUsuario() {
                             className="text-base font-medium text-on-light">
                             Departamento:
                         </label>
-                        <select className="w-1/2 border rounded border-n70 p-1" {...register("departamentoUsuario")}>
-                            <option disabled selected value="">Departamento</option>
-                            <option value="Departamento 1">Departamento 1</option>
-                            <option value="Departamento 2">Departamento 2</option>
-                            <option value="Departamento 3">Departamento 3</option>
-                            <option value="Departamento 4">Departamento 4</option>
-                            <option value="Departamento 5">Departamento 5</option>
-                        </select>
+                        <input
+                        type="text"
+                        className="w-1/2 rounded-md border border-n70 p-1"
+                        defaultValue={usuario.departamento}
+                        disabled
+                    />
                     </div>
                 </div>
                 <div className="mt-4 flex flex-col">
@@ -98,13 +92,12 @@ function FormVisualizarUsuario() {
                         className="text-base font-medium text-on-light">
                         Cargo:
                     </label>
-                    <select className="w-1/2 border rounded border-n70 p-1" name="cargoUsuario" required {...register("cargoUsuario", { required: true })}>
-                        <option disabled selected value="">Cargo</option>
-                        <option value="Gerente">Gerente</option>
-                        <option value="Engenheiro Chefe">Engenheiro Chefe</option>
-                        <option value="Lider de Pacote de Trabalho">Líder de Pacote de Trabalho</option>
-                        <option value="Analista">Analista</option>
-                    </select>
+                    <input
+                        type="text"
+                        className="w-1/2 rounded-md border border-n70 p-1"
+                        defaultValue={usuario.cargo}
+                        disabled
+                    />
                 </div>
             </div>
         </form>
