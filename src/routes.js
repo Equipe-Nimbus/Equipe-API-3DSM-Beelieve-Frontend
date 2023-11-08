@@ -3,6 +3,7 @@ import ListaProjeto from "./pages/ListaProjeto";
 import ListaUsuario from "./pages/ListaUsuario";
 import NovoProjeto from "./pages/NovoProjeto";
 import NovoUsuario from "./pages/NovoUsuario";
+import VisualizarUsuario from "./pages/VisualizarUsuario";
 
 import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto';
@@ -55,6 +56,9 @@ const router = [
             },
             {   path: "editar-informacoes/:idUsuario",
                 element: <FormAlterarDadosUsuario/>,
+            },
+            {   path: "visualizar-usuario/:idUsuario",
+                element: <VisualizarUsuario/>,
             },
         ]
     },
