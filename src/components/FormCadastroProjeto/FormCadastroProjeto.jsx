@@ -15,7 +15,7 @@ import { formatarEstrutura } from "../../utils/formatarEstrutura"
 import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 
 
-function FormCadastroProjeto() { 
+function FormCadastroProjeto() {
   const [niveisExcel, setniveisExcel] = useState({})
 
   const {
@@ -27,11 +27,11 @@ function FormCadastroProjeto() {
     defaultValues: {
       valorHora: 0,
       prazoProjeto: null
-      
+
     },
     resolver: yupResolver(schemaProjetoInicial),
   })
-  
+
   const navigate = useNavigate()
 
   const [tabelaWBS, setTabelaWBS] = useState([
@@ -41,7 +41,7 @@ function FormCadastroProjeto() {
     },
   ])
 
-  useEffect(() => {}, [tabelaWBS])
+  useEffect(() => { }, [tabelaWBS])
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
@@ -69,9 +69,9 @@ function FormCadastroProjeto() {
           confirmButtonColor: "#132431",
           allowOutsideClick: false,
           allowEscapeKey: false
-          
+
         }).then((result) => {
-          if(result.isConfirmed){
+          if (result.isConfirmed) {
             navigate("/projetos")
           }
         })
@@ -94,12 +94,12 @@ function FormCadastroProjeto() {
   }
 
   useEffect(() => {
-    if(niveisExcel.subProjeto){
+    if (niveisExcel.subProjeto) {
       setValue("nomeProjeto", niveisExcel.subProjeto[0].descricao)
       let tabela = [...tabelaWBS]
       tabela = niveisExcel.subProjeto
       //console.log("TABELA", tabela)
-      setTabelaWBS(tabela) 
+      setTabelaWBS(tabela)
     }
   }, [niveisExcel])
 
@@ -195,6 +195,18 @@ function FormCadastroProjeto() {
             {errors.prazoProjeto.message}
           </label>
         )}
+      </div>
+      <div className="mt-4 flex flex-col">
+        <label
+          htmlFor="prazoProjeto"
+          className="text-base font-medium text-on-light"
+        >
+          Atribuição
+        </label>
+        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" required {...register("listaUsuario", { required: true })}>
+          <option disabled selected value="">Engenheiro Chefe</option>
+          <option value="usuarios"></option>
+        </select>
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
