@@ -12,7 +12,7 @@ function NavBar() {
     <>
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
-          <Link to="/projetos"> 
+          <Link to="/projetos">
             {<img
               alt="Logo da Beelieve"
               src={Beelieve}
@@ -44,17 +44,19 @@ function NavBar() {
               </li>
             </ul>
           </div>
+          <Link to="/usuarios/visualizar">
           <div className="mb-5 flex gap-2">
-            <div className="flex h-[45px] w-[45px] content-center justify-center rounded-md border-2 border-on-bg22">
-              <LiaUserTieSolid color="#DADDE6" size={45} />
-            </div>
-            <div className="flex h-[50px] flex-col">
-              <p className="text-base font-semibold text-on-bg22">
-                Nome do usuário
-              </p>
-              <p className="font-regular text-sm text-on-bg22">Cargo</p>
-            </div>
+              <div className="flex h-[45px] w-[45px] content-center justify-center rounded-md border-2 border-on-bg22">
+                <LiaUserTieSolid color="#DADDE6" size={45} />
+              </div>
+              <div className="flex h-[50px] flex-col">
+                <p className="text-base font-semibold text-on-bg22">
+                  Nome do usuário
+                </p>
+                <p className="font-regular text-sm text-on-bg22">Cargo</p>
+              </div>
           </div>
+          </Link>
         </div>
         <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
           <BiLogOut color="#DADDE6" size={24} />

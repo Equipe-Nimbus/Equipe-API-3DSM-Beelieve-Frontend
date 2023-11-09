@@ -4,6 +4,7 @@ import ListaUsuario from "./pages/ListaUsuario";
 import NovoProjeto from "./pages/NovoProjeto";
 import NovoUsuario from "./pages/NovoUsuario";
 import VisualizarUsuario from "./pages/VisualizarUsuario";
+import FormVisualizarUsuario from "./components/FormVisualizarUsuario/FormVisualizarUsuario";
 
 import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto';
@@ -50,6 +51,9 @@ const router = [
         children: [
             {   path: "",
                 element: <ListaUsuario/>,
+            },
+            {   path: "visualizar",
+                element: <FormVisualizarUsuario/>,
             },
             {   path: "novo-usuario",
                 element: <NovoUsuario/>,

@@ -1,14 +1,45 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { useNavigate } from "react-router-dom"
-import InputMask from "react-input-mask";
-
 import axios from "../../services/axios"
+import Button from "../Button"
+import { useNavigate } from "react-router-dom"
 
 function FormVisualizarUsuario() {
+    const [usuario, setUsuario] = useState([])
+    const { idUsuario } = useParams()
+    const navigate = useNavigate()
+    const { setValue } = useForm({})
+
+    async function getUsuario() {
+        try {
+            await axios.get(`/usuario/listar/${idUsuario}`).then((response) => {
+                const data = response.data
+                setUsuario(data)
+                console.log(data)
+
+                setValue("nomeUsuario", data.nome);
+                setValue("emailUsuario", data.email);
+                setValue("senhaUsuario", data.senha);
+                setValue("cpfUsuario", data.cpf);
+                setValue("confirmarSenhaUsuario", data.senha);
+                if (data && data.telefone) {
+                    setValue("telefoneUsuario", data.telefone);
+                }
+                setValue("departamentoUsuario", data.departamento)
+                setValue("cargoUsuario", data.cargo);
+            })
+        } catch (erro) {
+            console.log(erro)
+        }
+    }
+
+    useEffect(() => {
+        getUsuario()
+    }, [])
+
     return (
-        <form onSubmit={handleSubmit(visualizarUsuario)}>
+        <div className="bg-bg100 m-5 rounded-md p-7 drop-shadow-md">
             <div className="mt-4 flex flex-col">
                 <h1
                     className="font-semibold text-2xl text-center">
@@ -46,9 +77,8 @@ function FormVisualizarUsuario() {
                         className="text-base font-medium text-on-light">
                         CPF:
                     </label>
-                    <InputMask
-                        mask="999.999.999-99"
-                        maskChar=" "
+                    <input
+                        type="text"
                         className="w-1/2 rounded-md border border-n70 p-1"
                         defaultValue={usuario.cpf}
                         disabled
@@ -62,9 +92,8 @@ function FormVisualizarUsuario() {
                             className="text-base font-medium text-on-light">
                             Telefone:
                         </label>
-                        <InputMask
-                            mask="(99) 99999-9999"
-                            maskChar="_"
+                        <input
+                            type="text"
                             className="w-1/2 rounded-md border border-n70 p-1"
                             defaultValue={usuario.telefone}
                             disabled
@@ -79,11 +108,11 @@ function FormVisualizarUsuario() {
                             Departamento:
                         </label>
                         <input
-                        type="text"
-                        className="w-1/2 rounded-md border border-n70 p-1"
-                        defaultValue={usuario.departamento}
-                        disabled
-                    />
+                            type="text"
+                            className="w-1/2 rounded-md border border-n70 p-1"
+                            defaultValue={usuario.departamento}
+                            disabled
+                        />
                     </div>
                 </div>
                 <div className="mt-4 flex flex-col">
@@ -100,7 +129,15 @@ function FormVisualizarUsuario() {
                     />
                 </div>
             </div>
-        </form>
+            <div className="mt-5 flex justify-end gap-5">
+                <Button
+                    texto="Sair"
+                    tipo="button"
+                    className="rounded-[10px] border-2 border-bg22 p-2 text-lg font-semibold text-bg22"
+                    onClick={() => navigate("/usuarios")}
+                />
+            </div>
+        </div>
     )
 }
 
