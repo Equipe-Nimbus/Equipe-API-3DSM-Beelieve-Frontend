@@ -43,7 +43,19 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
             // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
-    } catch (error) {}
+    } catch (error) {
+		if (error.response.status === 400) {
+			Swal.fire({
+			  title: error.response.data,
+			  icon: "error",
+		  	  confirmButtonColor: "#132431",
+              allowOutsideClick: false,
+              allowEscapeKey: false
+			})
+		} else {
+			Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
+		}	
+	}
   }
 
   const statusInicio = projeto.data_inicio_projeto
