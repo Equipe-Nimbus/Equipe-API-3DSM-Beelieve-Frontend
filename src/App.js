@@ -5,7 +5,7 @@ import Breadcrumbs from "./components/Breadcrumbs"
 
 function App() {
   return (
-    <div className="flex">
+    <div className="lg:flex">
       <NavBar />
       <div className="w-full">
         <Breadcrumbs/>
