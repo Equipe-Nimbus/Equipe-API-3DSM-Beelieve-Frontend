@@ -10,8 +10,11 @@ import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 import { formatarEstrutura } from "../../utils/formatarEstrutura"
 import axios from "../../services/axios"
 
-function FormValorHora({ tabela, projeto, setAtualizar}) {
+function FormValorHora({ tabela, projeto, setAtualizar }) {
   const [subProjetosAcessiveis, setSubProjetosAcessiveis] = useState([])
+  const [usuariosEngenheiro, setusuariosEngenheiro] = useState([])
+  const [usuariosLiderPacote, setusuariosLiderPacote] = useState([])
+  const [chefesProjeto, setchefesProjeto] = useState([])
   const [estruturaDetalhes, setEstruturaDetalhes] = useState(
     tabela.map((linha) => {
       return {
@@ -24,6 +27,36 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
       }
     }),
   )
+
+  const pegarChefesProjetos = (projeto) => {
+    const chefes = [];
+
+    // Adicionando chefe de projeto, se existir
+    if (projeto.chefe_projeto) {
+      chefes.push(projeto.chefe_projeto);
+    } else {
+      chefes.push('');
+    }
+
+    // Adicionando chefes de subprojetos e nivel_sub_projeto, se existirem
+    if (projeto.sub_projetos && projeto.sub_projetos.length > 0) {
+      projeto.sub_projetos.forEach((subProjeto) => {
+        if (subProjeto.chefe_sub_projeto) {
+          chefes.push(subProjeto.chefe_sub_projeto);
+        } else {
+          chefes.push('');
+        }
+        // Adicione uma string vazia para nivel_sub_projeto
+        if (subProjeto.nivel_sub_projeto && subProjeto.nivel_sub_projeto.length > 0) {
+          subProjeto.nivel_sub_projeto.forEach((nivelSubProjeto) => {
+            chefes.push('');
+          });
+        }
+      });
+    }
+
+    setchefesProjeto(chefes);
+  }
 
   const checarNivelSubProjeto = (subprojetos) => {
     const subProjetosFiltrados = []
@@ -38,14 +71,37 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
       }
     })
 
-    //console.log("subprojetos alteraveis: ", subProjetosFiltrados)
+    console.log("subprojetos alteraveis: ", projeto)
 
     setSubProjetosAcessiveis(subProjetosFiltrados)
   }
 
+  async function getUsuariosLista() {
+    try {
+      await axios.get(`/usuario/listar/atribuicao`).then((response) => {
+        const data = response.data
+
+        setusuariosEngenheiro(data.EngenheirosChefe)
+        setusuariosLiderPacote(data.LideresPacotes)
+      })
+    } catch (erro) {
+      console.log(erro)
+    }
+  }
+
   useEffect(() => {
+    getUsuariosLista()
     checarNivelSubProjeto(projeto.sub_projetos)
+    pegarChefesProjetos(projeto)
   }, [])
+
+  useEffect(() => {
+    // Atualiza os valores dos selects usando o estado chefesProjeto
+    fields.forEach((linha, index) => {
+      const novoValor = chefesProjeto[index]; // Obtém o novo valor do estado chefesProjeto
+      setValue(`estruturaDetalhes[${index}].atribuicao`, novoValor); // Atualiza o valor do select no índice correspondente
+    });
+  }, [chefesProjeto]); // Executa quando chefesProjeto muda
 
   const { register, handleSubmit, control, setValue, getValues } = useForm({
     defaultValues: {
@@ -69,10 +125,10 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
     setValue(`valorHora`, valor)
   }
 
-  const handleTrocaValorHora = () =>{
+  const handleTrocaValorHora = () => {
     const valorHora = getValues(`valorHora`)
     const pacotes = getValues(`estruturaDetalhes`)
-    
+
     pacotes.forEach((pacote, index) => {
       setValue(`estruturaDetalhes[${index}].orcamento`, (pacote.hora_homem * valorHora) + pacote.materiais)
     })
@@ -170,10 +226,10 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
     projeto.hora_humano_total = parseFloat(detalhesPacotesPreenchidos[0].hora_homem)
     projeto.materiais_projeto = detalhesPacotesPreenchidos[0].materiais
     projeto.hora_valor_projeto = data.valorHora
-    
+
     const projetoFormatado = formatarEstrutura(projeto, detalhesPacotesPreenchidos)
 
-    //console.log(projetoFormatado)
+    console.log(detalhesPacotesPreenchidos)
 
     try {
       await axios
@@ -193,7 +249,7 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
             // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const statusInicio = projeto.data_inicio_projeto
@@ -322,13 +378,44 @@ function FormValorHora({ tabela, projeto, setAtualizar}) {
                           (subprojeto) =>
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
-                      linha.nivel === "1"||
+                      linha.nivel === "1" ||
                       statusInicio
                     }
                     className="text-justify disabled:text-n40"
                   />
                 </td>
-                <td class="break-all px-1">{}</td>
+                <td class="break-all px-1">
+                  {(
+                    ((linha.nivel).split('.').length - 1) != 2
+                  ) && (
+                      <select className="text-justify disabled:text-n40"
+                        name={`estruturaDetalhes[${index}].atribuicao`}
+                        {...register(`estruturaDetalhes[${index}].atribuicao`)}
+                      >
+                        {linha.nivel === "1" ? (
+                          
+                            <option value=''>Engenheiro chefe</option>
+                        ) : (
+                            <option value=''>Líder de Pacote</option>
+                        )}
+
+                        {linha.nivel === "1" ? (
+                          usuariosEngenheiro.map((usuario, contador) => (
+                            <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
+                              {usuario.nome}
+                            </option>
+                          ))
+                        ) : (
+                          usuariosLiderPacote.map((usuario, contador) => (
+                            <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
+                              {usuario.nome}
+                            </option>
+                          ))
+                        )}
+
+                      </select>
+                    )}
+                </td>
               </tr>
             ))}
           </tbody>
