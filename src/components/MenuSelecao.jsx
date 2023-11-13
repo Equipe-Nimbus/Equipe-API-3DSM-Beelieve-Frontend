@@ -22,8 +22,8 @@ function MenuSelecao({ opcoes, secaoAtual, mudarSecao }) {
   }
 
   return (
-    <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
-      <ul className="mx-36 flex gap-20 text-lg text-on-light ">
+    <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md overflow-x-auto">
+      <ul className="flex gap-10 text-lg text-on-light md:justify-center lg:gap-32 lg:mx-10">
         {gerarOpcoes(opcoes)}
       </ul>
     </div>

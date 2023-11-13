@@ -117,7 +117,7 @@ function FormCadastroProjeto() {
         <input
           type="text"
           id="nomeProjeto"
-          className="w-1/2 rounded-md border border-n70 p-1"
+          className="rounded-md border border-n70 p-1 lg:w-1/2"
           {...register("nomeProjeto")}
           onBlur={(e) => {
             handlerBlur(e)
@@ -141,7 +141,7 @@ function FormCadastroProjeto() {
         </label>
         <input
           type="text"
-          className="w-1/2 rounded-md border border-n70 p-1"
+          className="rounded-md border border-n70 p-1 lg:w-1/2"
           {...register("descricaoProjeto")}
         />
         {errors?.descricaoProjeto && (
@@ -163,7 +163,7 @@ function FormCadastroProjeto() {
         <IntlCurrencyInput
           type="text"
           {...register("valorHora")}
-          className="w-1/2 rounded-md border border-n70 p-1"
+          className="rounded-md border border-n70 p-1 lg:w-1/2"
           currency="BRL"
           config={formatacaoDinheiro}
           onChange={handleInputDinheiro}
@@ -184,7 +184,7 @@ function FormCadastroProjeto() {
         <input
           type="number"
           min={0}
-          className="w-1/2 rounded-md border border-n70 p-1"
+          className="rounded-md border border-n70 p-1 lg:w-1/2"
           {...register("prazoProjeto")}
         />
         {errors?.prazoProjeto && (
@@ -196,7 +196,7 @@ function FormCadastroProjeto() {
           </label>
         )}
       </div>
-      <div className="ml-5 mt-5">
+      <div className="mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
         <TabelaWbs
           tabelaWBS={tabelaWBS}

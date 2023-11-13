@@ -189,21 +189,44 @@ function VisaoGeral({
       <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
       <hr className="border-n90" />
 
-      <div className="my-3 flex justify-between">
+      <div className={`my-3 block ${projetoNaoIniciado? "lg:flex lg:justify-between" : ""}`}>
+        <div>
         <div className="flex max-w-2xl flex-col gap-2">
           <h3 className="text-2xl font-medium text-complementary-20">
             {nomeProjeto}
           </h3>
           <p className="text-n20">{descricaoProjeto}</p>
         </div>
-        <div className="flex flex-col gap-5">
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20 lg:mt-5">
+          <span className="font-semibold text-complementary-20">
+            Líder do projeto:
+          </span>
+          <span>{liderProjeto? liderProjeto : "Não atribuído"}</span>
+        </span>
+        <br />
+        {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span>
+        <br />
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span> */}
+        </div>
+        
+        {<div className="flex flex-col gap-2 mt-5">
           {projetoNaoIniciado && (
             <>
               <Button
                 texto="Iniciar projeto"
                 iconeOpcional={BsPlayFill}
                 iconeTamanho="20px"
-                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+                className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
                 onClick={handleIniciarProjetoClick}
               />
               <Button
@@ -211,46 +234,27 @@ function VisaoGeral({
                 iconeOpcional={BsPlayFill}
                 iconeTamanho="20px"
                 onClick={handleExcluirProjetoClick}
-                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
-              />
+                className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
+              />             
             </>
           )}
           {!projetoNaoIniciado && (
-            <div className="mr-96 flex items-center gap-1">
-              <span className="text-2xl">
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-complementary-20 font-medium lg:text-xl">
                 Progresso:{" "}
-                <span className="text-2xl text-complementary-20">{`${progressoProjeto}%`}</span>{" "}
+                <span className="text-n20 font-normal lg:text-xl">{`${progressoProjeto}%`}</span>{" "}
               </span>
               <progress
                 value={progressoProjeto}
                 max={100}
-                className="h-2 rounded bg-complementary-20"
+                className="h-2 w-1/2 md:w-40"
               ></progress>
             </div>
           )}
-        </div>
+        </div>}
       </div>
 
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Líder do projeto:
-        </span>
-        <span>{liderProjeto? liderProjeto : "Não atribuído"}</span>
-      </span>
-      <br />
-      {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Info Relevante:
-        </span>
-        <span>{}</span>
-      </span>
-      <br />
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Info Relevante:
-        </span>
-        <span>{}</span>
-      </span> */}
+      
       <hr className="border-n90 my-4" />
       <CriarExcel projeto={projeto}/>
     </div>
