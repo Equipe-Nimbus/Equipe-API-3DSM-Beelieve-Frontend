@@ -105,8 +105,35 @@ function ListaUsuario() {
 				onClick={() => navigate("/usuarios/novo-usuario")}
 			/>
 			<hr className="border-n90"></hr>
+
+			<details className="cursor-pointer my-5 text-n40 font-medium lg:hidden">
+				<summary>Filtros</summary>
+				<form
+					className="flex flex-col mx-5 gap-4 my-5" onSubmit={(e) => { getUsuarioFiltro(e) }}
+				>
+					<input placeholder="Nome:" className="md:w-1/2 rounded-md border border-n70 p-0.5 pl-2" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+					<select className="md:w-1/2 rounded-md border border-n70 p-0.5" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
+						<option selected value="">Cargo</option>
+						<option value="Gerente">Gerente</option>
+						<option value="EngenheiroChefe">Engenheiro Chefe</option>
+						<option value="LiderDePacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+						<option value="Analista">Analista</option>
+					</select>
+					<select className="md:w-1/2 rounded-md border border-n70 p-0.5" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }}>
+						<option selected value="">Departamento</option>
+						<option value="Departamento 1">Departamento 1</option>
+						<option value="Departamento 2">Departamento 2</option>
+						<option value="Departamento 3">Departamento 3</option>
+						<option value="Departamento 4">Departamento 4</option>
+						<option value="Departamento 5">Departamento 5</option>
+					</select>
+
+					<button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter/>Filtrar</button>
+				</form>
+			</details>
+
 			<form
-				className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getUsuarioFiltro(e) }}
+				className="hidden lg:flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getUsuarioFiltro(e) }}
 			>
 				<input placeholder="Nome:" className="w-64 rounded-md border border-n70 p-0.5 pl-2" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
 				<select className="w-48 rounded-md border border-n70 p-0.5" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>

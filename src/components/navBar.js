@@ -15,7 +15,6 @@ function NavBar() {
     setOpcoesMobile(!opcoesMobile)
   }
 
-  console.log(opcoesMobile)
   return (
     <>
       <aside className={`bg-bg22 p-2 ${opcoesMobile ? "h-screen block top-0 duration-300 z-50 w-full" : "h-16 duration-300 w-full"}

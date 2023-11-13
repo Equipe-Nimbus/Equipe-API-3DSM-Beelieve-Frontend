@@ -101,14 +101,28 @@ function ListaProjeto() {
           onClick={() => navigate("/projetos/novo-projeto")}
         />
         <hr className="border-n90"></hr>
+        
+        <details className="cursor-pointer my-5 text-n40 font-medium lg:hidden">
+          <summary>Filtros</summary>
+          <form
+            className="flex flex-col mx-5 gap-4 my-5 " onSubmit={(e) => { getProdutoFiltro(e) }}
+          >
+            <input className="md:w-1/2 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+            <input className="md:w-1/2 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
+
+            <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter/>Filtrar</button>
+          </form>
+        </details>
+        
         <form
-          className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
+          className="hidden lg:flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
         >
           <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
           <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
 
           <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter/>Filtrar</button>
         </form>
+        
         <div className="mx-10 flex flex-row flex-wrap gap-10">
           {projetos.map((projeto, index) => (
             <CardProjeto
