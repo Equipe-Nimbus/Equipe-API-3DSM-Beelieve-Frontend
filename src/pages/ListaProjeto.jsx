@@ -48,7 +48,7 @@ function ListaProjeto() {
     //console.log("Pagina Mudada: " + paginaMudada)
     let requisicao = montaRequisicaoFiltragem()
     setPagina(paginaMudada)
-    requisicao = requisicao + `&page=${paginaMudada}&size=10`
+    requisicao = requisicao + `&page=${paginaMudada}&size=9`
     //console.log("Requisição: " + requisicao)
     try {
       await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
@@ -63,7 +63,7 @@ function ListaProjeto() {
   async function getProdutoFiltro(evento) {
     evento.preventDefault()
     let requisicao = montaRequisicaoFiltragem()
-    requisicao = requisicao + `&page=0&size=10`
+    requisicao = requisicao + `&page=0&size=9`
     //console.log("Requisição: " + requisicao)
     try {
       await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
@@ -79,7 +79,7 @@ function ListaProjeto() {
 
   async function getProjetos() {
     try {
-      await axios.get("/projeto/lista/paginada?page=0&size=10").then((response) => {
+      await axios.get("/projeto/lista/paginada?page=0&size=9").then((response) => {
         //console.log(response)
         const data = response.data.content
         setProjetos(data)
