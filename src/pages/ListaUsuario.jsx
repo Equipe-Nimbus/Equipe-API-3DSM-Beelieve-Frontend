@@ -155,33 +155,36 @@ function ListaUsuario() {
 				<button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter/>Filtrar</button>
 			</form>
 			
-			<div className="mx-10 flex flex-col gap-20 overflow-x-auto pb-5">
+			<div className="flex flex-col gap-20 overflow-x-auto pb-5">
 				<table className="w-12/12">
-					<thead className="bg-primary98 p-10 text-base uppercase text-center">
-						<tr>
-							<th className="w-2/12 py-3">Matricula</th>
-							<th className="w-4/12 py-3 text-left">Nome</th>
-							<th className="w-4/12 py-3 text-left">Cargo</th>
-							<th className="w-2/12 py-3">Departamento</th>	
+					<thead className="bg-primary98 text-base uppercase text-center block md:p-10 md:table-header-group">
+						<tr className="hidden md:table-row">
+							<th className="w-2/12 py-3 block md:table-cell">Matricula</th>
+							<th className="w-4/12 py-3 block md:table-cell md:text-left">Nome</th>
+							<th className="w-4/12 py-3 block md:table-cell md:text-left">Cargo</th>
+							<th className="w-2/12 py-3 block md:table-cell md:pr-2">Departamento</th>	
 						</tr>
 					</thead>
-					<tbody>
+					<tbody className="block md:table-row-group">
 						{usuarios.map((linha, index) => (
-							<tr key={index} className="border-b border-n90">
-								<td className="py-3 text-lg font-semibold text-center">
+							<tr key={index} className="block mr-4 border border-n70 even:bg-primary98 odd:bg-bg100 mb-0.5 md:table-row md:border-b md:border-t-0 md:border-x-0 md:even:bg-bg100">
+								<td className="text-lg font-semibold block relative px-2 border-b md:hidden">
+									{`Matrícula ${linha.id_usuario}`}
+								</td>
+								<td className="text-lg font-semibold hidden relative px-2 md:table-cell md:py-3 md:text-center md:border-none">
 									{linha.id_usuario}
 								</td>
-								<td className="text-lg text-left underline underline-offset-4 decoration-n70">
+								<td className="text-lg font-medium block border-b border-n40 relative px-2 md:table-cell md:text-left md:px-0 md:border-none">
 									<Link
 										to={`/usuarios/editar-informacoes/${linha.id_usuario}`}
 									>
 										{linha.nome}
 									</Link>
 								</td>
-								<td className="text-lg text-left">
+								<td className="text-lg block border-b border-n40 relative px-2 md:table-cell md:text-left md:px-0 md:border-none">
 									{linha.cargo}
 								</td>
-								<td className="text-lg text-center">
+								<td className="text-lg block border-b border-n40 relative px-2 md:table-cell md:text-center md:border-none">
 									{linha.departamento}
 								</td>
 								

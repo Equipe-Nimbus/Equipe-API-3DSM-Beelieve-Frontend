@@ -168,7 +168,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="text"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             id="nomeUsuario"
                             {...register(`nomeUsuario`)}
                         />
@@ -190,7 +190,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="text"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("emailUsuario")}
                         />
                         {errors.emailUsuario && (
@@ -211,7 +211,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="password"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("senhaUsuario")}
                         />
                         {errors.senhaUsuario && (
@@ -231,7 +231,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="password"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("confirmarSenhaUsuario")}
                         />
                         {errors.confirmarSenhaUsuario && (
@@ -253,7 +253,7 @@ function AlterarUsuario() {
                         <InputMask
                             mask="(99) 99999-9999"
                             maskChar="_"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("telefoneUsuario")}
                         />
                         {errors.telefoneUsuario && (
