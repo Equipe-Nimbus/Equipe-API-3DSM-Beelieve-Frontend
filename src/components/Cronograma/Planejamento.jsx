@@ -290,7 +290,7 @@ function Planejamento({ idProjeto }) {
         Avanço planejado
       </h1>
       <hr className="border-n90"></hr>
-      <form onSubmit={handleSubmit(atualizarCronograma)}>
+      <form onSubmit={handleSubmit(atualizarCronograma)} className="overflow-x-auto">
         <div className="ml-5 mt-5 flex justify-start">
           <table className="mt-5 text-left">
             <thead className="bg-primary98 p-10 text-base uppercase">
@@ -313,7 +313,7 @@ function Planejamento({ idProjeto }) {
             </tbody>
           </table>
 
-          <div className="max-w-6xl overflow-x-auto ">
+          <div className="max-w-6xl md:overflow-x-auto">
             <table className="mt-5 text-left">
               <thead className="bg-primary98 p-10 text-base uppercase">
                 <tr>{renderizarColunas()}</tr>

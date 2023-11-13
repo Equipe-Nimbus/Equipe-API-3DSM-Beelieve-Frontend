@@ -50,7 +50,7 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
 
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
-      <div className="mx-5 mb-2 flex items-center justify-between">
+      <div className="mx-5 mb-2 flex flex-col gap-2 items-center justify-between md:flex-row md:gap-0">
         <h3 className="text-xl font-semibold text-on-light">
           Visualizar/Editar
         </h3>

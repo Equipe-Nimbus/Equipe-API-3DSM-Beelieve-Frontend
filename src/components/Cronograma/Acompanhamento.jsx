@@ -72,7 +72,7 @@ function Acompanhamento({ idProjeto }) {
   
   return (
     <div>
-      <div className="mx-5 mb-2 flex items-center justify-between">
+      <div className="mx-5 mb-2 flex flex-col gap-2 items-center justify-between md:flex-row md:gap-0">
         <h3 className="text-xl font-semibold text-on-light">
           Visualizar/Editar
         </h3>
