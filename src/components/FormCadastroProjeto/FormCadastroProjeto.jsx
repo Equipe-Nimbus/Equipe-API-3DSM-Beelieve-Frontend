@@ -215,7 +215,10 @@ function FormCadastroProjeto() {
         >
           Atribuição
         </label>
-        
+        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" required {...register("listaUsuario", { required: true })}>
+          <option disabled selected value="">Engenheiro Chefe</option>
+          <option value="usuarios"></option>
+        </select>
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
