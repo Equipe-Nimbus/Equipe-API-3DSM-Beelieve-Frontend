@@ -112,7 +112,19 @@ function AlterarUsuario() {
             else {
                 Swal.fire('Erro ao realizar a alteração do usuário :(', '', 'error');
             }
-        })
+        }).catch(error => {
+			if (error.response.status === 400) {
+				Swal.fire({
+			  		title: error.response.data,
+			  		icon: "error",
+		  	  		confirmButtonColor: "#132431",
+              		allowOutsideClick: false,
+              		allowEscapeKey: false
+				})
+			} else {
+				Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
+			}	
+  		})
     }
 
     const handleExcluirUsuarioClick = async () => {

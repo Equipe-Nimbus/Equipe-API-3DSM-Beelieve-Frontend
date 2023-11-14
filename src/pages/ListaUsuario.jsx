@@ -112,8 +112,8 @@ function ListaUsuario() {
 				<select className="w-48 rounded-md border border-n70 p-0.5" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
 					<option selected value="">Cargo</option>
 					<option value="Gerente">Gerente</option>
-					<option value="EngenheiroChefe">Engenheiro Chefe</option>
-					<option value="LiderDePacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+					<option value="Engenheiro_Chefe">Engenheiro Chefe</option>
+					<option value="Lider_de_Pacote_de_Trabalho">Líder de Pacote de Trabalho</option>
 					<option value="Analista">Analista</option>
 				</select>
 				<select className="w-48 rounded-md border border-n70 p-0.5" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }}>

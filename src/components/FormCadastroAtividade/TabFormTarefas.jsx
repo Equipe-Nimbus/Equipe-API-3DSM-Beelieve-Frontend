@@ -10,6 +10,11 @@ import schemaInsercaoAtividade from "./validation"
 import Button from "../Button"
 import axios from "../../services/axios"
 
+const removeZerosAEsquerda = (valor) => {
+  // Remove zeros à esquerda usando expressão regular
+  return valor.replace(/^0+/, '');
+};
+
 const TabFormTarefas = ({
   listaTarefas,
   tipoPai,
@@ -153,6 +158,7 @@ const TabFormTarefas = ({
         : null,
       })
     })
+    
 
     return listaTarefas
   }
@@ -313,7 +319,11 @@ const TabFormTarefas = ({
                       type="number"
                       {...register(`tarefas[${index}].peso`)}
                       defaultValue={tarefa.peso}
-                      onBlur={(e) => handlePeso(index, e.target.value)}
+                      onBlur={(e) => {
+                        // Remove zeros à esquerda antes de atualizar o valor
+                        e.target.value = removeZerosAEsquerda(e.target.value);
+                        handlePeso(index, e.target.value);
+                      }}
                       min={0}
                       className="w-1/2 text-center border border-n90 rounded disabled:text-n40"
                       disabled={tarefa.status === true}
