@@ -41,6 +41,7 @@ function DetalhesProjeto() {
       orcamento: projeto.orcamento_projeto,
       hora_homem: projeto.hora_humano_total,
       materiais: projeto.materiais_projeto,
+      atribuicao: projeto.chefe_projeto,
     })
 
     projeto.sub_projetos?.forEach((subprojeto) => {
@@ -51,6 +52,7 @@ function DetalhesProjeto() {
         orcamento: subprojeto.orcamento_sub_projeto,
         materiais: subprojeto.materiais_sub_projeto,
         hora_homem: subprojeto.hora_humano_sub_projeto,
+        atribuicao: subprojeto.chefe_sub_projeto,
       })
 
       subprojeto.nivel_sub_projeto?.forEach((nivel) => {
