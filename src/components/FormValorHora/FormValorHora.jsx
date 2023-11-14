@@ -98,10 +98,24 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   useEffect(() => {
     // Atualiza os valores dos selects usando o estado chefesProjeto
     fields.forEach((linha, index) => {
-      const novoValor = chefesProjeto[index]; // Obtém o novo valor do estado chefesProjeto
-      setValue(`estruturaDetalhes[${index}].atribuicao`, novoValor); // Atualiza o valor do select no índice correspondente
+      const nomeChefeProjeto = chefesProjeto[index]; // Obtém o nome do estado chefesProjeto
+
+      // Procura pelo nome do chefe de projeto nos arrays de usuários
+      const usuarioEncontradoEngenheiro = usuariosEngenheiro.find(usuario => usuario.nome === nomeChefeProjeto);
+      const usuarioEncontradoLiderPacote = usuariosLiderPacote.find(usuario => usuario.nome === nomeChefeProjeto);
+
+      // Verifica se o usuário foi encontrado e atualiza o valor do select com o ID correspondente
+      if (usuarioEncontradoEngenheiro) {
+        setValue(`estruturaDetalhes[${index}].atribuicao`, usuarioEncontradoEngenheiro.id_usuario);
+      } else if (usuarioEncontradoLiderPacote) {
+        setValue(`estruturaDetalhes[${index}].atribuicao`, usuarioEncontradoLiderPacote.id_usuario);
+      } else {
+        // Se nenhum usuário for encontrado, você pode manipular isso de acordo com a sua lógica
+        // Por exemplo, definir um valor padrão para `novoValor` ou lidar com a situação de outra forma
+      }
     });
-  }, [chefesProjeto]); // Executa quando chefesProjeto muda
+  }, [chefesProjeto, usuariosEngenheiro, usuariosLiderPacote]); // Executa quando chefesProjeto, usuariosEngenheiro ou usuariosLiderPacote mudam
+
 
   const { register, handleSubmit, control, setValue, getValues } = useForm({
     defaultValues: {
@@ -393,10 +407,10 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                         {...register(`estruturaDetalhes[${index}].atribuicao`)}
                       >
                         {linha.nivel === "1" ? (
-                          
-                            <option value=''>Engenheiro chefe</option>
+
+                          <option value=''>Engenheiro chefe</option>
                         ) : (
-                            <option value=''>Líder de Pacote</option>
+                          <option value=''>Líder de Pacote</option>
                         )}
 
                         {linha.nivel === "1" ? (
