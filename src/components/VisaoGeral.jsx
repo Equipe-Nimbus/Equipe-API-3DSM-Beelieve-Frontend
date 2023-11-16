@@ -184,77 +184,202 @@ function VisaoGeral({
     setProjetoNaoIniciado(!DataProjetoIniciado)
   }, [DataProjetoIniciado])
 
-  return (
-    <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
-      <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
-      <hr className="border-n90" />
+  if (cargoUsuario === 'Gerente') {
+    return (
+      <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
+        <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
+        <hr className="border-n90" />
 
-      <div className="my-3 flex justify-between">
-        <div className="flex max-w-2xl flex-col gap-2">
-          <h3 className="text-2xl font-medium text-complementary-20">
-            {nomeProjeto}
-          </h3>
-          <p className="text-n20">{descricaoProjeto}</p>
+        <div className="my-3 flex justify-between">
+          <div className="flex max-w-2xl flex-col gap-2">
+            <h3 className="text-2xl font-medium text-complementary-20">
+              {nomeProjeto}
+            </h3>
+            <p className="text-n20">{descricaoProjeto}</p>
+          </div>
+          <div className="flex flex-col gap-5">
+            {projetoNaoIniciado && (
+              <>
+                <Button
+                  texto="Iniciar projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+                  onClick={handleIniciarProjetoClick}
+                />
+                <Button
+                  texto="Excluir projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  onClick={handleExcluirProjetoClick}
+                  className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
+                />
+              </>
+            )}
+            {!projetoNaoIniciado && (
+              <div className="mr-96 flex items-center gap-1">
+                <span className="text-2xl">
+                  Progresso:{" "}
+                  <span className="text-2xl text-complementary-20">{`${progressoProjeto}%`}</span>{" "}
+                </span>
+                <progress
+                  value={progressoProjeto}
+                  max={100}
+                  className="h-2 rounded bg-complementary-20"
+                ></progress>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-5">
-          {projetoNaoIniciado && (
-            <>
-              <Button
-                texto="Iniciar projeto"
-                iconeOpcional={BsPlayFill}
-                iconeTamanho="20px"
-                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-                onClick={handleIniciarProjetoClick}
-              />
-              <Button
-                texto="Excluir projeto"
-                iconeOpcional={BsPlayFill}
-                iconeTamanho="20px"
-                onClick={handleExcluirProjetoClick}
-                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
-              />
-            </>
-          )}
-          {!projetoNaoIniciado && (
-            <div className="mr-96 flex items-center gap-1">
-              <span className="text-2xl">
-                Progresso:{" "}
-                <span className="text-2xl text-complementary-20">{`${progressoProjeto}%`}</span>{" "}
-              </span>
-              <progress
-                value={progressoProjeto}
-                max={100}
-                className="h-2 rounded bg-complementary-20"
-              ></progress>
-            </div>
-          )}
-        </div>
+
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Líder do projeto:
+          </span>
+          <span>{liderProjeto ? liderProjeto : "Não atribuído"}</span>
+        </span>
+        <br />
+        {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span>
+        <br />
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span> */}
+        <hr className="border-n90 my-4" />
+        <CriarExcel projeto={projeto} />
       </div>
+    )
+  }
 
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Líder do projeto:
+  else if (cargoUsuario === 'EngenheiroChefe') {
+    return (
+      <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
+        <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
+        <hr className="border-n90" />
+
+        <div className="my-3 flex justify-between">
+          <div className="flex max-w-2xl flex-col gap-2">
+            <h3 className="text-2xl font-medium text-complementary-20">
+              {nomeProjeto}
+            </h3>
+            <p className="text-n20">{descricaoProjeto}</p>
+          </div>
+          <div className="flex flex-col gap-5">
+            {projetoNaoIniciado && (
+              <>
+                <Button
+                  texto="Iniciar projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+                  onClick={handleIniciarProjetoClick}
+                />
+              </>
+            )}
+            {!projetoNaoIniciado && (
+              <div className="mr-96 flex items-center gap-1">
+                <span className="text-2xl">
+                  Progresso:{" "}
+                  <span className="text-2xl text-complementary-20">{`${progressoProjeto}%`}</span>{" "}
+                </span>
+                <progress
+                  value={progressoProjeto}
+                  max={100}
+                  className="h-2 rounded bg-complementary-20"
+                ></progress>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Líder do projeto:
+          </span>
+          <span>{liderProjeto ? liderProjeto : "Não atribuído"}</span>
         </span>
-        <span>{liderProjeto? liderProjeto : "Não atribuído"}</span>
-      </span>
-      <br />
-      {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Info Relevante:
+        <br />
+        {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
         </span>
-        <span>{}</span>
-      </span>
-      <br />
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Info Relevante:
+        <br />
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span> */}
+        <hr className="border-n90 my-4" />
+        <CriarExcel projeto={projeto} />
+      </div>
+    )
+  }
+
+  else {
+    return (
+      <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
+        <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
+        <hr className="border-n90" />
+
+        <div className="my-3 flex justify-between">
+          <div className="flex max-w-2xl flex-col gap-2">
+            <h3 className="text-2xl font-medium text-complementary-20">
+              {nomeProjeto}
+            </h3>
+            <p className="text-n20">{descricaoProjeto}</p>
+          </div>
+          <div className="flex flex-col gap-5">
+            {!projetoNaoIniciado && (
+              <div className="mr-96 flex items-center gap-1">
+                <span className="text-2xl">
+                  Progresso:{" "}
+                  <span className="text-2xl text-complementary-20">{`${progressoProjeto}%`}</span>{" "}
+                </span>
+                <progress
+                  value={progressoProjeto}
+                  max={100}
+                  className="h-2 rounded bg-complementary-20"
+                ></progress>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Líder do projeto:
+          </span>
+          <span>{liderProjeto ? liderProjeto : "Não atribuído"}</span>
         </span>
-        <span>{}</span>
-      </span> */}
-      <hr className="border-n90 my-4" />
-      <CriarExcel projeto={projeto}/>
-    </div>
-  )
+        <br />
+        {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span>
+        <br />
+        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
+          <span className="font-semibold text-complementary-20">
+            Info Relevante:
+          </span>
+          <span>{}</span>
+        </span> */}
+        <hr className="border-n90 my-4" />
+        <CriarExcel projeto={projeto} />
+      </div>
+    )
+  }
 }
 
 VisaoGeral.propTypes = {
