@@ -8,7 +8,12 @@ import { LiaUserTieSolid } from "react-icons/lia"
 import { BiLogOut } from "react-icons/bi"
 
 function NavBar() {
-  if (cargoUsuario === 'Gerente') {
+  useEffect(() => {
+    getUsuario()
+    getUsuario(usuario.cargo)
+    getUsuario(usuario.nome)
+  }, [])
+  if (usuario.cargo === 'Gerente') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -50,7 +55,7 @@ function NavBar() {
             </div>
             <div className="flex h-[50px] flex-col">
               <p className="text-base font-semibold text-on-bg22">
-                {data.nomeUsuario}
+                {usuario.nome}
               </p>
               <p className="font-regular text-sm text-on-bg22">Gerente</p>
             </div>
@@ -63,7 +68,7 @@ function NavBar() {
       </aside>
     )
   }
-  else if (cargoUsuario === 'EngenheiroChefe') {
+  else if (usuario.cargo === 'EngenheiroChefe') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -92,7 +97,7 @@ function NavBar() {
           <div className="mb-5 flex gap-2">
             <div className="flex h-[50px] flex-col">
               <p className="text-base font-semibold text-on-bg22">
-                {data.nomeUsuario}
+                {usuario.nome}
               </p>
               <p className="font-regular text-sm text-on-bg22">Engenheiro Chefe</p>
             </div>
@@ -106,7 +111,7 @@ function NavBar() {
     )
   }
 
-  else if (cargoUsuario === 'LiderPacote') {
+  else if (usuario.cargo === 'LiderPacote') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -135,7 +140,7 @@ function NavBar() {
           <div className="mb-5 flex gap-2">
             <div className="flex h-[50px] flex-col">
               <p className="text-base font-semibold text-on-bg22">
-                {data.nomeUsuario}
+                {usuario.nome}
               </p>
               <p className="font-regular text-sm text-on-bg22">Engenheiro Chefe</p>
             </div>
@@ -149,7 +154,7 @@ function NavBar() {
     )
   }
 
-  else if (cargoUsuario === 'Analista') {
+  else if (usuario.cargo === 'Analista') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -178,7 +183,7 @@ function NavBar() {
           <div className="mb-5 flex gap-2">
             <div className="flex h-[50px] flex-col">
               <p className="text-base font-semibold text-on-bg22">
-                {data.nomeUsuario}
+                {usuario.nome}
               </p>
               <p className="font-regular text-sm text-on-bg22">Líder de Pacote de Trabalho</p>
             </div>
