@@ -134,6 +134,7 @@ function ListaUsuario() {
 						<tr>
 							<th className="w-2/12 py-3">Matricula</th>
 							<th className="w-4/12 py-3 text-left">Nome</th>
+							<th className="w-4/12 py-3 text-left">Email</th>
 							<th className="w-4/12 py-3 text-left">Cargo</th>
 							<th className="w-2/12 py-3">Departamento</th>	
 						</tr>
@@ -150,6 +151,9 @@ function ListaUsuario() {
 									>
 										{linha.nome}
 									</Link>
+								</td>
+								<td className="text-lg text-left">
+									{linha.email}
 								</td>
 								<td className="text-lg text-left">
 									{linha.cargo}
