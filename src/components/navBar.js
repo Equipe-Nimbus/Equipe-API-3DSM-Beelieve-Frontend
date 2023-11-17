@@ -8,12 +8,9 @@ import { LiaUserTieSolid } from "react-icons/lia"
 import { BiLogOut } from "react-icons/bi"
 
 function NavBar() {
-  useEffect(() => {
-    getUsuario()
-    getUsuario(usuario.cargo)
-    getUsuario(usuario.nome)
-  }, [])
-  if (usuario.cargo === 'Gerente') {
+  const [cargo, setCargo] = useState('')
+  const navigate = useNavigate()
+  if (cargo === 'Gerente') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -68,7 +65,7 @@ function NavBar() {
       </aside>
     )
   }
-  else if (usuario.cargo === 'EngenheiroChefe') {
+  else if (cargo === 'EngenheiroChefe') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -111,7 +108,7 @@ function NavBar() {
     )
   }
 
-  else if (usuario.cargo === 'LiderPacote') {
+  else if (cargo === 'LiderPacote') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
@@ -154,7 +151,7 @@ function NavBar() {
     )
   }
 
-  else if (usuario.cargo === 'Analista') {
+  else if (cargo === 'Analista') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
         <div className="rounded bg-bg22 p-8">
