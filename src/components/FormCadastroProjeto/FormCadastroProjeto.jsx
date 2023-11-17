@@ -259,6 +259,7 @@ function FormCadastroProjeto() {
             name={`estruturaDetalhes[${index}].atribuicao`}
             {...register(`estruturaDetalhes[${index}].atribuicao`)}
           >
+            <option disabled selected value="">Engenheiro Chefe</option>
             {linha.nivel === "1"(
               usuariosEngenheiro.map((usuario, contador) => (
                 <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
