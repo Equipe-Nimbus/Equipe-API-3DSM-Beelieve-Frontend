@@ -89,173 +89,51 @@ function ListaProjeto() {
     } catch (erro) { }
   }
 
-  if (cargoUsuario === 'Gerente') {
-    return (
-      <div>
-        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <Button
-            texto="Novo"
-            tipo="button"
-            iconeOpcional={BsPlusCircle}
-            iconeTamanho="20px"
-            className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-            onClick={() => navigate("/projetos/novo-projeto")}
-          />
-          <hr className="border-n90"></hr>
-          <form
-            className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
-          >
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
+  return (
+    <div>
+      <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+        <Button
+          texto="Novo"
+          tipo="button"
+          iconeOpcional={BsPlusCircle}
+          iconeTamanho="20px"
+          className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+          onClick={() => navigate("/projetos/novo-projeto")}
+        />
+        <hr className="border-n90"></hr>
+        <form
+          className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
+        >
+          <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
+          <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
 
-            <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter />Filtrar</button>
-          </form>
-          <div className="mx-10 flex flex-row flex-wrap gap-10">
-            {projetos.map((projeto, index) => (
-              <CardProjeto
-                key={projeto.id_projeto}
-                titulo={projeto.nome_projeto}
-                descricao={projeto.descricao_projeto}
-                estadoProjeto={projeto.data_inicio_projeto}
-                liderProjeto={projeto.chefe_projeto}
-                onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
-              />
-            ))}
-          </div>
-
-          <div className="flex justify-center items-center mt-12">
-            <button className="mr-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina - 1) }} disabled={pagina === 0}>Anterior</button>
-            <InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
-              mudaInputPagina(valor)
-            }} />
-            <span className="ml-1 text-n40">/ {totalPagina}</span>
-            <button className="ml-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina + 1) }} disabled={!(pagina < totalPagina - 1)}>Próxima</button>
-          </div>
-
+          <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter />Filtrar</button>
+        </form>
+        <div className="mx-10 flex flex-row flex-wrap gap-10">
+          {projetos.map((projeto, index) => (
+            <CardProjeto
+              key={projeto.id_projeto}
+              titulo={projeto.nome_projeto}
+              descricao={projeto.descricao_projeto}
+              estadoProjeto={projeto.data_inicio_projeto}
+              liderProjeto={projeto.chefe_projeto}
+              onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
+            />
+          ))}
         </div>
-      </div>
-    )
-  }
 
-  else if (cargoUsuario === 'EngenheiroChefe') {
-    return (
-      <div>
-        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <hr className="border-n90"></hr>
-          <form
-            className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
-          >
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
-
-            <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter />Filtrar</button>
-          </form>
-          <div className="mx-10 flex flex-row flex-wrap gap-10">
-            {projetos.map((projeto, index) => (
-              <CardProjeto
-                key={projeto.id_projeto}
-                titulo={projeto.nome_projeto}
-                descricao={projeto.descricao_projeto}
-                estadoProjeto={projeto.data_inicio_projeto}
-                liderProjeto={projeto.chefe_projeto}
-                onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
-              />
-            ))}
-          </div>
-
-          <div className="flex justify-center items-center mt-12">
-            <button className="mr-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina - 1) }} disabled={pagina === 0}>Anterior</button>
-            <InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
-              mudaInputPagina(valor)
-            }} />
-            <span className="ml-1 text-n40">/ {totalPagina}</span>
-            <button className="ml-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina + 1) }} disabled={!(pagina < totalPagina - 1)}>Próxima</button>
-          </div>
-
+        <div className="flex justify-center items-center mt-12">
+          <button className="mr-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina - 1) }} disabled={pagina === 0}>Anterior</button>
+          <InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
+            mudaInputPagina(valor)
+          }} />
+          <span className="ml-1 text-n40">/ {totalPagina}</span>
+          <button className="ml-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina + 1) }} disabled={!(pagina < totalPagina - 1)}>Próxima</button>
         </div>
+
       </div>
-    )
-  }
-
-  else if (cargoUsuario === 'LiderPacote') {
-    return (
-      <div>
-        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <hr className="border-n90"></hr>
-          <form
-            className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
-          >
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
-
-            <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter />Filtrar</button>
-          </form>
-          <div className="mx-10 flex flex-row flex-wrap gap-10">
-            {projetos.map((projeto, index) => (
-              <CardProjeto
-                key={projeto.id_projeto}
-                titulo={projeto.nome_projeto}
-                descricao={projeto.descricao_projeto}
-                estadoProjeto={projeto.data_inicio_projeto}
-                liderProjeto={projeto.chefe_projeto}
-                onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
-              />
-            ))}
-          </div>
-
-          <div className="flex justify-center items-center mt-12">
-            <button className="mr-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina - 1) }} disabled={pagina === 0}>Anterior</button>
-            <InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
-              mudaInputPagina(valor)
-            }} />
-            <span className="ml-1 text-n40">/ {totalPagina}</span>
-            <button className="ml-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina + 1) }} disabled={!(pagina < totalPagina - 1)}>Próxima</button>
-          </div>
-
-        </div>
-      </div>
-    )
-  }
-
-  else if (cargoUsuario === 'Analista') {
-    return (
-      <div>
-        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <hr className="border-n90"></hr>
-          <form
-            className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
-          >
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
-            <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
-
-            <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter />Filtrar</button>
-          </form>
-          <div className="mx-10 flex flex-row flex-wrap gap-10">
-            {projetos.map((projeto, index) => (
-              <CardProjeto
-                key={projeto.id_projeto}
-                titulo={projeto.nome_projeto}
-                descricao={projeto.descricao_projeto}
-                estadoProjeto={projeto.data_inicio_projeto}
-                liderProjeto={projeto.chefe_projeto}
-                onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
-              />
-            ))}
-          </div>
-
-          <div className="flex justify-center items-center mt-12">
-            <button className="mr-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina - 1) }} disabled={pagina === 0}>Anterior</button>
-            <InputPaginacao min={1} max={totalPagina} paginaAtual={pagina + 1} onValueChange={(valor) => {
-              mudaInputPagina(valor)
-            }} />
-            <span className="ml-1 text-n40">/ {totalPagina}</span>
-            <button className="ml-4 text-complementary-20 underline underline-offset-4 disabled:text-n40 disabled:no-underline" onClick={(e) => { mudaPagina(pagina + 1) }} disabled={!(pagina < totalPagina - 1)}>Próxima</button>
-          </div>
-
-        </div>
-      </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default ListaProjeto
