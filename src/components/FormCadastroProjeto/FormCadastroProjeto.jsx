@@ -80,18 +80,18 @@ function FormCadastroProjeto() {
         Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
       }
     }).catch(error => {
-		if (error.response.status === 400) {
-			Swal.fire({
-			  title: error.response.data,
-			  icon: "error",
-		  	  confirmButtonColor: "#132431",
-              allowOutsideClick: false,
-              allowEscapeKey: false
-			})
-		} else {
-			Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
-		}	
-  	})
+      if (error.response.status === 400) {
+        Swal.fire({
+          title: error.response.data,
+          icon: "error",
+          confirmButtonColor: "#132431",
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        })
+      } else {
+        Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
+      }
+    })
   }
 
   const handlerBlur = (evento) => {
@@ -114,6 +114,12 @@ function FormCadastroProjeto() {
       setTabelaWBS(tabela)
     }
   }, [niveisExcel])
+
+  useEffect(() => {
+    getUsuario()
+    getUsuario(usuario.cargo === 'EngenheiroChefe')
+    getUsuario(usuario.nome)
+  }, [])
 
   return (
     <form onSubmit={handleSubmit(cadastrarProjeto)}>
@@ -217,7 +223,7 @@ function FormCadastroProjeto() {
         </label>
         <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" required {...register("listaUsuario", { required: true })}>
           <option disabled selected value="">Engenheiro Chefe</option>
-          <option value="usuarios">{data.nomeUsuario}</option>
+          <option value="usuarios">{usuario.nome}</option>
         </select>
       </div>
       <div className="ml-5 mt-5">
