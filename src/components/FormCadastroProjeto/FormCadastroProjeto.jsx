@@ -17,6 +17,45 @@ import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 
 function FormCadastroProjeto() {
   const [niveisExcel, setniveisExcel] = useState({})
+  const [usuariosEngenheiro, setusuariosEngenheiro] = useState([])
+
+  async function getUsuariosLista() {
+    try {
+      await axios.get(`/usuario/listar/atribuicao`).then((response) => {
+        const data = response.data
+
+        setusuariosEngenheiro(data.EngenheirosChefe)
+      })
+    } catch (erro) {
+      console.log(erro)
+    }
+  }
+
+  useEffect(() => {
+    getUsuariosLista()
+    checarNivelSubProjeto(projeto.sub_projetos)
+    pegarChefesProjetos(projeto)
+  }, [])
+
+  useEffect(() => {
+    // Atualiza os valores dos selects usando o estado chefesProjeto
+    fields.forEach((linha, index) => {
+      const nomeChefeProjeto = chefesProjeto[index]; // Obtém o nome do estado chefesProjeto
+
+      // Procura pelo nome do chefe de projeto nos arrays de usuários
+      const usuarioEncontradoEngenheiro = usuariosEngenheiro.find(usuario => usuario.nome === nomeChefeProjeto);
+
+      // Verifica se o usuário foi encontrado e atualiza o valor do select com o ID correspondente
+      if (usuarioEncontradoEngenheiro) {
+        setValue(`estruturaDetalhes[${index}].atribuicao`, usuarioEncontradoEngenheiro.id_usuario);
+      }
+      else {
+        // Se nenhum usuário for encontrado, você pode manipular isso de acordo com a sua lógica
+        // Por exemplo, definir um valor padrão para `novoValor` ou lidar com a situação de outra forma
+      }
+    });
+  }, [chefesProjeto, usuariosEngenheiro, usuariosLiderPacote]); // Executa quando chefesProjeto, usuariosEngenheiro ou usuariosLiderPacote mudam
+
 
   const {
     register,
@@ -114,12 +153,6 @@ function FormCadastroProjeto() {
       setTabelaWBS(tabela)
     }
   }, [niveisExcel])
-
-  useEffect(() => {
-    getUsuario()
-    getUsuario(usuario.cargo === 'EngenheiroChefe')
-    getUsuario(usuario.nome)
-  }, [])
 
   return (
     <form onSubmit={handleSubmit(cadastrarProjeto)}>
@@ -221,9 +254,17 @@ function FormCadastroProjeto() {
         >
           Atribuição
         </label>
-        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" required {...register("listaUsuario", { required: true })}>
-          <option disabled selected value="">Engenheiro Chefe</option>
-          <option value="usuarios">{usuario.nome}</option>
+        <select className="text-justify disabled:text-n40"
+          name={`estruturaDetalhes[${index}].atribuicao`}
+          {...register(`estruturaDetalhes[${index}].atribuicao`)}
+        >
+          {linha.nivel === "1"(
+            usuariosEngenheiro.map((usuario, contador) => (
+              <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
+                {usuario.nome}
+              </option>
+            ))
+          )}
         </select>
       </div>
       <div className="ml-5 mt-5">
