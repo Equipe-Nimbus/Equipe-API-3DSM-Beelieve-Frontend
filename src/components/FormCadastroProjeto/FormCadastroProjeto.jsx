@@ -254,18 +254,20 @@ function FormCadastroProjeto() {
         >
           Atribuição
         </label>
-        <select className="text-justify disabled:text-n40"
-          name={`estruturaDetalhes[${index}].atribuicao`}
-          {...register(`estruturaDetalhes[${index}].atribuicao`)}
-        >
-          {linha.nivel === "1"(
-            usuariosEngenheiro.map((usuario, contador) => (
-              <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
-                {usuario.nome}
-              </option>
-            ))
-          )}
-        </select>
+        {fields.map((linha, index) => (
+          <select className="text-justify disabled:text-n40"
+            name={`estruturaDetalhes[${index}].atribuicao`}
+            {...register(`estruturaDetalhes[${index}].atribuicao`)}
+          >
+            {linha.nivel === "1"(
+              usuariosEngenheiro.map((usuario, contador) => (
+                <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
+                  {usuario.nome}
+                </option>
+              ))
+            )}
+          </select>
+        ))}
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
