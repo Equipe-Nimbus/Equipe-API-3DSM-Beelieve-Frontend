@@ -10,6 +10,19 @@ import { BiLogOut } from "react-icons/bi"
 function NavBar() {
   const [cargo, setCargo] = useState('')
   const navigate = useNavigate()
+
+  if (dadoUsuario.data.logado) {
+    setCargo(dadoUsuario.usuario.cargo)
+  }
+  else {
+    setLogado(false)
+  }
+
+  async function loggout() {
+    const log = await api.get('/loggout')
+    console.log(log.data)
+    navigate('/')
+  }
   if (cargo === 'Gerente') {
     return (
       <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
@@ -60,7 +73,7 @@ function NavBar() {
         </div>
         <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
           <BiLogOut color="#DADDE6" size={24} />
-          <p>Sair</p>
+          <button className='' onClick={loggout}>Sair</button>
         </div>
       </aside>
     )
@@ -102,7 +115,7 @@ function NavBar() {
         </div>
         <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
           <BiLogOut color="#DADDE6" size={24} />
-          <p>Sair</p>
+          <button className='' onClick={loggout}>Sair</button>
         </div>
       </aside>
     )
@@ -145,7 +158,7 @@ function NavBar() {
         </div>
         <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
           <BiLogOut color="#DADDE6" size={24} />
-          <p>Sair</p>
+          <button className='' onClick={loggout}>Sair</button>
         </div>
       </aside>
     )
@@ -188,7 +201,7 @@ function NavBar() {
         </div>
         <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
           <BiLogOut color="#DADDE6" size={24} />
-          <p>Sair</p>
+          <button className='' onClick={loggout}>Sair</button>
         </div>
       </aside>
     )
