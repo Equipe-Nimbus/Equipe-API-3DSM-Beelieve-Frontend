@@ -8,17 +8,12 @@ import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto';
 import FormAlterarDadosUsuario from './components/FormAlterarDadosUsuario/FormAlterarDadosUsuario';
 import MudaData from "./pages/MudaData";
-import Login2 from "./components/login.js"
 import Login from "./components/login.jsx"
 
 const router = [
     {
         path:"/",
         element: <Login/>
-    },
-    {
-        path:"/teste",
-        element: <Login2/>
     },
     {
         path: "/",
@@ -31,7 +26,7 @@ const router = [
 		]
     },
     {   
-        path:",
+        path: "/projetos",
         element: <App />,
         children: [
             {   path: "",
