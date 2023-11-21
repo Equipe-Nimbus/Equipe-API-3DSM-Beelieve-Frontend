@@ -6,7 +6,7 @@ import detalhe from '../images/detalhe.png'
 import beelieveLogo from '../images/beelieveLogo.png';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login2() {
     let navegate = useNavigate()
 
     return (
@@ -44,4 +44,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Login2

@@ -8,8 +8,13 @@ import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto';
 import FormAlterarDadosUsuario from './components/FormAlterarDadosUsuario/FormAlterarDadosUsuario';
 import MudaData from "./pages/MudaData";
+import Login from "./components/login.jsx"
 
 const router = [
+    {
+        path:"/",
+        element: <Login/>
+    },
     {
         path: "/",
         element: <App/>,
