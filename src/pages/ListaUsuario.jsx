@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
+import { useAuth } from "../contexts/authContext.jsx"
 
 import axios from "../services/axios"
 
@@ -18,6 +19,16 @@ function ListaUsuario() {
 	const [pagina, setPagina] = useState(0)
 	const [totalPagina, setTotalPagina] = useState()
 	const [render, setRender] = useState(0)
+
+	const {user, autenticado} = useAuth()
+	useEffect(() => {
+		if(!autenticado){
+			navigate("/")
+		}
+		else if(autenticado && user.cargo !== 'Gerente'){
+			navigate("/projetos")
+		}
+	})
 
 	useEffect(() => {
 		getUsuarios()
@@ -141,11 +152,11 @@ function ListaUsuario() {
 						{usuarios.map((linha, index) => (
 							<tr key={index} className="border-b border-n90">
 								<td className="py-3 text-lg font-semibold text-center">
-									{linha.id_usuario}
+									{linha.idUsuario}
 								</td>
 								<td className="text-lg text-left underline underline-offset-4 decoration-n70">
 									<Link
-										to={`/usuarios/editar-informacoes/${linha.id_usuario}`}
+										to={`/usuarios/editar-informacoes/${linha.idUsuario}`}
 									>
 										{linha.nome}
 									</Link>

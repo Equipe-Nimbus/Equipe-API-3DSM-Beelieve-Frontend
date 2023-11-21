@@ -10,9 +10,11 @@ import axios from '../services/axios'
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => Cookies.get('user') || null)
+    const [user, setUser] = useState(() => {
+        const storedUser = Cookies.get('user')
+        return storedUser ? JSON.parse(storedUser) : null })
     const [token, setToken] = useState(() => Cookies.get('tokenJWT') || null)
-    //console.log(user)
+    const autenticado = !!token
 
     const navigate = useNavigate()
 
@@ -21,12 +23,15 @@ export const AuthProvider = ({ children }) => {
             //console.log(data)
             await axios.post('http://localhost:8080/usuario/login', data).then((response) => {
                 //console.log(response)
-                const user = response.data.cargo
+                const user = {
+                    nome: response.data.nome,
+                    cargo: response.data.cargo
+                }
                 const tokenJWT = response.data.token
                 setUser(user)
                 setToken(tokenJWT)
                 Cookies.set('tokenJWT', tokenJWT)
-                Cookies.set('user', user)
+                Cookies.set('user', JSON.stringify(user))
 
                 navigate('/projetos')
             })
@@ -65,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     }, [token])
 
     return (
-        <AuthContext.Provider value={{user, login, loggout}}>
+        <AuthContext.Provider value={{user, login, loggout, autenticado}}>
             {children}
         </AuthContext.Provider>
     )
