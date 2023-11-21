@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import { useAuth } from "../contexts/authContext"
 
 import Beelieve from "../assets/images/Beelieve-yellow.png"
 import { PiProjectorScreenChart } from "react-icons/pi"
@@ -8,7 +9,8 @@ import { LiaUserTieSolid } from "react-icons/lia"
 import { BiLogOut } from "react-icons/bi"
 
 function NavBar() {
-  
+  const {loggout} = useAuth()
+
   return (
     <>
     <aside className="sticky top-0 flex h-screen min-w-max flex-col gap-3 bg-bg15 p-2">
@@ -57,7 +59,8 @@ function NavBar() {
           </div>
         </div>
       </div>
-      <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
+      <div className="flex cursor-pointer items-center gap-2 rounded bg-bg22 p-3 text-lg font-semibold text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22"
+      onClick={() => loggout()}>
         <BiLogOut color="#DADDE6" size={24} />
         <p>Sair</p>
       </div>

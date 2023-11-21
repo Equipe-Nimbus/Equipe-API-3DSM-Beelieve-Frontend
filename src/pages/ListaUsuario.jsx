@@ -24,7 +24,6 @@ function ListaUsuario() {
 	}, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
 
 	useEffect(() => {
-		console.log("renderizou")
 	}, [render])
 
 	async function mudaInputPagina(valor) {
@@ -85,7 +84,7 @@ function ListaUsuario() {
 	async function getUsuarios() {
 		try {
 			await axios.get("/usuario/lista/paginada?page=0&size=10").then((response) => {
-				console.log(response)
+				//console.log(response)
 				const data = response.data.content
 				setUsuarios(data)
 				const total = response.data.totalPages

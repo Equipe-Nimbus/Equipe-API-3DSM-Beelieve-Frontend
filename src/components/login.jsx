@@ -1,22 +1,18 @@
-import React, {useState} from "react"
+import React from "react"
 import { useForm } from "react-hook-form"
+import { useAuth } from "../contexts/authContext"
+
 import detalhe from '../images/detalhe.png'
 import Beelieve1 from '../images/Beelieve1.png'
 
-import axios from "../services/axios"
-
 function Login(){
 
-  const { register, handleSubmit } = useForm({
-  })
+  const { register, handleSubmit } = useForm({})
+  const { login } = useAuth()
 
   const handleLogin = async (data) => {
-    //console.log(data)
-
-    await axios.post("/usuario/login", data).then((response) => {
-      console.log(response)
-    })
-  };
+    await login(data)
+  }
 
     return(
         <div className="bg-gradient-to-t from-bg33 via-bg33 to-bg100 h-screen flex items-center justify-center">

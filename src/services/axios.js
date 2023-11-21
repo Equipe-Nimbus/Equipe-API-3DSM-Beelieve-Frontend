@@ -1,8 +1,20 @@
 import axios from "axios";
 
-const api = axios.create({
-    withCredentials: true,
-    baseURL: "http://localhost:8080"
-});
+export const configurarAxios = (token) => {
+    axios.defaults.baseURL = "http://localhost:8080"
 
-export default api;
+    axios.interceptors.request.use(
+        (config) => {
+            if(token){
+                config.headers.Authorization = `Bearer ${token}`
+            }
+            return config
+        },
+        (error) => {
+            return Promise.reject(error)
+        }
+        
+    )
+}
+
+export default axios;

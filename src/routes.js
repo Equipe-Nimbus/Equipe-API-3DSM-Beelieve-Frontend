@@ -12,13 +12,13 @@ import Login from "./components/login.jsx"
 
 const router = [
     {
-        path:"/",
-        element: <Login/>
-    },
-    {
         path: "/",
         element: <App/>,
         children: [
+            {
+                path:"",
+                element: <Login/>
+            },
 			{
 				path: "muda-data",
 				element: <MudaData/>
