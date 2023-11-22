@@ -186,7 +186,7 @@ function VisaoGeral({
   useEffect(() => {
     setProjetoNaoIniciado(!DataProjetoIniciado)
   }, [DataProjetoIniciado])
-
+  
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
       <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
@@ -202,6 +202,7 @@ function VisaoGeral({
         <div className="flex flex-col gap-5">
           {projetoNaoIniciado && (
             <>
+            { (user?.cargo === 'Gerente' || user?.cargo === 'Engenheiro Chefe') && 
               <Button
                 texto="Iniciar projeto"
                 iconeOpcional={BsPlayFill}
@@ -209,6 +210,7 @@ function VisaoGeral({
                 className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
                 onClick={handleIniciarProjetoClick}
               />
+            }
               { user?.cargo === 'Gerente' && 
                 <Button
                   texto="Excluir projeto"

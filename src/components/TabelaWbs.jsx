@@ -1,10 +1,12 @@
 import React from "react"
+import { useAuth } from "../contexts/authContext"
 import Button from "./Button"
 
 
 import { FiPlus, FiMinus } from "react-icons/fi"
 
 function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
+  const { user } = useAuth()
 
   const statusInicio = projeto
   
@@ -36,10 +38,11 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
                   className="w-full"
                   value={tabelaWBS[index].descricao}
                   onChange={(e) => handleDescricaoSubProjeto(e, index)}
+                  disabled={statusInicio || user?.cargo === 'Analista'}
                 />
               }
               </td>
-              {!statusInicio && linha.nivel.toLocaleString().split(".").length < 3 && (
+              {!statusInicio && linha.nivel.toLocaleString().split(".").length < 3 && user?.cargo !== 'Analista' && (
                 <Button
                   iconeOpcional={FiPlus}
                   tipo="button"
@@ -48,7 +51,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
                   iconeTamanho="24px"
                 />
               )}
-              {!statusInicio && linha.nivel !== "1" && (
+              {!statusInicio && linha.nivel !== "1" && user?.cargo !== 'Analista' && (
                 <Button
                   iconeOpcional={FiMinus}
                   tipo="button"

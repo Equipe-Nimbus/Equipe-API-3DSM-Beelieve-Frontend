@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAuth } from "../../contexts/authContext"
 import Swal from "sweetalert2"
 
 import Button from "../Button"
@@ -25,6 +26,8 @@ function Planejamento({ idProjeto }) {
     control,
     name: "cronograma",
   })
+
+  const { user } = useAuth()
 
   const getCronograma = async () => {
     try {
@@ -179,7 +182,7 @@ function Planejamento({ idProjeto }) {
                 handleInput(e.target.value, indexMes, indexNivel)
               }
               className={`text-center disabled:text-n40`}
-              disabled={!subProjetosEditaveis.includes(nivel.ordem_nivel)}
+              disabled={!subProjetosEditaveis.includes(nivel.ordem_nivel) || user?.cargo === 'Analista'}
             />
           </td>
         ))}
