@@ -38,7 +38,7 @@ function NavBar() {
             </li>
           </ul>
 
-          {user.cargo === 'Gerente' && 
+          {user?.cargo === 'Gerente' && 
           <ul className="my-10 flex flex-col gap-3">
             <li className="flex cursor-pointer flex-row items-center gap-1 p-1.5 text-xl font-medium text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
               <FiUser

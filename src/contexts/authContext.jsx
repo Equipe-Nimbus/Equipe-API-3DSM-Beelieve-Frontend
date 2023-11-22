@@ -15,10 +15,9 @@ export const AuthProvider = ({ children }) => {
         return storedUser ? JSON.parse(storedUser) : null })
     const [token, setToken] = useState(() => Cookies.get('tokenJWT') || null)
     const autenticado = !!token
-
     const navigate = useNavigate()
 
-    const login = async(data) => {
+    const login = async (data) => {
         try {
             //console.log(data)
             await axios.post('http://localhost:8080/usuario/login', data).then((response) => {
@@ -33,7 +32,8 @@ export const AuthProvider = ({ children }) => {
                 Cookies.set('tokenJWT', tokenJWT)
                 Cookies.set('user', JSON.stringify(user))
 
-                navigate('/projetos')
+                configurarAxios(tokenJWT)
+                navigate("/projetos")
             })
             
         } catch (error) {
@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
         Cookies.remove('user')
         setToken(null)
         setUser(null)
+        configurarAxios(null)
         navigate("/")
       }
 
@@ -70,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     }, [token])
 
     return (
-        <AuthContext.Provider value={{user, login, loggout, autenticado}}>
+        <AuthContext.Provider value={{user, login, loggout, autenticado, token}}>
             {children}
         </AuthContext.Provider>
     )

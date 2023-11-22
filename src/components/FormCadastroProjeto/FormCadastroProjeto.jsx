@@ -61,7 +61,7 @@ function FormCadastroProjeto() {
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
 
-    await axios.post("/projeto/cadastrar", projeto).then((response) => {
+    await axios.post("/projeto/cadastrar", projeto, {log:true}).then((response) => {
       if (response.status === 200) {
         Swal.fire({
           title: "Cadastro realizado com sucesso!",

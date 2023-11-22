@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-import { useParams, useLocation } from "react-router-dom"
+import { useParams, useLocation, useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/authContext"
 import axios from "../services/axios"
 
 import VisaoGeral from "../components/VisaoGeral"
@@ -21,6 +22,14 @@ function DetalhesProjeto() {
 
   const { id } = useParams()
   const location = useLocation()
+  const navigate = useNavigate()
+  const {autenticado} = useAuth()
+  useEffect(() => {
+    if(!autenticado){
+      navigate("/")
+    }
+  })
+
   const getProjeto = async () => {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
