@@ -327,7 +327,7 @@ function Planejamento({ idProjeto }) {
         </div>
         <div className="mx-5 mt-5 flex justify-between">
           <div>
-            {cronograma.lista_cronograma?.length > 1 && (
+            {(cronograma.lista_cronograma?.length > 1 && user?.cargo !== 'Analista') && (
               <Button
                 iconeOpcional={FiMinus}
                 tipo="button"
@@ -338,22 +338,27 @@ function Planejamento({ idProjeto }) {
                 iconeTamanho="28px"
               />
             )}
-            <Button
-              iconeOpcional={FiPlus}
-              tipo="button"
-              onClick={(e) => {
-                adicionarMes()
-              }}
-              className="m-2 rounded-full bg-primary50"
-              iconeTamanho="28px"
-            />
+            {user?.cargo !== 'Analista' &&
+              <Button
+                iconeOpcional={FiPlus}
+                tipo="button"
+                onClick={(e) => {
+                  adicionarMes()
+                }}
+                className="m-2 rounded-full bg-primary50"
+                iconeTamanho="28px"
+              />
+            }
+            
           </div>
-
-          <Button
-            texto="Salvar"
-            tipo="submit"
-            className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-          />
+          { user?.cargo !== 'Analista' &&
+            <Button
+              texto="Salvar"
+              tipo="submit"
+              className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+            />
+          }
+          
         </div>
       </form>
     </>
