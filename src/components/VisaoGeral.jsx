@@ -252,7 +252,7 @@ function VisaoGeral({
         <span>{}</span>
       </span> */}
       <hr className="border-n90 my-4" />
-      <CriarExcel projeto={projeto} />
+      <CriarExcel projeto={projeto} idProjeto={id} />
     </div>
   )
 }
