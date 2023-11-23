@@ -152,7 +152,7 @@ function ListaUsuario() {
 						{usuarios.map((linha, index) => (
 							<tr key={index} className="border-b border-n90">
 								<td className="py-3 text-lg font-semibold text-center">
-									{linha.idUsuario}
+									{linha.id_usuario}
 								</td>
 								<td className="text-lg text-left underline underline-offset-4 decoration-n70">
 									<Link

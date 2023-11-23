@@ -272,13 +272,15 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   const atualizarDetalhesPacotes = async (data) => {
     const detalhesPacotesPreenchidos = data.estruturaDetalhes
 
+    console.log(detalhesPacotesPreenchidos)
+    projeto.chefe_projeto = detalhesPacotesPreenchidos[0].atribuicao
     projeto.orcamento_projeto = parseFloat(detalhesPacotesPreenchidos[0].orcamento)
     projeto.hora_humano_total = parseFloat(detalhesPacotesPreenchidos[0].hora_homem)
     projeto.materiais_projeto = detalhesPacotesPreenchidos[0].materiais
     projeto.hora_valor_projeto = data.valorHora
     const projetoFormatado = formatarEstrutura(projeto, detalhesPacotesPreenchidos)
 
-    console.log(detalhesPacotesPreenchidos)
+    console.log(projetoFormatado)
 
     try {
       await axios
@@ -291,17 +293,36 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
               icon: "success",
               confirmButtonColor: "#132431",
             })
-            // window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
           } else {
             Swal.fire("Ocorreu algum problema na atualização :(", "", "error")
-            // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
     } catch (error) {}
   }
 
   const statusInicio = projeto.data_inicio_projeto
+
+  const blurEngenheiroChefe = () => {
+    const engenheiroAtribuido = getValues(`estruturaDetalhes[${0}].atribuicao`)
+    console.log("engenheiro atribuido: ", engenheiroAtribuido)
+    if(!engenheiroAtribuido){
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-start",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
+
+      Toast.fire({
+        icon: "warning",
+        title: "O projeto não pode ficar sem um responsável."
+      })
+
+      setValue(`estruturaDetalhes[${0}].atribuicao`, usuariosEngenheiro[0].id_usuario)
+    }
+  }
 
   return (
     <div>
@@ -323,7 +344,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
               <th className="pl-8 text-justify">Orçamento</th>
               <th className="">Hora Homem</th>
               <th className="pl-24 text-justify">Materiais</th>
-              <th className="px-10">Atribuição</th>
+              <th className="pr-10">Atribuição</th>
             </tr>
           </thead>
           <tbody>
@@ -444,6 +465,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                       name={`estruturaDetalhes[${index}].atribuicao`}
                       {...register(`estruturaDetalhes[${index}].atribuicao`)}
                       disabled={user?.cargo === "Analista"}
+                      onBlur={blurEngenheiroChefe}
                     >
                       {linha.nivel === "1" ? (
                         <option value="">Engenheiro chefe</option>
