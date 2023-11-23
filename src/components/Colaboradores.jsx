@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react"
+import { useForm } from "react-hook-form";
+import { useAuth } from "../contexts/authContext";
+import Swal from "sweetalert2";
 import axios from "../services/axios"
 
+import Button from "./Button";
 import { LuUsers } from "react-icons/lu";
 import { TbUsersGroup } from "react-icons/tb";
 
 
 function Colaboradores({ idProjeto }){
+    const { user } = useAuth()
+    const { register, handleSubmit } = useForm()
+
     const [visualizacaoAtual, setVisualizacaoAtual] = useState("Líderes")
     const mudarVisualizacao = (valor) => {
         const view = valor
@@ -13,7 +20,7 @@ function Colaboradores({ idProjeto }){
     }
 
     const [colaboradores, setColaboradores] = useState()
-
+    console.log(colaboradores)
     const getColaboradores = async () => {
         await axios.get(`/usuario/atribuidos/projeto/${idProjeto}`)
         .then((response) => {
@@ -21,10 +28,50 @@ function Colaboradores({ idProjeto }){
             setColaboradores(colaboradores)
         })
     }
+
+    const [analistasAtribuicao, setAnalistasAtribuicao] = useState()
+    
+    const getAnalistasAtribuicao = async () => {
+        await axios.get(`usuario/listar/atribuicao`)
+        .then((response) => {
+            const analistasAtribuicao = response.data.Analista
+            setAnalistasAtribuicao(analistasAtribuicao)
+        })
+    }
+
     useEffect( () => {
         getColaboradores()
+
+        if(user?.cargo !== 'Analista'){
+            getAnalistasAtribuicao()
+        }
     }, [idProjeto])
 
+    const atribuirAnalista = async (data) => {
+        const dadosAtribuicaoAnalista = {
+            id_analista: data.id_analista,
+            id_projeto: idProjeto
+        }
+
+        const analistaJaAtribuido = colaboradores.analistasAtribuidos.some(analista => analista.idAnalista === parseInt(data.id_analista))
+        if(!analistaJaAtribuido){
+            console.log(dadosAtribuicaoAnalista)
+        }
+        else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "bottom-start",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+              })
+        
+              Toast.fire({
+                icon: "error",
+                title: "O analista selecionado já está atribuido ao projeto."
+              })
+        }
+    }
 
     return (
         <>
@@ -104,26 +151,47 @@ function Colaboradores({ idProjeto }){
         )}
 
         {visualizacaoAtual === 'Analistas' && (
-            <table className="w-2/3 mt-5">
-                <thead className="bg-primary98 p-10 text-base uppercase text-center">
-                    <tr>
-                        <th className="pl-10 py-3 text-left">Nome</th>
-                        <th className=" py-3 text-left">Email</th>	
-                    </tr>
-                </thead>
-                <tbody>
-                    {colaboradores?.analistasAtribuidos.map((analista, index) => (
-                        <tr key={index} className="border-b border-n90">
-                            <td className="pl-10 py-3 text-lg font-semibold">
-                                {analista.nomeAnalista}
-                            </td>
-                            <td className="text-lg">
-                                {analista.emailAnalista}
-                            </td>
+            <>
+                {
+                    user?.cargo !== 'Analista' && (
+                        <div className="ml-4 mt-5 text-lg">
+                            <form onSubmit={handleSubmit(atribuirAnalista)}>
+                                <label className='font-medium'>Atribuir um novo analista: </label>
+                                <select className='border p-2 rounded-lg border-n90' {...register('id_analista')}>
+                                    <option value="" selected disabled>Selecione um analista</option>
+                                    {analistasAtribuicao.map((analista, index) => (
+                                        <option key={index} value={analista.id_usuario}>
+                                        {analista.nome}
+                                        </option>
+                                    ))}
+                                </select>
+                                <Button texto="Confirmar" tipo="submit" className="p-1 ml-5 font-medium bg-primary50 rounded-lg"/>
+                            </form>
+                        </div>
+                    )
+                }
+                
+                <table className="w-2/3 mt-5">
+                    <thead className="bg-primary98 p-10 text-base uppercase text-center">
+                        <tr>
+                            <th className="pl-10 py-3 text-left">Nome</th>
+                            <th className=" py-3 text-left">Email</th>	
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {colaboradores?.analistasAtribuidos.map((analista, index) => (
+                            <tr key={index} className="border-b border-n90">
+                                <td className="pl-10 py-3 text-lg font-semibold">
+                                    {analista.nomeAnalista}
+                                </td>
+                                <td className="text-lg">
+                                    {analista.emailAnalista}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </>
         )}
         </>
     )
