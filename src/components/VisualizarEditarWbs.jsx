@@ -8,8 +8,9 @@ import Button from "./Button"
 import { PiLeaf, PiGridNineFill } from "react-icons/pi"
 import { formatarEstrutura } from "../utils/formatarEstrutura"
 import axios from "../services/axios"
+import ArvoreProjeto from "./ArvoreProjeto"
 
-function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
+function VisualizarEditarWbs({ projeto, tabela, nodes, edges, setTabela, setAtualizar }) {
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
 
   const mudarVisualizacao = (valor) => {
@@ -60,7 +61,7 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
 		}	
 	}
   }
-
+  
   const statusInicio = projeto.data_inicio_projeto
 
   return (
@@ -124,7 +125,10 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
           </form>
         )}
         {visualizacaoAtual === "Árvore" && (
-          <></>
+          <ArvoreProjeto
+          	listaNodes={nodes}
+          	listaEdges={edges}
+          />
         )}
       </div>
     </div>

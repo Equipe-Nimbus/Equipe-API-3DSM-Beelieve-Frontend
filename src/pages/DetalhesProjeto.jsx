@@ -15,6 +15,8 @@ import Colaboradores from "../components/Colaboradores"
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
   const [projeto, setProjeto] = useState({})
+  const [nodes, setNodes] = useState([])
+  const [edges, setEdges] = useState([])
   const [tabela, setTabela] = useState([])
   const [secaoAtual, setSecaoAtual] = useState("ESTRUTURA")
   const mudarSecao = (secao) => {
@@ -34,7 +36,7 @@ function DetalhesProjeto() {
   const getProjeto = async () => {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
-        const dados = response.data
+        const dados = response.data.projeto
         //console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
@@ -44,6 +46,26 @@ function DetalhesProjeto() {
       }
     }
   }
+  
+  const getNodes = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data.listaNodes
+        setNodes(dados)
+      })
+    } catch (error) {}
+  }
+  
+  const getEdges = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data.listaEdges
+        setEdges(dados)
+      })
+    } catch (error) {}
+  }
+  
+  
 
   const gerarTabela = () => {
     const tabela = []
@@ -84,9 +106,13 @@ function DetalhesProjeto() {
 
   useEffect(() => {
     getProjeto()
+    getNodes()
+    getEdges()
 
     if (atualizar) {
       getProjeto()
+      getNodes()
+      getEdges()
       setAtualizar(false)
     }
   }, [atualizar])
@@ -102,6 +128,11 @@ function DetalhesProjeto() {
       }
     }
   }, [projeto, atualizar])
+     
+  useEffect(() => {
+	  console.log('Nodes do DetalhesProjeto: ', nodes)
+	  console.log('Edges do DetalhesProjeto: ', edges)
+  })
 
   return (
     <>
@@ -124,11 +155,12 @@ function DetalhesProjeto() {
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
-
       {secaoAtual === "ESTRUTURA" && (
         <VisualizarEditarWbs
           projeto={projeto}
           tabela={tabela}
+          nodes={nodes}
+          edges={edges}
           setTabela={setTabela}
           setAtualizar={setAtualizar}
         />
