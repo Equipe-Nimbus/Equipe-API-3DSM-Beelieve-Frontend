@@ -24,6 +24,7 @@ const TabFormTarefas = ({
   nomeProjeto,
   dataInicioProjeto,
   progressoPacote,
+  atribuicao,
 }) => {
   const [tarefas, setTarefas] = useState([])
   const [progressoAnterior, setProgressoAnterior] = useState(progressoPacote)
@@ -44,6 +45,7 @@ const TabFormTarefas = ({
 
   useEffect(() => {
     if (listaTarefas.length > 0) {
+      console.log(listaTarefas)
       const novasTarefas = listaTarefas.map((atividade) => {
         const novaTarefa = {
           id: atividade.id_tarefa,
@@ -51,6 +53,7 @@ const TabFormTarefas = ({
           resultadoEsperado: atividade.resultado_esperado_tarefa,
           status: atividade.status_tarefa === 1 ? true : false,
           peso: atividade.peso_tarefa ? atividade.peso_tarefa : 0,
+          atribuicao: atividade.atribuicao,
           prazo: atividade.prazo_tarefa
             ? atividade.prazo_tarefa.slice(0, 10)
             : null,
@@ -75,7 +78,8 @@ const TabFormTarefas = ({
       status: false,
       peso: 0,
       prazo: null,
-      tendencia: null
+      tendencia: null,
+      atribuicao:null
     }
 
     novaTarefa.push(novaLinha)
@@ -147,25 +151,23 @@ const TabFormTarefas = ({
         peso_tarefa: parseInt(atividade.peso),
         status_tarefa: atividade.status === true ? 1 : 0,
         prazo_tarefa: atividade.prazo
-          ? `${atividade.prazo.slice(6,10)}-${
-              atividade.prazo.slice(3,5)
-            }-${atividade.prazo.slice(0, 2)}`
+          ? `${atividade.prazo.slice(6, 10)}-${atividade.prazo.slice(3, 5)
+          }-${atividade.prazo.slice(0, 2)}`
           : null,
         tendencia_tarefa: atividade.tendencia
-          ? `${atividade.tendencia.slice(6,10)}-${
-            atividade.tendencia.slice(3,5)
+          ? `${atividade.tendencia.slice(6, 10)}-${atividade.tendencia.slice(3, 5)
           }-${atividade.tendencia.slice(0, 2)}`
-        : null,
+          : null,
+        atribuicao: atividade.atribuicao,
       })
     })
-    
+
 
     return listaTarefas
   }
 
   const saveTarefa = async (data) => {
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
-    
 
     let PodeSalvar = true
     const peloMenosUmaTarefaMarcada =
@@ -289,6 +291,7 @@ const TabFormTarefas = ({
                 <th className="w-1/12 text-center">Execução</th>
                 <th className="w-1/12 text-center">Prazo</th>
                 <th className="w-1/12 text-center">Tendência</th>
+                <th className="w-1/12 text-center">Atribuição</th>
               </tr>
             </thead>
             <tbody>
@@ -353,8 +356,19 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].tendencia`)}
                       defaultValue={tarefa.tendencia}
                       className="w-full text-center disabled:text-n40"
-                      disabled={tarefa.status === true  || !dataInicioProjeto}
+                      disabled={tarefa.status === true || !dataInicioProjeto}
                     />
+                  </td>
+                  <td>
+                    <select
+                      {...register(`tarefas[${index}].atribuicao`)}
+                      className="w-full text-center disabled:text-n40"
+                    >
+                    <option value=''>Grupos de trabalho</option>
+                    {[...Array(20)].map((_, i) => (
+                      <option key={i + 1}>{`Grupo ${i + 1}`}</option>
+                    ))}
+                    </select>
                   </td>
                   <td className="text-center">
                     <Button
