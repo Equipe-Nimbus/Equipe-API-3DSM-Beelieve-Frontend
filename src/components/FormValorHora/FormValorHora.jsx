@@ -311,7 +311,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         toast: true,
         position: "bottom-start",
         showConfirmButton: false,
-        timer: 2000,
+        timer: 3000,
         timerProgressBar: true,
       })
 
