@@ -156,7 +156,7 @@ function ListaUsuario() {
 								</td>
 								<td className="text-lg text-left underline underline-offset-4 decoration-n70">
 									<Link
-										to={`/usuarios/editar-informacoes/${linha.idUsuario}`}
+										to={`/usuarios/editar-informacoes/${linha.id_usuario}`}
 									>
 										{linha.nome}
 									</Link>
