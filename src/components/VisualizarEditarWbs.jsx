@@ -18,7 +18,7 @@ function VisualizarEditarWbs({ projeto, tabela, setTabela, setAtualizar }) {
   }
 
   const { user } = useAuth()
-  console.log(user?.cargo)
+  
   const atualizarEstruturaProjeto = async (e) => {
     e.preventDefault()
     projeto.nome_projeto = tabela[0].descricao

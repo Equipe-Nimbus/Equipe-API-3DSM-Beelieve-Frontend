@@ -40,13 +40,31 @@ function FormCadastroProjeto() {
       descricao: "Objetivo Final",
     },
   ])
+  useEffect(() => {}, [tabelaWBS])
 
-  useEffect(() => { }, [tabelaWBS])
+  const [usuariosEngenheiro, setUsuariosEngenheiro] = useState()
+  async function getUsuariosLista() {
+    try {
+      await axios.get(`/usuario/listar/atribuicao`).then((response) => {
+        const data = response.data
+        
+        //console.log(data.EngenheirosChefe)
+        const engenheirosChefe = data.EngenheirosChefe
+        setUsuariosEngenheiro(engenheirosChefe)
+      })
+    } catch (erro) {
+      console.error(erro)
+    }
+  }
+  useEffect(() => {
+    getUsuariosLista()
+  }, [])
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
       nome_projeto: data.nomeProjeto,
       descricao_projeto: data.descricaoProjeto,
+      chefe_projeto: data.chefeProjeto,
       valor_hora_projeto: data.valorHora,
       prazo_meses: data.prazoProjeto,
       ordem_projeto: 1,
@@ -60,8 +78,9 @@ function FormCadastroProjeto() {
 
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
+    //console.log(projeto)
 
-    await axios.post("/projeto/cadastrar", projeto, {log:true}).then((response) => {
+    await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
         Swal.fire({
           title: "Cadastro realizado com sucesso!",
@@ -215,10 +234,20 @@ function FormCadastroProjeto() {
         >
           Atribuição
         </label>
-        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" required {...register("listaUsuario", { required: true })}>
+        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" {...register("chefeProjeto")}>
           <option disabled selected value="">Engenheiro Chefe</option>
-          <option value="usuarios"></option>
+          {usuariosEngenheiro?.map((engenheiro, index) => (
+              <option key={index} value={engenheiro.id_usuario}>{engenheiro.nome}</option>
+          ))}
         </select>
+        {errors?.chefeProjeto && (
+          <label
+            htmlFor="prazoProjeto"
+            className="text-sm font-light text-error"
+          >
+            {errors.chefeProjeto.message}
+          </label>
+        )}
       </div>
       <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>

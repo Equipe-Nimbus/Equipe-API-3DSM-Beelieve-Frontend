@@ -34,10 +34,10 @@ export function formatarEstrutura(projeto, tabelaWBS) {
       })
     }
 
-    if (primeiraVez) {
+    /* if (primeiraVez) {
       projeto.chefe_projeto = linha.atribuicao
       primeiraVez = false;
-    }
+    } */
   })
 
   projeto.sub_projetos = novaEstruturaPacotes
