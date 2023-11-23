@@ -106,7 +106,7 @@ function CriarExcel({projeto, idProjeto}){
 
 const planejadoDataArray = Object.values(planejadoData);
 
-console.log(planejadoDataArray)
+//console.log(planejadoDataArray)
 
 
   const excelData = projeto && projeto.sub_projetos ? 

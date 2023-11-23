@@ -12,6 +12,7 @@ import { TbUsersGroup } from "react-icons/tb";
 function Colaboradores({ idProjeto }){
     const { user } = useAuth()
     const { register, handleSubmit } = useForm()
+    const [atualizar, setAtualizar] = useState(false)
 
     const [visualizacaoAtual, setVisualizacaoAtual] = useState("Líderes")
     const mudarVisualizacao = (valor) => {
@@ -20,7 +21,7 @@ function Colaboradores({ idProjeto }){
     }
 
     const [colaboradores, setColaboradores] = useState()
-    console.log(colaboradores)
+
     const getColaboradores = async () => {
         await axios.get(`/usuario/atribuidos/projeto/${idProjeto}`)
         .then((response) => {
@@ -45,7 +46,12 @@ function Colaboradores({ idProjeto }){
         if(user?.cargo !== 'Analista'){
             getAnalistasAtribuicao()
         }
-    }, [idProjeto])
+
+        if(atualizar){
+            setAtualizar(false)
+        }
+
+    }, [idProjeto, atualizar])
 
     const atribuirAnalista = async (data) => {
         const dadosAtribuicaoAnalista = {
@@ -53,19 +59,27 @@ function Colaboradores({ idProjeto }){
             id_projeto: idProjeto
         }
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "bottom-start",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          })
+
         const analistaJaAtribuido = colaboradores.analistasAtribuidos.some(analista => analista.idAnalista === parseInt(data.id_analista))
         if(!analistaJaAtribuido){
-            console.log(dadosAtribuicaoAnalista)
+            //console.log(dadosAtribuicaoAnalista)
+            await axios.post(`/projeto/atribuir/analista`, dadosAtribuicaoAnalista)
+            .then(() => {
+                Toast.fire({
+                    icon: "success",
+                    title: "Analista atribuido."
+                  })
+                setAtualizar(true)
+            })
         }
         else {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "bottom-start",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-              })
-        
               Toast.fire({
                 icon: "error",
                 title: "O analista selecionado já está atribuido ao projeto."
