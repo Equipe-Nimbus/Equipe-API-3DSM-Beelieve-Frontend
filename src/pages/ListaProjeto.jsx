@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/authContext.jsx"
+import { configurarAxios } from "../services/axios"
 
 import axios from "../services/axios"
 
@@ -19,9 +21,16 @@ function ListaProjeto() {
   const [chefeFiltro, setChefeFiltro] = useState()
   const [render, setRender] = useState(0)
 
+  const {user, autenticado, token} = useAuth()
+  useEffect(() => {
+    if(!autenticado){
+      navigate("/")
+    }
+  }, [])
+
   useEffect(() => {
     getProjetos()
-  }, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
+  }, []) 
 
   useEffect(() => {
     //console.log("renderizou")
@@ -86,21 +95,29 @@ function ListaProjeto() {
         const total = response.data.totalPages
         setTotalPagina(total)
       })
-    } catch (erro) { }
+    } catch (erro) {
+      //console.error(erro)
+     }
   }
 
   return (
     <div>
       <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-        <Button
-          texto="Novo"
-          tipo="button"
-          iconeOpcional={BsPlusCircle}
-          iconeTamanho="20px"
-          className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-          onClick={() => navigate("/projetos/novo-projeto")}
-        />
-        <hr className="border-n90"></hr>
+      {
+        user?.cargo === 'Gerente' && (
+          <>
+          <Button
+            texto="Novo"
+            tipo="button"
+            iconeOpcional={BsPlusCircle}
+            iconeTamanho="20px"
+            className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+            onClick={() => navigate("/projetos/novo-projeto")}
+          />
+          <hr className="border-n90"></hr>
+          </>
+        )
+      }
         <form
           className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getProdutoFiltro(e) }}
         >

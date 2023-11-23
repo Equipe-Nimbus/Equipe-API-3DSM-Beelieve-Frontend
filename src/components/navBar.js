@@ -9,7 +9,8 @@ import { LiaUserTieSolid } from "react-icons/lia"
 import { BiLogOut } from "react-icons/bi"
 
 function NavBar() {
-  const {loggout} = useAuth()
+  const { user, loggout } = useAuth()
+  //console.log(user)
 
   return (
     <>
@@ -36,6 +37,8 @@ function NavBar() {
               <Link to="/projetos">Projetos</Link>
             </li>
           </ul>
+
+          {user?.cargo === 'Gerente' && 
           <ul className="my-10 flex flex-col gap-3">
             <li className="flex cursor-pointer flex-row items-center gap-1 p-1.5 text-xl font-medium text-on-bg22 duration-200 hover:rounded hover:bg-hover-bg22">
               <FiUser
@@ -45,7 +48,8 @@ function NavBar() {
               />
               <Link to="/usuarios">Usuários</Link>
             </li>
-          </ul>
+          </ul>}
+
         </div>
         <div className="mb-5 flex gap-2">
           <div className="flex h-[45px] w-[45px] content-center justify-center rounded-md border-2 border-on-bg22">
@@ -53,9 +57,9 @@ function NavBar() {
           </div>
           <div className="flex h-[50px] flex-col">
             <p className="text-base font-semibold text-on-bg22">
-              Nome do Usuario
+              {user ? user.nome : "Nome"}
             </p>
-            <p className="font-regular text-sm text-on-bg22">Cargo</p>
+            <p className="font-regular text-sm text-on-bg22">{user ? user.cargo : "Cargo"}</p>
           </div>
         </div>
       </div>

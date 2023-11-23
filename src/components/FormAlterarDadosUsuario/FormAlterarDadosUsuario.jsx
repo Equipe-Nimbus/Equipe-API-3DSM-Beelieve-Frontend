@@ -316,7 +316,7 @@ function AlterarUsuario() {
                             onClick={() => navigate("/usuarios")}
                         />
                         <Button
-                            texto="Cadastrar"
+                            texto="Salvar"
                             tipo="submit"
                             className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
                         />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useForm, useFieldArray } from "react-hook-form"
-import Swal from 'sweetalert2'
+import { useAuth } from "../../contexts/authContext"
+import Swal from "sweetalert2"
 
 import Button from "../Button"
 import IntlCurrencyInput from "react-intl-currency-input"
@@ -29,33 +30,36 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   )
 
   const pegarChefesProjetos = (projeto) => {
-    const chefes = [];
+    const chefes = []
 
     // Adicionando chefe de projeto, se existir
     if (projeto.chefe_projeto) {
-      chefes.push(projeto.chefe_projeto);
+      chefes.push(projeto.chefe_projeto)
     } else {
-      chefes.push('');
+      chefes.push("")
     }
 
     // Adicionando chefes de subprojetos e nivel_sub_projeto, se existirem
     if (projeto.sub_projetos && projeto.sub_projetos.length > 0) {
       projeto.sub_projetos.forEach((subProjeto) => {
         if (subProjeto.chefe_sub_projeto) {
-          chefes.push(subProjeto.chefe_sub_projeto);
+          chefes.push(subProjeto.chefe_sub_projeto)
         } else {
-          chefes.push('');
+          chefes.push("")
         }
         // Adicione uma string vazia para nivel_sub_projeto
-        if (subProjeto.nivel_sub_projeto && subProjeto.nivel_sub_projeto.length > 0) {
+        if (
+          subProjeto.nivel_sub_projeto &&
+          subProjeto.nivel_sub_projeto.length > 0
+        ) {
           subProjeto.nivel_sub_projeto.forEach((nivelSubProjeto) => {
-            chefes.push('');
-          });
+            chefes.push("")
+          })
         }
-      });
+      })
     }
 
-    setchefesProjeto(chefes);
+    setchefesProjeto(chefes)
   }
 
   const checarNivelSubProjeto = (subprojetos) => {
@@ -71,11 +75,12 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
       }
     })
 
-    console.log("subprojetos alteraveis: ", projeto)
+    //console.log("subprojetos alteraveis: ", projeto)
 
     setSubProjetosAcessiveis(subProjetosFiltrados)
   }
 
+  const { user } = useAuth()
   async function getUsuariosLista() {
     try {
       await axios.get(`/usuario/listar/atribuicao`).then((response) => {
@@ -98,29 +103,38 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
   useEffect(() => {
     // Atualiza os valores dos selects usando o estado chefesProjeto
     fields.forEach((linha, index) => {
-      const nomeChefeProjeto = chefesProjeto[index]; // Obtém o nome do estado chefesProjeto
+      const nomeChefeProjeto = chefesProjeto[index] // Obtém o nome do estado chefesProjeto
 
       // Procura pelo nome do chefe de projeto nos arrays de usuários
-      const usuarioEncontradoEngenheiro = usuariosEngenheiro.find(usuario => usuario.nome === nomeChefeProjeto);
-      const usuarioEncontradoLiderPacote = usuariosLiderPacote.find(usuario => usuario.nome === nomeChefeProjeto);
+      const usuarioEncontradoEngenheiro = usuariosEngenheiro.find(
+        (usuario) => usuario.nome === nomeChefeProjeto,
+      )
+      const usuarioEncontradoLiderPacote = usuariosLiderPacote.find(
+        (usuario) => usuario.nome === nomeChefeProjeto,
+      )
 
       // Verifica se o usuário foi encontrado e atualiza o valor do select com o ID correspondente
       if (usuarioEncontradoEngenheiro) {
-        setValue(`estruturaDetalhes[${index}].atribuicao`, usuarioEncontradoEngenheiro.id_usuario);
+        setValue(
+          `estruturaDetalhes[${index}].atribuicao`,
+          usuarioEncontradoEngenheiro.id_usuario,
+        )
       } else if (usuarioEncontradoLiderPacote) {
-        setValue(`estruturaDetalhes[${index}].atribuicao`, usuarioEncontradoLiderPacote.id_usuario);
+        setValue(
+          `estruturaDetalhes[${index}].atribuicao`,
+          usuarioEncontradoLiderPacote.id_usuario,
+        )
       } else {
         // Se nenhum usuário for encontrado, você pode manipular isso de acordo com a sua lógica
         // Por exemplo, definir um valor padrão para `novoValor` ou lidar com a situação de outra forma
       }
-    });
-  }, [chefesProjeto, usuariosEngenheiro, usuariosLiderPacote]); // Executa quando chefesProjeto, usuariosEngenheiro ou usuariosLiderPacote mudam
-
+    })
+  }, [chefesProjeto, usuariosEngenheiro, usuariosLiderPacote]) // Executa quando chefesProjeto, usuariosEngenheiro ou usuariosLiderPacote mudam
 
   const { register, handleSubmit, control, setValue, getValues } = useForm({
     defaultValues: {
       estruturaDetalhes: estruturaDetalhes,
-      valorHora: projeto.hora_valor_projeto
+      valorHora: projeto.hora_valor_projeto,
     },
   })
 
@@ -129,7 +143,6 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     keyName: "customId",
     name: "estruturaDetalhes",
   })
-
 
   const handleMateriais = (index, valor) => {
     setValue(`estruturaDetalhes[${index}].materiais`, valor)
@@ -144,16 +157,21 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     const pacotes = getValues(`estruturaDetalhes`)
 
     pacotes.forEach((pacote, index) => {
-      setValue(`estruturaDetalhes[${index}].orcamento`, (pacote.hora_homem * valorHora) + pacote.materiais)
+      setValue(
+        `estruturaDetalhes[${index}].orcamento`,
+        pacote.hora_homem * valorHora + pacote.materiais,
+      )
     })
 
     setEstruturaDetalhes(pacotes)
   }
 
   const handleOrcamento = (index, nivel) => {
-    const horaHomem = Number(getValues(`estruturaDetalhes[${index}].hora_homem`),)
+    const horaHomem = Number(
+      getValues(`estruturaDetalhes[${index}].hora_homem`),
+    )
     const material = Number(getValues(`estruturaDetalhes[${index}].materiais`))
-    const valorHora = getValues('valorHora')
+    const valorHora = getValues("valorHora")
     const orcamentoNivel = horaHomem * valorHora + material
 
     setValue(`estruturaDetalhes[${index}].orcamento`, orcamentoNivel)
@@ -178,18 +196,36 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
         const indexSubProjeto = estruturaDetalhes.findIndex(
           (linha) => linha.nivel === subprojeto.nivel,
         )
-        const orcamentoSubProjeto = getValues(`estruturaDetalhes[${indexSubProjeto}].orcamento`)
-        const horaHomemSubProjeto = parseFloat(getValues(`estruturaDetalhes[${indexSubProjeto}].hora_homem`))
-        const materialSubProjeto = getValues(`estruturaDetalhes[${indexSubProjeto}].materiais`)
+        const orcamentoSubProjeto = getValues(
+          `estruturaDetalhes[${indexSubProjeto}].orcamento`,
+        )
+        const horaHomemSubProjeto = parseFloat(
+          getValues(`estruturaDetalhes[${indexSubProjeto}].hora_homem`),
+        )
+        const materialSubProjeto = getValues(
+          `estruturaDetalhes[${indexSubProjeto}].materiais`,
+        )
 
-        orcamentoSubProjetosSomados = orcamentoSubProjetosSomados + orcamentoSubProjeto
-        horaHomemSubProjetosSomados = horaHomemSubProjetosSomados + horaHomemSubProjeto
-        materialSubProjetosSomados = materialSubProjetosSomados + materialSubProjeto
+        orcamentoSubProjetosSomados =
+          orcamentoSubProjetosSomados + orcamentoSubProjeto
+        horaHomemSubProjetosSomados =
+          horaHomemSubProjetosSomados + horaHomemSubProjeto
+        materialSubProjetosSomados =
+          materialSubProjetosSomados + materialSubProjeto
       })
 
-      setValue(`estruturaDetalhes[${indexSubProjetoPai}].orcamento`, orcamentoSubProjetosSomados,)
-      setValue(`estruturaDetalhes[${indexSubProjetoPai}].hora_homem`, horaHomemSubProjetosSomados,)
-      setValue(`estruturaDetalhes[${indexSubProjetoPai}].materiais`, materialSubProjetosSomados,)
+      setValue(
+        `estruturaDetalhes[${indexSubProjetoPai}].orcamento`,
+        orcamentoSubProjetosSomados,
+      )
+      setValue(
+        `estruturaDetalhes[${indexSubProjetoPai}].hora_homem`,
+        horaHomemSubProjetosSomados,
+      )
+      setValue(
+        `estruturaDetalhes[${indexSubProjetoPai}].materiais`,
+        materialSubProjetosSomados,
+      )
     }
 
     const valores = getValues("estruturaDetalhes")
@@ -240,7 +276,6 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
     projeto.hora_humano_total = parseFloat(detalhesPacotesPreenchidos[0].hora_homem)
     projeto.materiais_projeto = detalhesPacotesPreenchidos[0].materiais
     projeto.hora_valor_projeto = data.valorHora
-
     const projetoFormatado = formatarEstrutura(projeto, detalhesPacotesPreenchidos)
 
     console.log(detalhesPacotesPreenchidos)
@@ -252,18 +287,18 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
           if (response.status === 200) {
             //console.log("resposta: ", response)
             Swal.fire({
-              title: 'Detalhes dos pacotes salvos com sucesso!',
-              icon: 'success',
-              confirmButtonColor: "#132431"
-            });
+              title: "Detalhes dos pacotes salvos com sucesso!",
+              icon: "success",
+              confirmButtonColor: "#132431",
+            })
             // window.alert("Detalhes dos pacotes atualizados com sucesso!")
             setAtualizar(true)
           } else {
-            Swal.fire('Ocorreu algum problema na atualização :(', '', 'error');
+            Swal.fire("Ocorreu algum problema na atualização :(", "", "error")
             // window.alert("Ocorreu algum problema na atualização :(")
           }
         })
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const statusInicio = projeto.data_inicio_projeto
@@ -297,7 +332,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                 <td className="px-4 py-3 text-lg font-semibold">
                   {linha.nivel}
                 </td>
-                <td className="font-regular text-lg pr-32">
+                <td className="font-regular pr-32 text-lg">
                   {linha.nivel === "1" && linha.descricao}
 
                   {linha.nivel.length === 3 &&
@@ -314,7 +349,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                           ),
                           nomeProjeto: projeto.nome_projeto,
                           dataInicioProjeto: projeto.data_inicio_projeto,
-                          idProjeto: projeto.id_projeto
+                          idProjeto: projeto.id_projeto,
                         }}
                       >
                         {linha.descricao}
@@ -334,7 +369,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                         ),
                         nomeProjeto: projeto.nome_projeto,
                         dataInicioProjeto: projeto.data_inicio_projeto,
-                        idProjeto: projeto.id_projeto
+                        idProjeto: projeto.id_projeto,
                       }}
                     >
                       {linha.descricao}
@@ -362,7 +397,9 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                     {...register(`estruturaDetalhes[${index}].hora_homem`)}
                     defaultValue={linha.hora_homem}
                     type="number"
-                    onBlur={(e) => handleHoraHomem(index, linha.nivel, e.target.value)}
+                    onBlur={(e) =>
+                      handleHoraHomem(index, linha.nivel, e.target.value)
+                    }
                     className="text-center disabled:text-n40"
                     disabled={
                       (linha.nivel.length === 3 &&
@@ -371,7 +408,8 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
                       linha.nivel === "1" ||
-                      statusInicio
+                      statusInicio ||
+                      user?.cargo === "Analista"
                     }
                   />
                 </td>
@@ -393,49 +431,52 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                             subprojeto.id_sub_projeto === linha.id,
                         )) ||
                       linha.nivel === "1" ||
-                      statusInicio
+                      statusInicio ||
+                      user?.cargo === "Analista"
                     }
                     className="text-justify disabled:text-n40"
                   />
                 </td>
                 <td class="break-all px-1">
-                  {(
-                    ((linha.nivel).split('.').length - 1) != 2
-                  ) && (
-                      <select className="text-justify disabled:text-n40"
-                        name={`estruturaDetalhes[${index}].atribuicao`}
-                        {...register(`estruturaDetalhes[${index}].atribuicao`)}
-                      >
-                        {linha.nivel === "1" ? (
+                  {linha.nivel.split(".").length - 1 !== 2 && (
+                    <select
+                      className="text-justify disabled:text-n40"
+                      name={`estruturaDetalhes[${index}].atribuicao`}
+                      {...register(`estruturaDetalhes[${index}].atribuicao`)}
+                      disabled={user?.cargo === "Analista"}
+                    >
+                      {linha.nivel === "1" ? (
+                        <option value="">Engenheiro chefe</option>
+                      ) : (
+                        <option value="">Líder de Pacote</option>
+                      )}
 
-                          <option value=''>Engenheiro chefe</option>
-                        ) : (
-                          <option value=''>Líder de Pacote</option>
-                        )}
-
-                        {linha.nivel === "1" ? (
-                          usuariosEngenheiro.map((usuario, contador) => (
-                            <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
+                      {linha.nivel === "1"
+                        ? usuariosEngenheiro.map((usuario, contador) => (
+                            <option
+                              value={usuario.id_usuario}
+                              selected={chefesProjeto[index] === usuario.nome}
+                            >
                               {usuario.nome}
                             </option>
                           ))
-                        ) : (
-                          usuariosLiderPacote.map((usuario, contador) => (
-                            <option value={usuario.id_usuario} selected={chefesProjeto[index] === usuario.nome}>
+                        : usuariosLiderPacote.map((usuario, contador) => (
+                            <option
+                              value={usuario.id_usuario}
+                              selected={chefesProjeto[index] === usuario.nome}
+                            >
                               {usuario.nome}
                             </option>
-                          ))
-                        )}
-
-                      </select>
-                    )}
+                          ))}
+                    </select>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        <div className="ml-6 mt-7 rounded border px-2 py-1 font-bold w-fit">
+        <div className="ml-6 mt-7 w-fit rounded border px-2 py-1 font-bold">
           <label htmlFor="valorHora">Hora = </label>
           <IntlCurrencyInput
             {...register(`valorHora`)}
@@ -446,14 +487,17 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
             onBlur={(e) => handleTrocaValorHora()}
             defaultValue={projeto.hora_valor_projeto}
             className="w-16"
+            disabled={statusInicio || user?.cargo === 'Analista'}
           />
         </div>
 
-        {!statusInicio && <Button
-          texto="Salvar"
-          tipo="submit"
-          className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-        />}
+        {(!statusInicio && user?.cargo !== 'Analista') && (
+          <Button
+            texto="Salvar"
+            tipo="submit"
+            className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+          />
+        )}
       </form>
     </div>
   )
