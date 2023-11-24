@@ -25,7 +25,7 @@ function ListaUsuario() {
 		if(!autenticado){
 			navigate("/")
 		}
-		else if(autenticado && user.cargo !== 'Gerente'){
+		else if(autenticado && user.cargo !== 'Gerente' && user.cargo !== 'Engenheiro Chefe'){
 			navigate("/projetos")
 		}
 	})
@@ -106,6 +106,7 @@ function ListaUsuario() {
 
 	return (
 		<div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+			{user?.cargo !== 'Engenheiro Chefe' &&
 			<Button
 				texto="Novo"
 				tipo="button"
@@ -113,7 +114,7 @@ function ListaUsuario() {
 				iconeTamanho="20px"
 				className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
 				onClick={() => navigate("/usuarios/novo-usuario")}
-			/>
+			/>}
 			<hr className="border-n90"></hr>
 			<form
 				className="flex justify-end mx-5 gap-4 my-5" onSubmit={(e) => { getUsuarioFiltro(e) }}

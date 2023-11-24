@@ -12,7 +12,7 @@ function AlterarUsuario() {
 			navigate("/")
 		}
 		else if(autenticado && user.cargo !== 'Gerente'){
-			navigate("/projetos")
+			navigate("/usuarios")
 		}
 	})
 
