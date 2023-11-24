@@ -44,10 +44,9 @@ function NovaTarefa() {
             idPai={idTarefa}
             ordem={ordemSubProjeto}
             nomePacote={nomeSubProjeto}
-            nomeProjeto={'aaaa'}
+            nomeProjeto={nomeProjeto}
             dataInicioProjeto={dataInicioProjeto}
             progressoPacote={progressoSubProjeto}
-            atribuicao={'1'}
           />
         </div>
       </div>
