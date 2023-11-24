@@ -464,7 +464,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
                       className="text-justify disabled:text-n40"
                       name={`estruturaDetalhes[${index}].atribuicao`}
                       {...register(`estruturaDetalhes[${index}].atribuicao`)}
-                      disabled={user?.cargo === "Analista"}
+                      disabled={user?.cargo === "Analista" || user?.cargo === "Lider de Pacote de Trabalho"}
                       onBlur={blurEngenheiroChefe}
                     >
                       {linha.nivel === "1" ? (
