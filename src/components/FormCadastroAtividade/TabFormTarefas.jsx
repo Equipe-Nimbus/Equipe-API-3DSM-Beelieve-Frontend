@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAuth } from "../../contexts/authContext"
 import Swal from "sweetalert2"
 
 import { BiTrash } from "react-icons/bi"
@@ -14,6 +15,8 @@ const removeZerosAEsquerda = (valor) => {
   // Remove zeros à esquerda usando expressão regular
   return valor.replace(/^0+/, '');
 };
+
+
 
 const TabFormTarefas = ({
   listaTarefas,
@@ -79,7 +82,7 @@ const TabFormTarefas = ({
       peso: 0,
       prazo: null,
       tendencia: null,
-      atribuicao:null
+      atribuicao: null
     }
 
     novaTarefa.push(novaLinha)
@@ -165,6 +168,7 @@ const TabFormTarefas = ({
 
     return listaTarefas
   }
+  const { user, loggout } = useAuth()
 
   const saveTarefa = async (data) => {
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
@@ -268,13 +272,14 @@ const TabFormTarefas = ({
 
       <div className="flex flex-col gap-2">
         <div className="ms-16">
-          <button
-            onClick={addRow}
-            className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
-          >
-            Adicionar tarefa
-            <AiOutlinePlus />
-          </button>
+          {user?.cargo !== 'Analista' &&
+            <button
+              onClick={addRow}
+              className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
+            >
+              Adicionar tarefa
+              <AiOutlinePlus />
+            </button>}
         </div>
 
         <form
@@ -306,7 +311,7 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].descricao`)}
                       defaultValue={tarefa.descricao}
                       className="w-11/12 border border-n90 rounded pl-1 disabled:text-n40 truncate"
-                      disabled={tarefa.status === true}
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
                   <td className="pt-2">
@@ -314,7 +319,7 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].resultadoEsperado`)}
                       defaultValue={tarefa.resultadoEsperado}
                       className="w-full border border-n90 rounded disabled:text-n40 min-h-fit pl-2"
-                      disabled={tarefa.status === true}
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
                   <td className="text-center">
@@ -329,7 +334,7 @@ const TabFormTarefas = ({
                       }}
                       min={0}
                       className="w-1/2 text-center border border-n90 rounded disabled:text-n40"
-                      disabled={tarefa.status === true}
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
                   <td>
@@ -339,6 +344,7 @@ const TabFormTarefas = ({
                       checked={fields[index].status === true}
                       onChange={(e) => handleStatus(index)}
                       className="w-full"
+                      disabled={user?.cargo === 'Analista'}
                     />
                   </td>
                   <td>
@@ -347,7 +353,7 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].prazo`)}
                       defaultValue={tarefa.prazo}
                       className="w-full text-center disabled:text-n40"
-                      disabled={tarefa.status === true}
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
                   <td>
@@ -356,28 +362,30 @@ const TabFormTarefas = ({
                       {...register(`tarefas[${index}].tendencia`)}
                       defaultValue={tarefa.tendencia}
                       className="w-full text-center disabled:text-n40"
-                      disabled={tarefa.status === true || !dataInicioProjeto}
+                      disabled={tarefa.status === true || !dataInicioProjeto || user?.cargo === 'Analista'}
                     />
                   </td>
                   <td>
                     <select
                       {...register(`tarefas[${index}].atribuicao`)}
                       className="w-full text-center disabled:text-n40"
+                      disabled={user?.cargo === 'Analista'}
                     >
-                    <option value=''>Grupos de trabalho</option>
-                    {[...Array(20)].map((_, i) => (
-                      <option key={i + 1}>{`Grupo ${i + 1}`}</option>
-                    ))}
+                      <option value=''>Grupos de trabalho</option>
+                      {[...Array(20)].map((_, i) => (
+                        <option key={i + 1}>{`Grupo ${i + 1}`}</option>
+                      ))}
                     </select>
                   </td>
                   <td className="text-center">
+                  {user?.cargo !== 'Analista' &&
                     <Button
                       iconeOpcional={BiTrash}
                       tipo="button"
                       iconeTamanho="24px"
                       className="hover:fill-primary50"
                       onClick={(e) => deleteRow(index)}
-                    />
+                    />}
                   </td>
                 </tr>
               ))}
@@ -385,11 +393,12 @@ const TabFormTarefas = ({
           </table>
 
           <div className="me-16 place-self-end">
-            <Button
-              texto="Salvar"
-              tipo="submit"
-              className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-            />
+            {user?.cargo !== 'Analista' &&
+              <Button
+                texto="Salvar"
+                tipo="submit"
+                className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+              />}
           </div>
         </form>
       </div>
