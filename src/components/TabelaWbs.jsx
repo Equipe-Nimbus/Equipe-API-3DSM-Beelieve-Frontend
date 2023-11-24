@@ -17,7 +17,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
           <tr>
             <th className="w-1/6 px-4 py-2">Nível</th>
             <th className="w-3/6 px-4 py-2">Descrição</th>
-           {!statusInicio && <th className="w-2/6">Ação</th>}
+           {!statusInicio && user?.cargo !== 'Analista' && (<th className="w-2/6">Ação</th>)}
           </tr>
         </thead>
         <tbody className="text-lg">
