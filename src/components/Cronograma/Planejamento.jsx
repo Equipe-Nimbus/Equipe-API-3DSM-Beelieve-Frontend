@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAuth } from "../../contexts/authContext"
 import Swal from "sweetalert2"
 
 import Button from "../Button"
@@ -26,19 +27,25 @@ function Planejamento({ idProjeto }) {
     name: "cronograma",
   })
 
+  const { user } = useAuth()
+
   const getCronograma = async () => {
     try {
       await axios.get(`/cronograma/${idProjeto}`).then((response) => {
         let cronogramaResgatado = response.data
+        //console.log("cronograma resgatado:", cronogramaResgatado)
         if (cronogramaResgatado.inicio_projeto) {
           let anoCronograma = Number(
             cronogramaResgatado.inicio_projeto.slice(0, 4),
           )
           cronogramaResgatado.lista_cronograma.forEach((mes) => {
-            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
 
-            if (mes.mes_cronograma === `Dezembro ${anoCronograma}`) {
-              anoCronograma++
+            if(mes.mes_cronograma.split(" ").length < 2 ) {
+              mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+
+              if (mes.mes_cronograma === `Dezembro ${anoCronograma}`) {
+                anoCronograma++
+              }
             }
 
             mes.niveis.forEach((nivel) => {
@@ -179,7 +186,7 @@ function Planejamento({ idProjeto }) {
                 handleInput(e.target.value, indexMes, indexNivel)
               }
               className={`text-center disabled:text-n40`}
-              disabled={!subProjetosEditaveis.includes(nivel.ordem_nivel)}
+              disabled={!subProjetosEditaveis.includes(nivel.ordem_nivel) || user?.cargo === 'Analista'}
             />
           </td>
         ))}
@@ -253,7 +260,6 @@ function Planejamento({ idProjeto }) {
 
   const atualizarCronograma = async (data) => {
     data.cronograma.forEach((mes) => {
-      mes.mes_cronograma = mes.mes_cronograma.split(" ")[0]
       mes.niveis.forEach((nivel) => {
         if (nivel.progresso_planejado.slice(-1) === "%") {
           nivel.progresso_planejado = parseFloat(
@@ -324,7 +330,7 @@ function Planejamento({ idProjeto }) {
         </div>
         <div className="mx-5 mt-5 flex justify-between">
           <div>
-            {cronograma.lista_cronograma?.length > 1 && (
+            {(cronograma.lista_cronograma?.length > 1 && user?.cargo !== 'Analista') && (
               <Button
                 iconeOpcional={FiMinus}
                 tipo="button"
@@ -335,22 +341,27 @@ function Planejamento({ idProjeto }) {
                 iconeTamanho="28px"
               />
             )}
-            <Button
-              iconeOpcional={FiPlus}
-              tipo="button"
-              onClick={(e) => {
-                adicionarMes()
-              }}
-              className="m-2 rounded-full bg-primary50"
-              iconeTamanho="28px"
-            />
+            {user?.cargo !== 'Analista' &&
+              <Button
+                iconeOpcional={FiPlus}
+                tipo="button"
+                onClick={(e) => {
+                  adicionarMes()
+                }}
+                className="m-2 rounded-full bg-primary50"
+                iconeTamanho="28px"
+              />
+            }
+            
           </div>
-
-          <Button
-            texto="Salvar"
-            tipo="submit"
-            className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-          />
+          { user?.cargo !== 'Analista' &&
+            <Button
+              texto="Salvar"
+              tipo="submit"
+              className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+            />
+          }
+          
         </div>
       </form>
     </>

@@ -1,17 +1,29 @@
 import React from "react"
+import { AuthProvider } from "./contexts/authContext"
+
 import NavBar from "./components/navBar"
-import { Outlet } from "react-router-dom"
 import Breadcrumbs from "./components/Breadcrumbs"
 
+import { Outlet, useLocation } from "react-router-dom"
+
+
+
 function App() {
+  const location = useLocation()
+  const paginaLogin = location.pathname === '/'
+  const renderNavBar = !paginaLogin && <NavBar/>
+  const renderBreadcrumbs = !paginaLogin && <Breadcrumbs/>
+
   return (
-    <div className="lg:flex md:overflow-y-auto">
-      <NavBar />
-      <div className="w-full">
-        <Breadcrumbs/>
-        <Outlet />
+    <AuthProvider>
+      <div className="lg:flex md:overflow-y-auto">
+        {renderNavBar}
+        <div className="w-full">
+          {renderBreadcrumbs}
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </AuthProvider>
   )
 }
 

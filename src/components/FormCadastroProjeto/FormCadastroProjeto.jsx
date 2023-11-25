@@ -15,7 +15,7 @@ import { formatarEstrutura } from "../../utils/formatarEstrutura"
 import { formatacaoDinheiro } from "../../utils/formatacaoDinheiro"
 
 
-function FormCadastroProjeto() { 
+function FormCadastroProjeto() {
   const [niveisExcel, setniveisExcel] = useState({})
 
   const {
@@ -27,11 +27,11 @@ function FormCadastroProjeto() {
     defaultValues: {
       valorHora: 0,
       prazoProjeto: null
-      
+
     },
     resolver: yupResolver(schemaProjetoInicial),
   })
-  
+
   const navigate = useNavigate()
 
   const [tabelaWBS, setTabelaWBS] = useState([
@@ -40,13 +40,31 @@ function FormCadastroProjeto() {
       descricao: "Objetivo Final",
     },
   ])
-
   useEffect(() => {}, [tabelaWBS])
+
+  const [usuariosEngenheiro, setUsuariosEngenheiro] = useState()
+  async function getUsuariosLista() {
+    try {
+      await axios.get(`/usuario/listar/atribuicao`).then((response) => {
+        const data = response.data
+        
+        //console.log(data.EngenheirosChefe)
+        const engenheirosChefe = data.EngenheirosChefe
+        setUsuariosEngenheiro(engenheirosChefe)
+      })
+    } catch (erro) {
+      console.error(erro)
+    }
+  }
+  useEffect(() => {
+    getUsuariosLista()
+  }, [])
 
   const gerarJsonProjeto = (data) => {
     const projeto = {
       nome_projeto: data.nomeProjeto,
       descricao_projeto: data.descricaoProjeto,
+      chefe_projeto: data.chefeProjeto,
       valor_hora_projeto: data.valorHora,
       prazo_meses: data.prazoProjeto,
       ordem_projeto: 1,
@@ -60,6 +78,7 @@ function FormCadastroProjeto() {
 
   const cadastrarProjeto = async (data) => {
     const projeto = gerarJsonProjeto(data)
+    //console.log(projeto)
 
     await axios.post("/projeto/cadastrar", projeto).then((response) => {
       if (response.status === 200) {
@@ -69,9 +88,9 @@ function FormCadastroProjeto() {
           confirmButtonColor: "#132431",
           allowOutsideClick: false,
           allowEscapeKey: false
-          
+
         }).then((result) => {
-          if(result.isConfirmed){
+          if (result.isConfirmed) {
             navigate("/projetos")
           }
         })
@@ -79,7 +98,19 @@ function FormCadastroProjeto() {
       else {
         Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
       }
-    })
+    }).catch(error => {
+		if (error.response.status === 400) {
+			Swal.fire({
+			  title: error.response.data,
+			  icon: "error",
+		  	  confirmButtonColor: "#132431",
+              allowOutsideClick: false,
+              allowEscapeKey: false
+			})
+		} else {
+			Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
+		}	
+  	})
   }
 
   const handlerBlur = (evento) => {
@@ -94,12 +125,12 @@ function FormCadastroProjeto() {
   }
 
   useEffect(() => {
-    if(niveisExcel.subProjeto){
+    if (niveisExcel.subProjeto) {
       setValue("nomeProjeto", niveisExcel.subProjeto[0].descricao)
       let tabela = [...tabelaWBS]
       tabela = niveisExcel.subProjeto
       //console.log("TABELA", tabela)
-      setTabelaWBS(tabela) 
+      setTabelaWBS(tabela)
     }
   }, [niveisExcel])
 
@@ -196,7 +227,29 @@ function FormCadastroProjeto() {
           </label>
         )}
       </div>
-      <div className="mt-5">
+      <div className="mt-4 flex flex-col">
+        <label
+          htmlFor="prazoProjeto"
+          className="text-base font-medium text-on-light"
+        >
+          Atribuição
+        </label>
+        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" {...register("chefeProjeto")}>
+          <option disabled selected value="">Engenheiro Chefe</option>
+          {usuariosEngenheiro?.map((engenheiro, index) => (
+              <option key={index} value={engenheiro.id_usuario}>{engenheiro.nome}</option>
+          ))}
+        </select>
+        {errors?.chefeProjeto && (
+          <label
+            htmlFor="prazoProjeto"
+            className="text-sm font-light text-error"
+          >
+            {errors.chefeProjeto.message}
+          </label>
+        )}
+      </div>
+      <div className="ml-5 mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
         <TabelaWbs
           tabelaWBS={tabelaWBS}

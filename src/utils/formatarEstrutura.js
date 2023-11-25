@@ -1,7 +1,9 @@
 export function formatarEstrutura(projeto, tabelaWBS) {
   const novaEstruturaPacotes = []
   let nivelSubProjeto = ""
+  let primeiraVez = true;
   tabelaWBS.forEach((linha) => {
+    
     if (linha.nivel.length === 3) {
       novaEstruturaPacotes.push({
         id_sub_projeto: linha.id,
@@ -11,6 +13,7 @@ export function formatarEstrutura(projeto, tabelaWBS) {
         hora_humano_sub_projeto: parseFloat(linha.hora_homem),
         materiais_sub_projeto: linha.materiais,
         nivel_sub_projeto: [],
+        chefe_sub_projeto: linha.atribuicao,
       })
 
       nivelSubProjeto = linha.nivel
@@ -30,6 +33,11 @@ export function formatarEstrutura(projeto, tabelaWBS) {
         hora_humano_nivel_sub_projeto: parseFloat(linha.hora_homem),
       })
     }
+
+    /* if (primeiraVez) {
+      projeto.chefe_projeto = linha.atribuicao
+      primeiraVez = false;
+    } */
   })
 
   projeto.sub_projetos = novaEstruturaPacotes

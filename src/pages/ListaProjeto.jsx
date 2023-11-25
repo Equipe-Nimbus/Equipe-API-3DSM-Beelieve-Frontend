@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/authContext.jsx"
+import { configurarAxios } from "../services/axios"
 
 import axios from "../services/axios"
 
@@ -19,9 +21,16 @@ function ListaProjeto() {
   const [chefeFiltro, setChefeFiltro] = useState()
   const [render, setRender] = useState(0)
 
+  const {user, autenticado, token} = useAuth()
+  useEffect(() => {
+    if(!autenticado){
+      navigate("/")
+    }
+  }, [])
+
   useEffect(() => {
     getProjetos()
-  }, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
+  }, []) 
 
   useEffect(() => {
     //console.log("renderizou")
@@ -48,7 +57,7 @@ function ListaProjeto() {
     //console.log("Pagina Mudada: " + paginaMudada)
     let requisicao = montaRequisicaoFiltragem()
     setPagina(paginaMudada)
-    requisicao = requisicao + `&page=${paginaMudada}&size=10`
+    requisicao = requisicao + `&page=${paginaMudada}&size=9`
     //console.log("Requisição: " + requisicao)
     try {
       await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
@@ -63,7 +72,7 @@ function ListaProjeto() {
   async function getProdutoFiltro(evento) {
     evento.preventDefault()
     let requisicao = montaRequisicaoFiltragem()
-    requisicao = requisicao + `&page=0&size=10`
+    requisicao = requisicao + `&page=0&size=9`
     //console.log("Requisição: " + requisicao)
     try {
       await axios.get(`/projeto/lista/paginada?${requisicao}`).then((response) => {
@@ -79,28 +88,37 @@ function ListaProjeto() {
 
   async function getProjetos() {
     try {
-      await axios.get("/projeto/lista/paginada?page=0&size=10").then((response) => {
+      await axios.get("/projeto/lista/paginada?page=0&size=9").then((response) => {
         //console.log(response)
         const data = response.data.content
         setProjetos(data)
         const total = response.data.totalPages
         setTotalPagina(total)
       })
-    } catch (erro) { }
+    } catch (erro) {
+      //console.error(erro)
+     }
   }
+  
 
   return (
     <div>
       <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-        <Button
-          texto="Novo"
-          tipo="button"
-          iconeOpcional={BsPlusCircle}
-          iconeTamanho="20px"
-          className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-          onClick={() => navigate("/projetos/novo-projeto")}
-        />
-        <hr className="border-n90"></hr>
+      {
+        user?.cargo === 'Gerente' && (
+          <>
+          <Button
+            texto="Novo"
+            tipo="button"
+            iconeOpcional={BsPlusCircle}
+            iconeTamanho="20px"
+            className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+            onClick={() => navigate("/projetos/novo-projeto")}
+          />
+          <hr className="border-n90"></hr>
+          </>
+        )
+      }
         
         <details className="cursor-pointer my-5 text-n40 font-medium lg:hidden">
           <summary>Filtros</summary>
@@ -120,7 +138,7 @@ function ListaProjeto() {
           <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" placeholder="Título:" type="text" value={nomeFiltro} onChange={(e) => { setNomeFiltro(e.target.value) }} />
           <input className="w-64 py-0.5 pl-2 rounded-md border border-n70" type="text" placeholder="Líder:" value={chefeFiltro} onChange={(e) => { setChefeFiltro(e.target.value) }} />
 
-          <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter/>Filtrar</button>
+          <button className="w-24 border inline-flex border-n70 rounded-md justify-center items-center hover:bg-n90 duration-300" type="submit"><BiFilter />Filtrar</button>
         </form>
         
         <div className="mx-10 flex flex-row flex-wrap gap-10">
@@ -131,6 +149,7 @@ function ListaProjeto() {
               descricao={projeto.descricao_projeto}
               estadoProjeto={projeto.data_inicio_projeto}
               liderProjeto={projeto.chefe_projeto}
+              progressoProjeto={projeto.progresso_projeto}
               onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
             />
           ))}

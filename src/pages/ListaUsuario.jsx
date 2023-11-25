@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
+import { useAuth } from "../contexts/authContext.jsx"
 
 import axios from "../services/axios"
 
@@ -19,12 +20,21 @@ function ListaUsuario() {
 	const [totalPagina, setTotalPagina] = useState()
 	const [render, setRender] = useState(0)
 
+	const {user, autenticado} = useAuth()
+	useEffect(() => {
+		if(!autenticado){
+			navigate("/")
+		}
+		else if(autenticado && user.cargo !== 'Gerente' && user.cargo !== 'Engenheiro Chefe'){
+			navigate("/projetos")
+		}
+	})
+
 	useEffect(() => {
 		getUsuarios()
 	}, []) //array vazio indica que este useEffect será executado uma vez quando o componente for montado
 
 	useEffect(() => {
-		console.log("renderizou")
 	}, [render])
 
 	async function mudaInputPagina(valor) {
@@ -85,7 +95,7 @@ function ListaUsuario() {
 	async function getUsuarios() {
 		try {
 			await axios.get("/usuario/lista/paginada?page=0&size=10").then((response) => {
-				console.log(response)
+				//console.log(response)
 				const data = response.data.content
 				setUsuarios(data)
 				const total = response.data.totalPages
@@ -96,6 +106,7 @@ function ListaUsuario() {
 
 	return (
 		<div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+			{user?.cargo !== 'Engenheiro Chefe' &&
 			<Button
 				texto="Novo"
 				tipo="button"
@@ -103,7 +114,7 @@ function ListaUsuario() {
 				iconeTamanho="20px"
 				className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
 				onClick={() => navigate("/usuarios/novo-usuario")}
-			/>
+			/>}
 			<hr className="border-n90"></hr>
 
 			<details className="cursor-pointer my-5 text-n40 font-medium lg:hidden">
@@ -139,8 +150,8 @@ function ListaUsuario() {
 				<select className="w-48 rounded-md border border-n70 p-0.5" value={cargoFiltro} onChange={(e) => { setCargoFiltro(e.target.value) }}>
 					<option selected value="">Cargo</option>
 					<option value="Gerente">Gerente</option>
-					<option value="EngenheiroChefe">Engenheiro Chefe</option>
-					<option value="LiderDePacoteDeTrabalho">Líder de Pacote de Trabalho</option>
+					<option value="Engenheiro_Chefe">Engenheiro Chefe</option>
+					<option value="Lider_de_Pacote_de_Trabalho">Líder de Pacote de Trabalho</option>
 					<option value="Analista">Analista</option>
 				</select>
 				<select className="w-48 rounded-md border border-n70 p-0.5" value={departamentoFiltro} onChange={(e) => { setDepartamentoFiltro(e.target.value) }}>

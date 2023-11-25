@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/authContext"
 import PropTypes from "prop-types"
 import Button from "./Button"
 
@@ -20,6 +21,8 @@ function VisaoGeral({
   camposValidados,
   setAtualizar,
 }) {
+  const { user } = useAuth()
+
   const [projetoNaoIniciado, setProjetoNaoIniciado] = useState(
     !DataProjetoIniciado,
   )
@@ -151,7 +154,7 @@ function VisaoGeral({
         .then((res) => {
           setProjetoNaoIniciado(false)
           setAtualizar(true)
-          Swal.fire("Projeto iniciado com sucesso!", "", "sucess")
+          Swal.fire("Projeto iniciado com sucesso!", "", "success")
         })
         .catch((error) => {
           console.log("error", error)
@@ -183,7 +186,7 @@ function VisaoGeral({
   useEffect(() => {
     setProjetoNaoIniciado(!DataProjetoIniciado)
   }, [DataProjetoIniciado])
-
+  
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
       <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
@@ -219,23 +222,28 @@ function VisaoGeral({
         </span> */}
         </div>
         
-        {<div className="flex flex-col gap-2 mt-5">
+        <div className="flex flex-col gap-2 mt-5">
           {projetoNaoIniciado && (
             <>
-              <Button
-                texto="Iniciar projeto"
-                iconeOpcional={BsPlayFill}
-                iconeTamanho="20px"
-                className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-                onClick={handleIniciarProjetoClick}
-              />
-              <Button
-                texto="Excluir projeto"
-                iconeOpcional={BsPlayFill}
-                iconeTamanho="20px"
-                onClick={handleExcluirProjetoClick}
-                className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
-              />             
+              { (user?.cargo === 'Gerente' || user?.cargo === 'Engenheiro Chefe') && 
+                <Button
+                  texto="Iniciar projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+                  onClick={handleIniciarProjetoClick}
+                />
+              }
+              {
+                user?.cargo === 'Gerente' && 
+                <Button
+                  texto="Excluir projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  onClick={handleExcluirProjetoClick}
+                  className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
+                /> 
+              }             
             </>
           )}
           {!projetoNaoIniciado && (
@@ -251,12 +259,10 @@ function VisaoGeral({
               ></progress>
             </div>
           )}
-        </div>}
+        </div>
       </div>
-
-      
       <hr className="border-n90 my-4" />
-      <CriarExcel projeto={projeto}/>
+      <CriarExcel projeto={projeto} idProjeto={id} />
     </div>
   )
 }
