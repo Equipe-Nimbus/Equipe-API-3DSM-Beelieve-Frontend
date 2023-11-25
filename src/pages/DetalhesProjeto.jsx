@@ -130,8 +130,8 @@ function DetalhesProjeto() {
   }, [projeto, atualizar])
      
   useEffect(() => {
-	  console.log('Nodes do DetalhesProjeto: ', nodes)
-	  console.log('Edges do DetalhesProjeto: ', edges)
+	  // console.log('Nodes do DetalhesProjeto: ', nodes)
+	  // console.log('Edges do DetalhesProjeto: ', edges)
   })
 
   return (

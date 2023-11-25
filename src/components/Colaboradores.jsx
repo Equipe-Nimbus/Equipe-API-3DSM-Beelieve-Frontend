@@ -7,11 +7,12 @@ import axios from "../services/axios"
 import Button from "./Button";
 import { LuUsers } from "react-icons/lu";
 import { TbUsersGroup } from "react-icons/tb";
+import { FiMinus } from "react-icons/fi"
 
 
 function Colaboradores({ idProjeto }){
     const { user } = useAuth()
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit, setValue } = useForm()
     const [atualizar, setAtualizar] = useState(false)
 
     const [visualizacaoAtual, setVisualizacaoAtual] = useState("Líderes")
@@ -76,6 +77,7 @@ function Colaboradores({ idProjeto }){
                     icon: "success",
                     title: "Analista atribuido."
                   })
+                setValue('id_analista', "")
                 setAtualizar(true)
             })
         }
@@ -83,6 +85,37 @@ function Colaboradores({ idProjeto }){
               Toast.fire({
                 icon: "error",
                 title: "O analista selecionado já está atribuido ao projeto."
+              })
+        }
+    }
+
+    const desatribuirAnalista = async(idAnalista) => {
+        const desatribuicaoAnalista = {
+            id_analista: idAnalista,
+            id_projeto: parseInt(idProjeto)
+        }
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "bottom-start",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        })
+
+        try {
+            await axios.put("/projeto/desatribuir/analista", desatribuicaoAnalista).then(() => {
+                Toast.fire({
+                    icon: "success",
+                    title: "Analista desatribuído."
+                  })
+                setAtualizar(true)
+            })
+        } catch (error) {
+            console.error(error)
+            Toast.fire({
+                icon: "error",
+                title: "Ocorreu um erro ao desatribuir o analista."
               })
         }
     }
@@ -188,8 +221,9 @@ function Colaboradores({ idProjeto }){
                 <table className="w-2/3 mt-5">
                     <thead className="bg-primary98 p-10 text-base uppercase text-center">
                         <tr>
-                            <th className="pl-10 py-3 text-left">Nome</th>
-                            <th className=" py-3 text-left">Email</th>	
+                            <th className="w-2/5 pl-10 py-3 text-left">Nome</th>
+                            <th className="w-2/5 text-left">Email</th>
+                            <th className="w-1/5 text-center">Ação</th>		
                         </tr>
                     </thead>
                     <tbody>
@@ -200,6 +234,20 @@ function Colaboradores({ idProjeto }){
                                 </td>
                                 <td className="text-lg">
                                     {analista.emailAnalista}
+                                </td>
+                                <td>
+                                    <div className="flex items-center justify-center">
+                                        <Button
+                                        iconeOpcional={FiMinus}
+                                        tipo="button"
+                                        onClick={() => desatribuirAnalista(analista.idAnalista)}
+                                        className="m-2 rounded-full bg-n40"
+                                        iconeTamanho="24px"
+                                        iconeCor="white"
+                                        />
+                                        <span className="text-n40 font-medium">Desatribuir</span>
+                                    </div>
+                                    
                                 </td>
                             </tr>
                         ))}
