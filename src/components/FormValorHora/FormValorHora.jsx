@@ -513,7 +513,7 @@ function FormValorHora({ tabela, projeto, setAtualizar }) {
           />
         </div>
 
-        {(!statusInicio && user?.cargo !== 'Analista') && (
+        {!user?.cargo !== 'Analista' && (
           <Button
             texto="Salvar"
             tipo="submit"

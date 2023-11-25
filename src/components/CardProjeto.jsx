@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-function CardProjeto({ titulo, descricao, estadoProjeto, onClick, liderProjeto }) {
+function CardProjeto({ titulo, descricao, estadoProjeto, onClick, liderProjeto, progressoProjeto }) {
   const [projetoIniciado] = useState(estadoProjeto)
 
   return (
@@ -14,7 +14,19 @@ function CardProjeto({ titulo, descricao, estadoProjeto, onClick, liderProjeto }
         </h1>
         <p className="h-28 text-sm text-n40">{descricao}</p>
         <span className="h-8 text-sm font-semibold text-n40">Responsável: </span><span className="text-sm" >{liderProjeto ? liderProjeto : "Não atribuído"}</span>
-        <p className="h-8 text-on-light font-medium">{projetoIniciado ? "Iniciado" : "Não Iniciado"}</p>
+        {projetoIniciado ?
+        <div className="flex items-center gap-1">
+          <progress
+            value={progressoProjeto}
+            max={100}
+            className="h-2 rounded bg-complementary-20"
+          ></progress>
+          <span className=" text-complementary-20">{`${progressoProjeto}%`}</span>
+        </div>
+        :
+          <p className="h-8 text-on-light font-medium">Não iniciado</p>
+        }
+        
       </div>
     </>
   )

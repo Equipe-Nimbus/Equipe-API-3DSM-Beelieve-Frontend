@@ -89,7 +89,7 @@ function ListaProjeto() {
   async function getProjetos() {
     try {
       await axios.get("/projeto/lista/paginada?page=0&size=9").then((response) => {
-        //console.log(response)
+        console.log(response)
         const data = response.data.content
         setProjetos(data)
         const total = response.data.totalPages
@@ -135,6 +135,7 @@ function ListaProjeto() {
               descricao={projeto.descricao_projeto}
               estadoProjeto={projeto.data_inicio_projeto}
               liderProjeto={projeto.chefe_projeto}
+              progressoProjeto={projeto.progresso_projeto}
               onClick={() => navigate(`/projetos/${projeto.id_projeto}`)}
             />
           ))}
