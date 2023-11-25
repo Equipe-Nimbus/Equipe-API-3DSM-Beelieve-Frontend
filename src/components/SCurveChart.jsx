@@ -37,7 +37,7 @@ function SCurveChart({ cronograma }) {
             }
           }
           progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].planejado.push(parseFloat(nivel.progresso_planejado.slice(0, -1)))
-          progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].real.push(nivel.progresso_real !== '-' ? parseFloat(nivel.progresso_real.slice(0, -1)) : 0)
+          progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].real.push(nivel.progresso_real !== '-' ? parseFloat(nivel.progresso_real.slice(0, -1)) : null)
         })
       })
 

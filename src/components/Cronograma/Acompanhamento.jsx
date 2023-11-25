@@ -11,6 +11,7 @@ import { GoGraph } from 'react-icons/go'
 
 function Acompanhamento({ idProjeto }) {
   const [cronograma, setCronograma] = useState({})
+  const [cronogramaGrafico, setCronogramaGrafico] = useState({})
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
   const mudarVisualizacao = (valor) => {
     const view = valor
@@ -21,7 +22,6 @@ function Acompanhamento({ idProjeto }) {
     try {
       await axios.get(`/cronograma/${idProjeto}`).then(async (response) => {
         let cronogramaResgatado = response.data;
-		
         let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
         const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
         let dataAtual
@@ -58,9 +58,8 @@ function Acompanhamento({ idProjeto }) {
             }
         
         })
+		setCronograma(cronogramaResgatado);
 
-
-        setCronograma(cronogramaResgatado);
       });
     } catch (error) {
       console.error("Erro ao obter cronograma:", error);
