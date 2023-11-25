@@ -154,7 +154,7 @@ function VisaoGeral({
         .then((res) => {
           setProjetoNaoIniciado(false)
           setAtualizar(true)
-          Swal.fire("Projeto iniciado com sucesso!", "", "sucess")
+          Swal.fire("Projeto iniciado com sucesso!", "", "success")
         })
         .catch((error) => {
           console.log("error", error)

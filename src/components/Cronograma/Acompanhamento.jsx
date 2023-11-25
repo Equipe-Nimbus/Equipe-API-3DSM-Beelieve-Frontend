@@ -33,14 +33,16 @@ function Acompanhamento({ idProjeto }) {
 		dataAtual = new Date(anoDataAtual, mesDataAtual)
 		
         cronogramaResgatado.lista_cronograma.forEach((mes) => { 
-            const nomeDoMes = mes.mes_cronograma
+            const nomeDoMes = mes.mes_cronograma.split(" ")[0]
             const indiceMes = mesesDoAno.indexOf(nomeDoMes)
             const data = new Date(anoCronograma, indiceMes)
             
-            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+            if(mes.mes_cronograma.split(" ").length < 2 ) {
+              mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+            }
 
             if(mes.mes_cronograma === `Dezembro ${anoCronograma}`){
-                anoCronograma++
+              anoCronograma++
             }
 
             if (data > dataAtual) {

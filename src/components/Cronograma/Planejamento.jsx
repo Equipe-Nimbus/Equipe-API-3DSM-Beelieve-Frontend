@@ -33,15 +33,19 @@ function Planejamento({ idProjeto }) {
     try {
       await axios.get(`/cronograma/${idProjeto}`).then((response) => {
         let cronogramaResgatado = response.data
+        //console.log("cronograma resgatado:", cronogramaResgatado)
         if (cronogramaResgatado.inicio_projeto) {
           let anoCronograma = Number(
             cronogramaResgatado.inicio_projeto.slice(0, 4),
           )
           cronogramaResgatado.lista_cronograma.forEach((mes) => {
-            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
 
-            if (mes.mes_cronograma === `Dezembro ${anoCronograma}`) {
-              anoCronograma++
+            if(mes.mes_cronograma.split(" ").length < 2 ) {
+              mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+
+              if (mes.mes_cronograma === `Dezembro ${anoCronograma}`) {
+                anoCronograma++
+              }
             }
 
             mes.niveis.forEach((nivel) => {
@@ -256,7 +260,6 @@ function Planejamento({ idProjeto }) {
 
   const atualizarCronograma = async (data) => {
     data.cronograma.forEach((mes) => {
-      mes.mes_cronograma = mes.mes_cronograma.split(" ")[0]
       mes.niveis.forEach((nivel) => {
         if (nivel.progresso_planejado.slice(-1) === "%") {
           nivel.progresso_planejado = parseFloat(

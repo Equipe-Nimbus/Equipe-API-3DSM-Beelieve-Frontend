@@ -89,7 +89,7 @@ function ListaProjeto() {
   async function getProjetos() {
     try {
       await axios.get("/projeto/lista/paginada?page=0&size=9").then((response) => {
-        console.log(response)
+        //console.log(response)
         const data = response.data.content
         setProjetos(data)
         const total = response.data.totalPages
