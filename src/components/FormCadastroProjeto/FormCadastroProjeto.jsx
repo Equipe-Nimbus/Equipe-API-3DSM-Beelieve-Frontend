@@ -234,7 +234,7 @@ function FormCadastroProjeto() {
         >
           Atribuição
         </label>
-        <select className="w-1/2 border rounded border-n70 p-1" name="listaUsuario" {...register("chefeProjeto")}>
+        <select className="border rounded border-n70 p-1 md:w-1/2" name="listaUsuario" {...register("chefeProjeto")}>
           <option disabled selected value="">Engenheiro Chefe</option>
           {usuariosEngenheiro?.map((engenheiro, index) => (
               <option key={index} value={engenheiro.id_usuario}>{engenheiro.nome}</option>
@@ -249,7 +249,7 @@ function FormCadastroProjeto() {
           </label>
         )}
       </div>
-      <div className="ml-5 mt-5">
+      <div className="mt-5">
         <h2 className="text-xl font-semibold text-on-light">WBS</h2>
         <TabelaWbs
           tabelaWBS={tabelaWBS}

@@ -16,7 +16,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="lg:flex md:overflow-y-auto">
+      <div className="xl:flex">
         {renderNavBar}
         <div className="w-full">
           {renderBreadcrumbs}

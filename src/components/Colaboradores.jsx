@@ -122,7 +122,7 @@ function Colaboradores({ idProjeto }){
 
     return (
         <>
-        <div className="mx-5 mb-2 flex items-center justify-between">
+        <div className="mx-5 mb-2 flex flex-col gap-2 items-center justify-between md:flex-row md:gap-0">
             <h3 className="text-xl font-semibold text-on-light">
             {visualizacaoAtual}
             </h3>
@@ -164,8 +164,8 @@ function Colaboradores({ idProjeto }){
 
         {visualizacaoAtual === 'Líderes' && (
             <table className="w-full mt-5">
-                <thead className="bg-primary98 p-10 text-base uppercase text-center">
-                    <tr>
+                <thead className="bg-primary98  text-base uppercase text-center block md:p-10 md:table-header-group">
+                    <tr className="hidden md:table-row">
                         <th className="w-1/12 py-3">Nível</th>
                         <th className="w-3/12 py-3 text-left">Descrição</th>
                         <th className="w-3/12 py-3 text-left">Nome</th>
@@ -173,22 +173,25 @@ function Colaboradores({ idProjeto }){
                         <th className="w-2/12 py-3 pr-5">Cargo</th>		
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="block md:table-row-group">
                     {colaboradores?.lideresAtribuidos.map((lider, index) => (
-                        <tr key={index} className="border-b border-n90">
-                            <td className="py-3 text-lg font-semibold text-center">
+                        <tr key={index} className="block mr-4 border border-n70 even:bg-primary98 odd:bg-bg100 mb-0.5 md:table-row md:border-b md:border-t-0 md:border-x-0 md:even:bg-bg100">
+                            <td className="py-3 text-lg font-semibold text-center border border-n70 block md:hidden">
+                                {`Nível ${lider.ordemProjeto}`}
+                            </td>
+                            <td className="py-3 text-lg font-semibold text-center hidden md:table-cell">
                                 {lider.ordemProjeto}
                             </td>
-                            <td className="text-lg text-left">
+                            <td className="text-lg text-left pl-2 border border-n70 block  md:table-cell md:border-none md:pl-0">
                                 {lider.descricaoProjeto}
                             </td>
-                            <td className="text-lg text-left">
+                            <td className="text-lg text-left pl-2 border border-n70 block md:table-cell md:border-none md:pl-0">
                                 {lider.nomeUsuario}
                             </td>
-                            <td className="text-lg text-left">
+                            <td className="text-lg text-left pl-2 border border-n70 block md:table-cell md:border-none md:pl-0">
                                 {lider.emailUsuario}
                             </td>
-                            <td className="text-lg text-center pr-5">
+                            <td className="text-lg pl-2 border border-n70 block md:pr-5 md:table-cell md:border-none md:text-center">
                                 {lider.cargoUsuario}
                             </td>
                         </tr>
@@ -201,7 +204,7 @@ function Colaboradores({ idProjeto }){
             <>
                 {
                     user?.cargo !== 'Analista' && (
-                        <div className="ml-4 mt-5 text-lg">
+                        <div className=" mt-5 text-lg">
                             <form onSubmit={handleSubmit(atribuirAnalista)}>
                                 <label className='font-medium'>Atribuir um novo analista: </label>
                                 <select className='border p-2 rounded-lg border-n90' {...register('id_analista')}>
@@ -212,30 +215,30 @@ function Colaboradores({ idProjeto }){
                                         </option>
                                     ))}
                                 </select>
-                                <Button texto="Confirmar" tipo="submit" className="p-1 ml-5 font-medium bg-primary50 rounded-lg"/>
+                                <Button texto="Confirmar" tipo="submit" className="p-1 font-medium bg-primary50 rounded-lg md:ml-5"/>
                             </form>
                         </div>
                     )
                 }
                 
-                <table className="w-2/3 mt-5">
-                    <thead className="bg-primary98 p-10 text-base uppercase text-center">
-                        <tr>
-                            <th className="w-2/5 pl-10 py-3 text-left">Nome</th>
-                            <th className="w-2/5 text-left">Email</th>
-                            <th className="w-1/5 text-center">Ação</th>		
+                <table className="w-full xl:w-2/3 mt-5">
+                    <thead className="bg-primary98  text-base uppercase text-center block md:p-10 md:table-header-group">
+                        <tr className="hidden md:table-row">
+                            <th className="w-2/5 block md:pl-10 md:py-3 md:text-left md:table-cell">Nome</th>
+                            <th className="w-2/5 block md:text-left md:table-cell">Email</th>
+                            <th className="w-1/5 block md:text-center md:table-cell">Ação</th>		
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="block md:table-row-group">
                         {colaboradores?.analistasAtribuidos.map((analista, index) => (
-                            <tr key={index} className="border-b border-n90">
-                                <td className="pl-10 py-3 text-lg font-semibold">
+                            <tr key={index} className="block mr-4 border border-n70 even:bg-primary98 odd:bg-bg100 mb-0.5 md:table-row md:border-b md:border-t-0 md:border-x-0 md:even:bg-bg100">
+                                <td className="text-lg font-semibold relative block text-center border border-n70 md:table-cell md:text-left md:pl-10 md:py-3 md:border-none">
                                     {analista.nomeAnalista}
                                 </td>
-                                <td className="text-lg">
+                                <td className="text-lg relative text-center border border-n70 block md:table-cell md:text-left md:border-none">
                                     {analista.emailAnalista}
                                 </td>
-                                <td>
+                                <td className="relative border border-n70 block md:table-cell md:border-none">
                                     <div className="flex items-center justify-center">
                                         <Button
                                         iconeOpcional={FiMinus}
