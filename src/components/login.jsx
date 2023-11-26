@@ -2,11 +2,10 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { useAuth } from "../contexts/authContext"
 
-import detalhe from '../images/detalhe.png'
-import Beelieve1 from '../images/Beelieve1.png'
+import wbs from "../assets/images/wbs.png"
+import Beelieve1 from "../assets/images/Beelieve1.png"
 
-function Login(){
-
+function Login() {
   const { register, handleSubmit } = useForm({})
   const { login } = useAuth()
 
@@ -14,54 +13,60 @@ function Login(){
     await login(data)
   }
 
-    return(
-        <div className="bg-gradient-to-t from-bg33 via-bg33 to-bg100 h-screen flex items-center justify-center">
-            <div className="shadow-xl bg-gradient-to-t from-bg98 via-bg98 to-bg100 w-4/5 h-4/5 p-8 rounded-md">
-        <div>
-        <img src={Beelieve1} alt="beelieveLogo" className="mb-5" />
-        <img src={detalhe} alt="detalhe" className="h-96" />
-        </div>
-        <form onSubmit={handleSubmit(handleLogin)} className="max-w-md mx-auto mt-[-25rem] mr-[10rem]">
-        <h2 className="text-center font-bold">Bem-Vindo</h2>
-        <br></br>
-          <div className="mb-4">
-            <label htmlFor="login" className="block text-gray-700 text-sm font-thin mb-2">
-              Login:
-            </label>
-            <input
-              type="text"
-              id="login"
-              name="login"
-              className="w-full border border-n70 rounded p-2"
-              required
-              {...register("login")}
-            />
+  return (
+    <div className="from-bg24 to-bg5 flex h-screen bg-gradient-to-t to-40% p-5 lg:p-16 flex-col justify-center">
+      <div className="h-fit w-full rounded-3xl bg-gradient-to-t from-bg98 to-bg100 p-8 shadow-xl">
+        <div className="my-10 lg:flex lg:justify-between lg:items-center lg:px-10">
+          <div className="flex justify-center lg:max-w-fit lg:flex-col lg:justify-start">
+            <img src={Beelieve1} alt="beelieveLogo" className="mb-5 lg:w-44" />
+            <img src={wbs} alt="detalhe" className="hidden lg:flex lg:w-96 xl:w-full" />
           </div>
+          <form
+            onSubmit={handleSubmit(handleLogin)}
+            className="my-20 lg:flex lg:w-1/3 lg:flex-col items-center lg:mr-10"
+          >
+            <h2 className="text-center text-xl font-bold text-n20">
+              Bem-Vindo
+            </h2>
+            <div className="mt-4 flex flex-col lg:w-11/12 xl:w-2/3">
+              <label htmlFor="login" className=" text-sm font-medium text-n40">
+                Login:
+              </label>
+              <input
+                type="text"
+                id="login"
+                name="login"
+                className="w-full rounded border border-n70 bg-primary98/0 p-1"
+                required
+                {...register("login")}
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="senha" className="block text-gray-700 text-sm font-thin mb-2">
-              Senha:
-            </label>
-            <input
-              type="password"
-              id="senha"
-              name="senha"
-              className="w-full border border-n70 rounded p-2"
-              required
-              {...register("senha")}
-            />
-          </div>
-
-          <input
-            type="submit"
-            className="p-2 bg-primary50 rounded px-8 hover:bg-bg33 text-center w-64 ml-24 mt-3"
-            value="Entrar"
-          />
-        </form>
+            <div className="mt-4 flex flex-col lg:w-11/12 xl:w-2/3">
+              <label htmlFor="senha" className="text-sm font-medium text-n40">
+                Senha:
+              </label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                className="w-full rounded border border-n70 bg-primary98/0 p-1"
+                required
+                {...register("senha")}
+              />
+            </div>
+            <div className="mt-5 flex justify-center">
+              <input
+                type="submit"
+                className="hover:bg-bg24 mt-3 cursor-pointer rounded bg-primary50 p-2 px-8 text-center drop-shadow-md"
+                value="Entrar"
+              />
+            </div>
+          </form>
         </div>
-        </div>
-    )
-
+      </div>
+    </div>
+  )
 }
 
 export default Login
