@@ -241,9 +241,12 @@ function Planejamento({ idProjeto }) {
         niveis: ultimoMes.niveis,
       }
 
-      const novoCronograma = { ...cronograma }
-      novoCronograma.lista_cronograma.push(novoMes)
-      setCronograma(novoCronograma)
+      //const novoCronograma = { ...cronograma }
+      const novoCronograma = getValues("cronograma")
+
+      novoCronograma.push(novoMes)
+      setValue("cronograma", novoCronograma)
+      //setCronograma(novoCronograma)
     }
   }
 
