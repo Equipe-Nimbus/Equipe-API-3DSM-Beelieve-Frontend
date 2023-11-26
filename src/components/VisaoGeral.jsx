@@ -194,32 +194,26 @@ function VisaoGeral({
 
       <div className={`my-3 block ${projetoNaoIniciado? "lg:flex lg:justify-between" : ""}`}>
         <div>
-        <div className="flex max-w-2xl flex-col gap-2">
-          <h3 className="text-2xl font-medium text-complementary-20">
-            {nomeProjeto}
-          </h3>
-          <p className="text-n20">{descricaoProjeto}</p>
-        </div>
-        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20 lg:mt-5">
-          <span className="font-semibold text-complementary-20">
-            Líder do projeto:
+          <div className="flex max-w-2xl flex-col gap-2 mb-10">
+            <h3 className="text-2xl font-medium text-complementary-20 truncate">
+              {nomeProjeto}
+            </h3>
+            <p className="text-n20">{descricaoProjeto}</p>
+          </div>
+          <span className="text-n20 ">
+            <span className="font-semibold text-complementary-20">
+              Líder do projeto:
+            </span>
+            <span>{liderProjeto? `${liderProjeto}` : "Não atribuído"}</span>
           </span>
-          <span>{liderProjeto? liderProjeto : "Não atribuído"}</span>
-        </span>
-        <br />
-        {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-          <span className="font-semibold text-complementary-20">
-            Info Relevante:
+          <br />
+          <span className="text-n20">
+            <span className="font-semibold text-complementary-20">
+              Data de início:
+            </span>
+            <span>{DataProjetoIniciado? `${DataProjetoIniciado.slice(8, 10)}/${DataProjetoIniciado.slice(5, 7)}/${DataProjetoIniciado.slice(0, 4)}` : `Não iniciado`}</span>
           </span>
-          <span>{}</span>
-        </span>
-        <br />
-        <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-          <span className="font-semibold text-complementary-20">
-            Info Relevante:
-          </span>
-          <span>{}</span>
-        </span> */}
+          <br />
         </div>
         
         <div className="flex flex-col gap-2 mt-5">
@@ -230,7 +224,7 @@ function VisaoGeral({
                   texto="Iniciar projeto"
                   iconeOpcional={BsPlayFill}
                   iconeTamanho="20px"
-                  className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+                  className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary hover:bg-bg24"
                   onClick={handleIniciarProjetoClick}
                 />
               }

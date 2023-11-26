@@ -189,7 +189,7 @@ const gerarExcel = (wbsData, tarefasData, planejadoDataArray) => {
 
 return (
   <button onClick={() => gerarExcel(excelData, tarefasData, planejadoDataArray)}
-  className="flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 py-1 px-2 text-lg font-semibold text-on-primary">
+  className="flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 py-1 px-2 text-lg font-semibold text-on-primary hover:bg-bg24">
     Gerar planilha</button>
 );
 }

@@ -37,7 +37,7 @@ function DetalhesProjeto() {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
         const dados = response.data.projeto
-        //console.log("projeto resgatado: ", dados)
+        console.log("projeto resgatado: ", dados)
         setProjeto(dados)
       })
     } catch (error) {
@@ -184,7 +184,7 @@ function DetalhesProjeto() {
 
       {secaoAtual === "ACOMPANHAMENTO" && (
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <Acompanhamento idProjeto={id} />
+          <Acompanhamento idProjeto={id} projetoIniciado={projeto.data_inicio_projeto}/>
         </div>
       )}
 

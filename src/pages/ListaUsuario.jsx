@@ -112,7 +112,7 @@ function ListaUsuario() {
 				tipo="button"
 				iconeOpcional={BsPlusCircle}
 				iconeTamanho="20px"
-				className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+				className="mb-5 flex items-center  gap-1.5 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary hover:bg-bg24"
 				onClick={() => navigate("/usuarios/novo-usuario")}
 			/>}
 			<hr className="border-n90"></hr>

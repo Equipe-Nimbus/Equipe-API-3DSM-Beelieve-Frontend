@@ -215,7 +215,7 @@ function Colaboradores({ idProjeto }){
                                         </option>
                                     ))}
                                 </select>
-                                <Button texto="Confirmar" tipo="submit" className="p-1 font-medium bg-primary50 rounded-lg md:ml-5"/>
+                                <Button texto="Confirmar" tipo="submit" className="p-1 font-medium bg-primary50 rounded-lg md:ml-5 hover:bg-bg24"/>
                             </form>
                         </div>
                     )

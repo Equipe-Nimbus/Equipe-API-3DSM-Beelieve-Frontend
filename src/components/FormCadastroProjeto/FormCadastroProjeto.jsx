@@ -267,7 +267,7 @@ function FormCadastroProjeto() {
         <Button
           texto="Confirmar"
           tipo="submit"
-          className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+          className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary hover:bg-bg24"
         />
       </div>
     </form>

@@ -79,7 +79,7 @@ function LerExcel({ niveisExcel, setniveisExcel }) {
 
     return (
         <div className='flex flex-col gap-2 justify-center mb-5'>
-            <label className="relative inline-flex items-center space-x-2 px-4 py-2 bg-primary50 text-on-primary rounded-lg cursor-pointer w-fit">
+            <label className="relative inline-flex items-center space-x-2 px-4 py-2 bg-primary50 text-on-primary rounded-lg cursor-pointer w-fit hover:bg-bg24">
             <span className="text-lg font-semibold">Subir um arquivo</span>
             <input
                 type="file"

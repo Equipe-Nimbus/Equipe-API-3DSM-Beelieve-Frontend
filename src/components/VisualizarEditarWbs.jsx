@@ -120,7 +120,7 @@ function VisualizarEditarWbs({ projeto, tabela, nodes, edges, setTabela, setAtua
             {(!statusInicio && user?.cargo !== 'Analista') && <Button
               texto="Salvar"
               tipo="submit"
-              className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+              className="place-self-end rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary hover:bg-bg24"
             />}
           </form>
         )}

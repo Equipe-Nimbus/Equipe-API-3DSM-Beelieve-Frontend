@@ -14,16 +14,20 @@ function Login() {
   }
 
   return (
-    <div className="from-bg24 to-bg5 flex h-screen bg-gradient-to-t to-40% p-5 lg:p-16 flex-col justify-center">
-      <div className="h-fit w-full rounded-3xl bg-gradient-to-t from-bg98 to-bg100 p-8 shadow-xl">
-        <div className="my-10 lg:flex lg:justify-between lg:items-center lg:px-10">
+    <div className="from-bg24 to-bg5 flex h-screen flex-col justify-center bg-gradient-to-t to-40% p-5 lg:p-16">
+      <div className="h-fit w-full rounded-3xl bg-gradient-to-t from-bg98 to-bg100 p-8 drop-shadow-2xl">
+        <div className="my-10 lg:flex lg:items-center lg:justify-between lg:px-10">
           <div className="flex justify-center lg:max-w-fit lg:flex-col lg:justify-start">
             <img src={Beelieve1} alt="beelieveLogo" className="mb-5 lg:w-44" />
-            <img src={wbs} alt="detalhe" className="hidden lg:flex lg:w-96 xl:w-full" />
+            <img
+              src={wbs}
+              alt="detalhe"
+              className="hidden lg:flex lg:w-96 xl:w-full"
+            />
           </div>
           <form
             onSubmit={handleSubmit(handleLogin)}
-            className="my-20 lg:flex lg:w-1/3 lg:flex-col items-center lg:mr-10"
+            className="my-20 items-center lg:mr-10 lg:flex lg:w-1/3 lg:flex-col"
           >
             <h2 className="text-center text-xl font-bold text-n20">
               Bem-Vindo
