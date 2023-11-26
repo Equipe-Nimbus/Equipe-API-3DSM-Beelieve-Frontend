@@ -176,7 +176,7 @@ const gerarExcel = (wbsData, tarefasData, planejadoDataArray) => {
   const workbook = XLSX.utils.book_new();
 
   const worksheet1 = XLSX.utils.json_to_sheet(wbsData);
-  XLSX.utils.book_append_sheet(workbook, worksheet1, "WBS");
+  XLSX.utils.book_append_sheet(workbook, worksheet1, "Progresso Realizado");
 
   const worksheet2 = XLSX.utils.json_to_sheet(tarefasData);
   XLSX.utils.book_append_sheet(workbook, worksheet2, "Tarefas");

@@ -26,6 +26,18 @@ function CardProjeto({ titulo, descricao, estadoProjeto, onClick, liderProjeto, 
         :
           <p className="h-8 text-on-light font-medium">Não iniciado</p>
         }
+        {
+          projetoIniciado && (
+            <div className="flex items-center gap-1">
+              <progress
+                value={80}
+                max={100}
+                className="h-2 rounded tendencia"
+              ></progress>
+              <span className=" text-n40">{`80%`}</span>
+            </div>
+          )
+        }
         
       </div>
     </>

@@ -201,14 +201,14 @@ function VisaoGeral({
             <p className="text-n20">{descricaoProjeto}</p>
           </div>
           <span className="text-n20 ">
-            <span className="font-semibold text-complementary-20">
+            <span className="font-semibold text-complementary-20 mr-2">
               Líder do projeto:
             </span>
             <span>{liderProjeto? `${liderProjeto}` : "Não atribuído"}</span>
           </span>
           <br />
           <span className="text-n20">
-            <span className="font-semibold text-complementary-20">
+            <span className="font-semibold text-complementary-20 mr-6">
               Data de início:
             </span>
             <span>{DataProjetoIniciado? `${DataProjetoIniciado.slice(8, 10)}/${DataProjetoIniciado.slice(5, 7)}/${DataProjetoIniciado.slice(0, 4)}` : `Não iniciado`}</span>
