@@ -251,10 +251,11 @@ function Planejamento({ idProjeto }) {
   }
 
   const removerMes = () => {
-    const novoCronograma = { ...cronograma }
-    novoCronograma.lista_cronograma.pop()
-
-    setCronograma(novoCronograma)
+    const novoCronograma = getValues("cronograma")
+    novoCronograma.pop()
+    
+    setValue("cronograma", novoCronograma)
+    //setCronograma(novoCronograma)
   }
 
   useEffect(() => {

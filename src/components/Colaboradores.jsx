@@ -207,7 +207,7 @@ function Colaboradores({ idProjeto }){
                         <div className=" mt-5 text-lg">
                             <form onSubmit={handleSubmit(atribuirAnalista)}>
                                 <label className='font-medium'>Atribuir um novo analista: </label>
-                                <select className='border p-2 rounded-lg border-n90' {...register('id_analista')}>
+                                <select className='border p-2 rounded-lg border-n90' {...register('id_analista')} required>
                                     <option value="" selected disabled>Selecione um analista</option>
                                     {analistasAtribuicao.map((analista, index) => (
                                         <option key={index} value={analista.id_usuario}>
