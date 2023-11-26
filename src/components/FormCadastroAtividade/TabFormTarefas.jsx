@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAuth } from "../../contexts/authContext"
 import Swal from "sweetalert2"
 
 import { BiTrash } from "react-icons/bi"
@@ -9,6 +10,13 @@ import { AiOutlinePlus } from "react-icons/ai"
 import schemaInsercaoAtividade from "./validation"
 import Button from "../Button"
 import axios from "../../services/axios"
+
+const removeZerosAEsquerda = (valor) => {
+  // Remove zeros à esquerda usando expressão regular
+  return valor.replace(/^0+/, '');
+};
+
+
 
 const TabFormTarefas = ({
   listaTarefas,
@@ -19,6 +27,7 @@ const TabFormTarefas = ({
   nomeProjeto,
   dataInicioProjeto,
   progressoPacote,
+  atribuicao,
 }) => {
   const [tarefas, setTarefas] = useState([])
   const [progressoAnterior, setProgressoAnterior] = useState(progressoPacote)
@@ -39,6 +48,7 @@ const TabFormTarefas = ({
 
   useEffect(() => {
     if (listaTarefas.length > 0) {
+      console.log(listaTarefas)
       const novasTarefas = listaTarefas.map((atividade) => {
         const novaTarefa = {
           id: atividade.id_tarefa,
@@ -46,6 +56,7 @@ const TabFormTarefas = ({
           resultadoEsperado: atividade.resultado_esperado_tarefa,
           status: atividade.status_tarefa === 1 ? true : false,
           peso: atividade.peso_tarefa ? atividade.peso_tarefa : 0,
+          atribuicao: atividade.atribuicao,
           prazo: atividade.prazo_tarefa
             ? atividade.prazo_tarefa.slice(0, 10)
             : null,
@@ -70,7 +81,8 @@ const TabFormTarefas = ({
       status: false,
       peso: 0,
       prazo: null,
-      tendencia: null
+      tendencia: null,
+      atribuicao: null
     }
 
     novaTarefa.push(novaLinha)
@@ -79,6 +91,7 @@ const TabFormTarefas = ({
 
   const deleteRow = (index) => {
     const tarefasExistentes = [...tarefas]
+    console.log(tarefasExistentes[index])
     tarefasExistentes.splice(index, 1)
 
     setTarefas(tarefasExistentes)
@@ -142,24 +155,24 @@ const TabFormTarefas = ({
         peso_tarefa: parseInt(atividade.peso),
         status_tarefa: atividade.status === true ? 1 : 0,
         prazo_tarefa: atividade.prazo
-          ? `${atividade.prazo.slice(6,10)}-${
-              atividade.prazo.slice(3,5)
-            }-${atividade.prazo.slice(0, 2)}`
+          ? `${atividade.prazo.slice(6, 10)}-${atividade.prazo.slice(3, 5)
+          }-${atividade.prazo.slice(0, 2)}`
           : null,
         tendencia_tarefa: atividade.tendencia
-          ? `${atividade.tendencia.slice(6,10)}-${
-            atividade.tendencia.slice(3,5)
+          ? `${atividade.tendencia.slice(6, 10)}-${atividade.tendencia.slice(3, 5)
           }-${atividade.tendencia.slice(0, 2)}`
-        : null,
+          : null,
+        atribuicao: atividade.atribuicao,
       })
     })
 
+
     return listaTarefas
   }
+  const { user, loggout } = useAuth()
 
   const saveTarefa = async (data) => {
     const listaTarefasPreenchidas = gerarJsonTarefas(data.tarefas)
-    
 
     let PodeSalvar = true
     const peloMenosUmaTarefaMarcada =
@@ -237,45 +250,47 @@ const TabFormTarefas = ({
 
   return (
     <div>
-      <div className="mb-2 flex items-end gap-64 ">
+      <div className="mb-2 items-end gap-64 ">
         <div>
           <h1 className="mb-5 text-3xl text-complementary-20">{nomeProjeto}</h1>
-          <h2 className="text-2xl">
+          <h2 className="text-lg lg:text-xl">
             Pacote de trabalho: {`${ordem} - ${nomePacote}`}
           </h2>
         </div>
-        <div className="flex items-center gap-1">
-          <span className="text-2xl">
+        <div className="flex items-center gap-2 mt-2">
+          <span className="font-normal text-lg lg:text-xl">
             Progresso:{" "}
-            <span className="text-2xl text-complementary-20">{`${progresso}%`}</span>{" "}
+            <span className="text-n20 font-normal lg:text-xl">{`${progresso}%`}</span>{" "}
           </span>
           <progress
             value={progresso}
             max={100}
-            className="h-2 rounded bg-complementary-20"
+            className="h-2 w-1/2 md:w-40"
           ></progress>
         </div>
       </div>
       <hr className="border-n90" />
 
       <div className="flex flex-col gap-2">
-        <div className="ms-16">
-          <button
-            onClick={addRow}
-            className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
-          >
-            Adicionar tarefa
-            <AiOutlinePlus />
-          </button>
+        <div className="md:ms-16">
+          { user?.cargo !== 'Analista' &&
+            <button
+              onClick={addRow}
+              className=" mt-9 flex items-center gap-1 place-self-end rounded-[10px] bg-primary50 p-1 text-lg font-semibold text-on-primary"
+            >
+              Adicionar tarefa
+              <AiOutlinePlus />
+            </button>
+          }
         </div>
 
         <form
           onSubmit={handleSubmit(saveTarefa)}
           className="flex flex-col gap-10"
         >
-          <table className="mx-auto mt-5 w-11/12">
-            <thead className="bg-primary98 p-10 text-base uppercase ">
-              <tr>
+          <table className="mt-5 w-full lg:w-11/12 lg:mx-auto">
+            <thead className="bg-primary98 block text-base uppercase md:p-10 md:table-header-group md:text-xs lg:text-base">
+              <tr className="hidden md:table-row">
                 <th className="w-1/12 py-3 text-center">Tarefa</th>
                 <th className="text-left">Descrição</th>
                 <th className="text-left">Resultado Esperado</th>
@@ -283,70 +298,95 @@ const TabFormTarefas = ({
                 <th className="w-1/12 text-center">Execução</th>
                 <th className="w-1/12 text-center">Prazo</th>
                 <th className="w-1/12 text-center">Tendência</th>
+                <th className="w-1/12 text-center">Atribuição</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="block md:table-row-group">
               {fields.map((tarefa, index) => (
-                <tr key={index} className="border-b border-n90">
-                  <td className="py-1.5 text-center text-lg font-semibold">
+                <tr key={index} className="border border-n90 block mt-2  md:table-row md:border-x-0 md:border-t-0">
+                  <td className="text-lg font-semibold block bg-primary98 pl-2 md:hidden">
+                    {`Tarefa ${index + 1}`}
+                  </td>
+                  <td className="hidden text-lg font-semibold bg-primary98 pl-2 md:table-cell md:bg-bg100 md:pl-0 md:text-center md:text-sm lg:text-lg">
                     {index + 1}
                   </td>
-                  <td>
+                  <td className="mt-2 block md:table-cell">
                     <input
                       type="text"
                       {...register(`tarefas[${index}].descricao`)}
                       defaultValue={tarefa.descricao}
-                      className="w-11/12 border border-n90 rounded pl-1 disabled:text-n40 truncate"
-                      disabled={tarefa.status === true}
+                      placeholder="Descrição"
+                      className="w-full border border-n90 rounded pl-2 disabled:text-n40 truncate md:placeholder-bg100 md:w-11/12 md:text-sm lg:text-base"
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
-                  <td className="pt-2">
+                  <td className="mt-2 block md:table-cell md:pt-2">
                     <textarea
                       {...register(`tarefas[${index}].resultadoEsperado`)}
                       defaultValue={tarefa.resultadoEsperado}
-                      className="w-full border border-n90 rounded disabled:text-n40 min-h-fit pl-2"
-                      disabled={tarefa.status === true}
+                      placeholder="Resultado esperado"
+                      className="w-full border border-n90 rounded disabled:text-n40 min-h-fit pl-2 md:text-sm lg:text-base"
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
-                  <td className="text-center">
+                  <td className="block text-center md:table-cell">
                     <input
                       type="number"
                       {...register(`tarefas[${index}].peso`)}
                       defaultValue={tarefa.peso}
-                      onBlur={(e) => handlePeso(index, e.target.value)}
+                      onBlur={(e) => {
+                        // Remove zeros à esquerda antes de atualizar o valor
+                        e.target.value = removeZerosAEsquerda(e.target.value);
+                        handlePeso(index, e.target.value);
+                      }}
                       min={0}
-                      className="w-1/2 text-center border border-n90 rounded disabled:text-n40"
-                      disabled={tarefa.status === true}
+                      className="border border-n90 rounded disabled:text-n40 text-center w-1/3 md:w-2/3 md:text-sm lg:text-base lg:w-1/2"
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
-                  <td>
+                  <td className="mt-2 block text-center md:table-cell">
                     <input
                       type="checkbox"
                       {...register(`tarefas[${index}].status`)}
                       checked={fields[index].status === true}
                       onChange={(e) => handleStatus(index)}
-                      className="w-full"
+                      className=""
+                      disabled={user?.cargo === 'Analista'}
                     />
                   </td>
-                  <td>
+                  <td className="block md:table-cell md:text-center">
                     <input
                       type="date"
                       {...register(`tarefas[${index}].prazo`)}
                       defaultValue={tarefa.prazo}
-                      className="w-full text-center disabled:text-n40"
-                      disabled={tarefa.status === true}
+                      className="disabled:text-n40 border border-n90 rounded w-full pl-2 md:text-sm md:w-4/5 lg:text-base"
+                      disabled={tarefa.status === true || user?.cargo === 'Analista'}
                     />
                   </td>
-                  <td>
+                  <td className="block md:table-cell md:text-center">
                     <input
                       type="date"
                       {...register(`tarefas[${index}].tendencia`)}
                       defaultValue={tarefa.tendencia}
-                      className="w-full text-center disabled:text-n40"
-                      disabled={tarefa.status === true  || !dataInicioProjeto}
+                      className="disabled:text-n40 border border-n90 rounded w-full pl-2 md:text-sm md:w-4/5 lg:text-base"
+                      disabled={tarefa.status === true || !dataInicioProjeto || user?.cargo === 'Analista'}
                     />
                   </td>
-                  <td className="text-center">
+                  <td className="block text-center md:table-cell">
+                    <select
+                      {...register(`tarefas[${index}].atribuicao`)}
+                      className="w-full text-center disabled:text-n40"
+                      disabled={user?.cargo === 'Analista'}
+                    >
+                      <option value=''>Grupos de trabalho</option>
+                      {[...Array(20)].map((_, i) => (
+                        <option key={i + 1}>{`Grupo ${i + 1}`}</option>
+                      ))}
+                    </select>
+                  </td>
+
+                  {user?.cargo !== 'Analista' &&
+                  <td className="block text-center md:table-cell ">
                     <Button
                       iconeOpcional={BiTrash}
                       tipo="button"
@@ -354,18 +394,20 @@ const TabFormTarefas = ({
                       className="hover:fill-primary50"
                       onClick={(e) => deleteRow(index)}
                     />
-                  </td>
+                  </td>}
+
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <div className="me-16 place-self-end">
-            <Button
-              texto="Salvar"
-              tipo="submit"
-              className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-            />
+          <div className="md:me-16 place-self-end">
+            {user?.cargo !== 'Analista' &&
+              <Button
+                texto="Salvar"
+                tipo="submit"
+                className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
+              />}
           </div>
         </form>
       </div>

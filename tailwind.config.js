@@ -16,6 +16,8 @@ module.exports = {
       bg15: "#0E1420" /* Azul escuro */,
       bg22: "#132431" /* Azul médio */,
       bg100: "#FFF" /* branco */,
+      bg24: "#FFF5C2" /* amarelo claro */,
+      bg5: "#FFFDF2",
       "hover-bg22": "#192F40",
 
       /* Cores de textos */

@@ -49,14 +49,26 @@ function CadastroUsuario() {
 
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate("/usuario")
+                        navigate("/usuarios")
                     }
                 })
             }
             else {
                 Swal.fire('Erro ao realizar o cadastro do usuário :(', '', 'error');
             }
-        })
+        }).catch(error => {
+		if (error.response.status === 400) {
+			Swal.fire({
+			  title: error.response.data,
+			  icon: "error",
+		  	  confirmButtonColor: "#132431",
+              allowOutsideClick: false,
+              allowEscapeKey: false
+			})
+		} else {
+			Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
+		}	
+  	})
     }
 
     return (
@@ -74,7 +86,7 @@ function CadastroUsuario() {
                     </label>
                     <input
                         type="text"
-                        className="w-1/2 rounded-md border border-n70 p-1"
+                        className="rounded-md border border-n70 p-1 lg:w-1/2"
                         {...register("nomeUsuario")}
                     />
                     {errors.nomeUsuario && (
@@ -86,12 +98,12 @@ function CadastroUsuario() {
                 <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="emailUsuario"
-                        className="text-base font-medium text-on-light">
+                        className="text-base font-medium text-on-light lg:w-1/2">
                         Email:
                     </label>
                     <input
                         type="text"
-                        className="w-1/2 rounded-md border border-n70 p-1"
+                        className="rounded-md border border-n70 p-1 lg:w-1/2"
                         {...register("emailUsuario")}
                     />
                     {errors.emailUsuario && (
@@ -103,13 +115,13 @@ function CadastroUsuario() {
                 <div className="mt-4 flex flex-col">
                     <label
                         htmlFor="cpfUsuario"
-                        className="text-base font-medium text-on-light">
+                        className="text-base font-medium text-on-light lg:w-1/2">
                         CPF:
                     </label>
                     <InputMask
                         mask="999.999.999-99"
                         maskChar=" "
-                        className="w-1/2 rounded-md border border-n70 p-1"
+                        className="rounded-md border border-n70 p-1 lg:w-1/2"
                         {...register("cpfUsuario")}
                     />
                     {errors.cpfUsuario && (
@@ -126,7 +138,7 @@ function CadastroUsuario() {
                     </label>
                     <input
                         type="password"
-                        className="w-1/2 rounded-md border border-n70 p-1"
+                        className="rounded-md border border-n70 p-1 lg:w-1/2"
                         {...register("senhaUsuario")}
                     />
                     {errors.senhaUsuario && (
@@ -143,7 +155,7 @@ function CadastroUsuario() {
                     </label>
                     <input
                         type="password"
-                        className="w-1/2 rounded-md border border-n70 p-1"
+                        className="rounded-md border border-n70 p-1 lg:w-1/2"
                         {...register("confirmarSenhaUsuario")}
                     />
                     {errors.confirmarSenhaUsuario && (
@@ -162,7 +174,7 @@ function CadastroUsuario() {
                         <InputMask
                             mask="(99) 99999-9999"
                             maskChar="_"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("telefoneUsuario")}
                         />
                         {errors.telefoneUsuario && (

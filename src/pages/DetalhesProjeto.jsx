@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-import { useParams, useLocation } from "react-router-dom"
+import { useParams, useLocation, useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/authContext"
 import axios from "../services/axios"
 
 import VisaoGeral from "../components/VisaoGeral"
@@ -9,11 +10,13 @@ import VisualizarEditarWbs from "../components/VisualizarEditarWbs"
 import FormValorHora from "../components/FormValorHora/FormValorHora"
 import Planejamento from "../components/Cronograma/Planejamento"
 import Acompanhamento from "../components/Cronograma/Acompanhamento"
-import CriarExcel from "../components/CriarExcel"
+import Colaboradores from "../components/Colaboradores"
 
 function DetalhesProjeto() {
   const [atualizar, setAtualizar] = useState(false)
   const [projeto, setProjeto] = useState({})
+  const [nodes, setNodes] = useState([])
+  const [edges, setEdges] = useState([])
   const [tabela, setTabela] = useState([])
   const [secaoAtual, setSecaoAtual] = useState("ESTRUTURA")
   const mudarSecao = (secao) => {
@@ -22,15 +25,47 @@ function DetalhesProjeto() {
 
   const { id } = useParams()
   const location = useLocation()
+  const navigate = useNavigate()
+  const {autenticado} = useAuth()
+  useEffect(() => {
+    if(!autenticado){
+      navigate("/")
+    }
+  })
+
   const getProjeto = async () => {
     try {
       await axios.get(`/projeto/listar/${id}`).then((response) => {
-        const dados = response.data
-        console.log("projeto resgatado: ", dados)
+        const dados = response.data.projeto
+        //console.log("projeto resgatado: ", dados)
         setProjeto(dados)
+      })
+    } catch (error) {
+      if(error.response.status === 403){
+        navigate("/projetos")
+      }
+    }
+  }
+  
+  const getNodes = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data.listaNodes
+        setNodes(dados)
       })
     } catch (error) {}
   }
+  
+  const getEdges = async () => {
+    try {
+      await axios.get(`/projeto/listar/${id}`).then((response) => {
+        const dados = response.data.listaEdges
+        setEdges(dados)
+      })
+    } catch (error) {}
+  }
+  
+  
 
   const gerarTabela = () => {
     const tabela = []
@@ -41,6 +76,7 @@ function DetalhesProjeto() {
       orcamento: projeto.orcamento_projeto,
       hora_homem: projeto.hora_humano_total,
       materiais: projeto.materiais_projeto,
+      atribuicao: projeto.chefe_projeto,
     })
 
     projeto.sub_projetos?.forEach((subprojeto) => {
@@ -51,6 +87,7 @@ function DetalhesProjeto() {
         orcamento: subprojeto.orcamento_sub_projeto,
         materiais: subprojeto.materiais_sub_projeto,
         hora_homem: subprojeto.hora_humano_sub_projeto,
+        atribuicao: subprojeto.chefe_sub_projeto,
       })
 
       subprojeto.nivel_sub_projeto?.forEach((nivel) => {
@@ -69,9 +106,13 @@ function DetalhesProjeto() {
 
   useEffect(() => {
     getProjeto()
+    getNodes()
+    getEdges()
 
     if (atualizar) {
       getProjeto()
+      getNodes()
+      getEdges()
       setAtualizar(false)
     }
   }, [atualizar])
@@ -87,6 +128,11 @@ function DetalhesProjeto() {
       }
     }
   }, [projeto, atualizar])
+     
+  useEffect(() => {
+	  // console.log('Nodes do DetalhesProjeto: ', nodes)
+	  // console.log('Edges do DetalhesProjeto: ', edges)
+  })
 
   return (
     <>
@@ -105,15 +151,16 @@ function DetalhesProjeto() {
       />
 
       <MenuSelecao
-        opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO"]}
+        opcoes={["ESTRUTURA", "PACOTES", "PLANEJAMENTO", "ACOMPANHAMENTO", "COLABORADORES"]}
         secaoAtual={secaoAtual}
         mudarSecao={mudarSecao}
       />
-
       {secaoAtual === "ESTRUTURA" && (
         <VisualizarEditarWbs
           projeto={projeto}
           tabela={tabela}
+          nodes={nodes}
+          edges={edges}
           setTabela={setTabela}
           setAtualizar={setAtualizar}
         />
@@ -137,9 +184,15 @@ function DetalhesProjeto() {
 
       {secaoAtual === "ACOMPANHAMENTO" && (
         <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
-          <Acompanhamento idProjeto={id} />
+          <Acompanhamento idProjeto={id} projetoIniciado={projeto.data_inicio_projeto}/>
         </div>
-      )}     
+      )}
+
+      {secaoAtual === "COLABORADORES" && (
+        <div className="m-5 rounded-md bg-bg100 p-7 drop-shadow-md">
+          <Colaboradores idProjeto={id} />
+        </div>
+      )}         
     </>
   )
 }

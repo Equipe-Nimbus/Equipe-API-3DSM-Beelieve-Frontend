@@ -1,10 +1,111 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import { useForm, useFieldArray } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
 import * as XLSX from "xlsx";
+import axios from "../services/axios"
+import schemaCronograma from "./Cronograma/validation"
 
-function CriarExcel({projeto}){
+
+function CriarExcel({projeto, idProjeto}){
+  const [cronograma, setCronograma] = useState()
+  const [subProjetosEditaveis, setSubProjetosEditaveis] = useState([])
 
 
+  const getCronograma = async () => {
+    try {
+      const response = await axios.get(`/cronograma/${idProjeto}`);
+      let cronogramaResgatado = response.data;
+  
+      if (cronogramaResgatado.inicio_projeto) {
+        let anoCronograma = Number(
+          cronogramaResgatado.inicio_projeto.slice(0, 4),
+        );
+        cronogramaResgatado.lista_cronograma.forEach((mes) => {
+          if (mes.mes_cronograma.split(" ").length < 2) {
+            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`;
+  
+            if (mes.mes_cronograma === `Dezembro ${anoCronograma}`) {
+              anoCronograma++;
+            }
+          }
+  
+          mes.niveis.forEach((nivel) => {
+            nivel.progresso_planejado = String(nivel.progresso_planejado) + "%";
+          });
+        });
+      } else {
+        cronogramaResgatado.lista_cronograma.forEach((mes) => {
+          mes.niveis.forEach((nivel) => {
+            nivel.progresso_planejado = String(nivel.progresso_planejado) + "%";
+          });
+        });
+      }
+  
+      setCronograma(cronogramaResgatado);
+      setSubProjetosEditaveis(
+        checarNivelSubProjeto(cronogramaResgatado.lista_cronograma[0].niveis),
+      );
+      return cronogramaResgatado;
+    } catch (error) {
+      
+      console.error("Erro ao obter o cronograma:", error)
+      throw error;
+    }
+  };
 
+  const checarNivelSubProjeto = (subprojetos) => {
+    const subProjetosFiltrados = []
+
+    subprojetos.forEach((subprojeto) => {
+      if (subprojeto.tipo === 'nivelsubprojeto') {
+        subProjetosFiltrados.push(subprojeto.ordem_nivel)
+      } 
+      else if(subprojeto.tipo === 'subprojeto'){
+
+        const nivelSubProjeto = subprojeto.ordem_nivel
+        if(!subprojetos.some((subProjetoAnalisado) => subProjetoAnalisado !== subprojeto && subProjetoAnalisado.ordem_nivel.startsWith(nivelSubProjeto))){
+          subProjetosFiltrados.push(nivelSubProjeto)
+        }
+      }
+    })
+
+    //console.log("subprojetos alteraveis: ", subProjetosFiltrados)
+    return subProjetosFiltrados
+  }
+
+  /* useEffect(() => {
+    getCronograma()
+  }, []) */
+
+
+  const retornarPlanejadoData = (cronograma) => {
+    //console.log(cronograma)
+    const planejadoData = [];
+    if (cronograma && cronograma?.lista_cronograma) {
+      cronograma.lista_cronograma.forEach(mes => {
+        if (mes && mes.niveis) {
+          mes.niveis.forEach(nivel => {
+            if (nivel && nivel.progresso_planejado !== undefined) {
+              const nomeMes = mes.mes_cronograma
+
+              if (!planejadoData[nivel.ordem_nivel]) {
+                planejadoData[nivel.ordem_nivel] = {
+                  "Ordem Nível": nivel.ordem_nivel,
+                  "Nome Nível": nivel.nome_nivel
+                };
+              }
+
+              planejadoData[nivel.ordem_nivel][nomeMes] = nivel.progresso_planejado;
+            }
+          });
+        }
+      });}
+
+      const planejadoDataArray = Object.values(planejadoData);
+
+      return planejadoDataArray
+  }
+  
   const excelData = projeto && projeto.sub_projetos ? 
   [
       {   
@@ -29,7 +130,6 @@ function CriarExcel({projeto}){
       )
   ) : [];
 
-  //console.log(projeto)
 
   const compareOrdemProjeto = (a, b) => {
       const orderA = a["Ordem Projeto"].replace(/\.+$/, '');
@@ -69,21 +169,32 @@ if (projeto && projeto.sub_projetos) {
 
 tarefasData.sort(compareOrdemProjeto)
 
-const gerarExcel = (wbsData, tarefasData) => {
+const acionarFuncaoExcel = (excelData, tarefasData) => {
+  getCronograma().then((response) => {
+    //console.log(response)
+    const planejadoDataArray = retornarPlanejadoData(response)
+    gerarExcel(excelData, tarefasData, planejadoDataArray)
+  })
+}
+
+const gerarExcel = (wbsData, tarefasData, planejadoDataArray) => {
   const workbook = XLSX.utils.book_new();
 
   const worksheet1 = XLSX.utils.json_to_sheet(wbsData);
-  XLSX.utils.book_append_sheet(workbook, worksheet1, "WBS");
+  XLSX.utils.book_append_sheet(workbook, worksheet1, "Progresso Realizado");
 
   const worksheet2 = XLSX.utils.json_to_sheet(tarefasData);
   XLSX.utils.book_append_sheet(workbook, worksheet2, "Tarefas");
+
+  const worksheet3 = XLSX.utils.json_to_sheet(planejadoDataArray);
+  XLSX.utils.book_append_sheet(workbook, worksheet3, "Progesso Planejado");
 
   XLSX.writeFile(workbook, "Projeto.xlsx");
 }
 
 return (
-  <button onClick={() => gerarExcel(excelData, tarefasData)}
-  className="flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 py-1 px-2 text-lg font-semibold text-on-primary">
+  <button onClick={() => acionarFuncaoExcel(excelData, tarefasData)}
+  className="flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 py-1 px-2 text-lg font-semibold text-on-primary hover:bg-bg24">
     Gerar planilha</button>
 );
 }

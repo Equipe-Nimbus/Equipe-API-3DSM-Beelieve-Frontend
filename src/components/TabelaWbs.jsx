@@ -1,45 +1,48 @@
 import React from "react"
+import { useAuth } from "../contexts/authContext"
 import Button from "./Button"
 
 
 import { FiPlus, FiMinus } from "react-icons/fi"
 
 function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
+  const { user } = useAuth()
 
   const statusInicio = projeto
   
   const gerarTabela = (tabelaWBS) => {
     return (
-      <table id="wbsTable" className="mt-5 w-1/3 text-left text-on-light">
+      <table id="wbsTable" className="mt-5 w-full text-left text-on-light lg:w-1/2">
         <thead className="bg-primary98 text-base uppercase">
           <tr>
             <th className="w-1/6 px-4 py-2">Nível</th>
             <th className="w-3/6 px-4 py-2">Descrição</th>
-           {!statusInicio && <th className="w-2/6">Ação</th>}
+           {!statusInicio && user?.cargo !== 'Analista' && (<th className="w-2/6">Ação</th>)}
           </tr>
         </thead>
         <tbody className="text-lg">
           {tabelaWBS.map((linha, index) => (
             <tr key={index} className="border-b border-n90">
-              <td className="w-1/4 px-4 py-1.5 font-semibold">{linha.nivel}</td>
+              <td className="w-1/4 px-4 py-1.5 font-semibold lg:px-6">{linha.nivel}</td>
               <td className="w-1/4 px-4 py-1.5">
               {!edicaoNivel1 && linha.nivel === "1" ?
               	<input
                   type="text"
-                  className="w-full"
+                  className="w-full truncate"
                   value={tabelaWBS[index].descricao}
                   onChange={(e) => handleDescricaoSubProjeto(e, index)}
                   disabled
                 /> :
                 <input
                   type="text"
-                  className="w-full"
+                  className="w-full truncate"
                   value={tabelaWBS[index].descricao}
                   onChange={(e) => handleDescricaoSubProjeto(e, index)}
+                  disabled={statusInicio || user?.cargo === 'Analista'}
                 />
               }
               </td>
-              {!statusInicio && linha.nivel.toLocaleString().split(".").length < 3 && (
+              {!statusInicio && linha.nivel.toLocaleString().split(".").length < 3 && user?.cargo !== 'Analista' && (
                 <Button
                   iconeOpcional={FiPlus}
                   tipo="button"
@@ -48,7 +51,7 @@ function TabelaWbs({ tabelaWBS, setTabelaWBS, edicaoNivel1, projeto }) {
                   iconeTamanho="24px"
                 />
               )}
-              {!statusInicio && linha.nivel !== "1" && (
+              {!statusInicio && linha.nivel !== "1" && user?.cargo !== 'Analista' && (
                 <Button
                   iconeOpcional={FiMinus}
                   tipo="button"

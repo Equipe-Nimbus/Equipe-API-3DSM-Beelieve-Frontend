@@ -37,7 +37,7 @@ function SCurveChart({ cronograma }) {
             }
           }
           progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].planejado.push(parseFloat(nivel.progresso_planejado.slice(0, -1)))
-          progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].real.push(nivel.progresso_real !== '-' ? parseFloat(nivel.progresso_real.slice(0, -1)) : 0)
+          progressoDosNiveis[`${nivel.ordem_nivel} - ${nivel.nome_nivel}`].real.push(nivel.progresso_real !== '-' ? parseFloat(nivel.progresso_real.slice(0, -1)) : null)
         })
       })
 
@@ -145,7 +145,7 @@ function SCurveChart({ cronograma }) {
   }
 
   return (
-    <div>
+    <div className='overflow-auto'>
       <div className="ml-4 mt-5 text-lg">
         <label className='font-medium'>Nível atual: </label>
         <select value={nivelSelecionado} onChange={handleNivelSelecionadoChange} className='border p-2 rounded-lg border-n90'>
@@ -156,7 +156,7 @@ function SCurveChart({ cronograma }) {
           ))}
         </select>
       </div>
-      <canvas id="sCurveChart" style={{ height: '100px', width: '300px' }}></canvas>
+      <canvas id="sCurveChart"></canvas>
     </div>
   )
 }

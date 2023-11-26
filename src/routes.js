@@ -6,14 +6,19 @@ import NovoUsuario from "./pages/NovoUsuario";
 
 import NovaTarefa from "./components/FormCadastroAtividade/NovaTarefa";
 import DetalhesProjeto from './pages/DetalhesProjeto';
-import FormAlterarDadosUsuario from './components/FormAlterarDadosUsuario/FormAlterarDadosUsuario';
 import MudaData from "./pages/MudaData";
+import Login from "./components/login.jsx"
+import AlterarUsuario from "./pages/AlterarUsuario.jsx";
 
 const router = [
     {
         path: "/",
         element: <App/>,
         children: [
+            {
+                path:"",
+                element: <Login/>
+            },
 			{
 				path: "muda-data",
 				element: <MudaData/>
@@ -54,7 +59,7 @@ const router = [
                 element: <NovoUsuario/>,
             },
             {   path: "editar-informacoes/:idUsuario",
-                element: <FormAlterarDadosUsuario/>,
+                element: <AlterarUsuario/>,
             },
         ]
     },

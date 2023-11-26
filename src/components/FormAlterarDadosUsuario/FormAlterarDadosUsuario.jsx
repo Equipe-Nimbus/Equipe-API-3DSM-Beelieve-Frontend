@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
+import { useAuth } from "../../contexts/authContext"
 import Button from "../Button"
 import axios from "../../services/axios"
 import Swal from 'sweetalert2'
@@ -12,6 +13,8 @@ import InputMask from "react-input-mask";
 import { BsPlayFill } from "react-icons/bs"
 
 function AlterarUsuario() {
+    const { user, loggout } = useAuth()
+
     const [usuario, setUsuario] = useState([])
     const navigate = useNavigate()
     const { idUsuario } = useParams()
@@ -94,25 +97,55 @@ function AlterarUsuario() {
         console.log(data)
         const usuarioJson = gerarJsonUsuario(data)
 
+        
         await axios.put(`/usuario/atualizar`, usuarioJson).then((response) => {
             if (response.status === 200) {
-                Swal.fire({
-                    title: "Dados atualizados com sucesso!",
-                    icon: "success",
-                    confirmButtonColor: "#132431",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        navigate("/usuario")
-                    }
-                })
+                console.log(response)
+                if(response.data.loggout === true){
+                    Swal.fire({
+                        title: "Suas credenciais mudaram. Por favor, faça o login novamente.",
+                        icon: "warning",
+                        confirmButtonColor: "#132431",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+    
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            loggout()
+                        }
+                    })
+                }
+                else{
+                    Swal.fire({
+                        title: "Dados atualizados com sucesso!",
+                        icon: "success",
+                        confirmButtonColor: "#132431",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+    
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigate("/usuarios")
+                        }
+                    })
+                }  
             }
             else {
                 Swal.fire('Erro ao realizar a alteração do usuário :(', '', 'error');
             }
-        })
+        })/* .catch(error => {
+			if (error.response.status === 400) {
+				Swal.fire({
+			  		title: error.response.data,
+			  		icon: "error",
+		  	  		confirmButtonColor: "#132431",
+              		allowOutsideClick: false,
+              		allowEscapeKey: false
+				})
+			} else {
+				Swal.fire('Erro ao realizar o cadastro :(', '', 'error');
+			}	
+  		}) */
     }
 
     const handleExcluirUsuarioClick = async () => {
@@ -131,7 +164,7 @@ function AlterarUsuario() {
             try {
                 await axios.put(`/usuario/deletar`, usuarioJson)
                 Swal.fire("Excluído com sucesso!", "", "success")
-                navigate("/usuario")
+                navigate("/usuarios")
             } catch (error) {
                 console.error("Erro ao excluir o usuário:", error)
             }
@@ -168,7 +201,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="text"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             id="nomeUsuario"
                             {...register(`nomeUsuario`)}
                         />
@@ -190,7 +223,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="text"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("emailUsuario")}
                         />
                         {errors.emailUsuario && (
@@ -211,7 +244,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="password"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("senhaUsuario")}
                         />
                         {errors.senhaUsuario && (
@@ -231,7 +264,7 @@ function AlterarUsuario() {
                         </label>
                         <input
                             type="password"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("confirmarSenhaUsuario")}
                         />
                         {errors.confirmarSenhaUsuario && (
@@ -253,7 +286,7 @@ function AlterarUsuario() {
                         <InputMask
                             mask="(99) 99999-9999"
                             maskChar="_"
-                            className="w-1/2 rounded-md border border-n70 p-1"
+                            className="rounded-md border border-n70 p-1 lg:w-1/2"
                             {...register("telefoneUsuario")}
                         />
                         {errors.telefoneUsuario && (
@@ -304,7 +337,7 @@ function AlterarUsuario() {
                             onClick={() => navigate("/usuarios")}
                         />
                         <Button
-                            texto="Cadastrar"
+                            texto="Salvar"
                             tipo="submit"
                             className="rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
                         />

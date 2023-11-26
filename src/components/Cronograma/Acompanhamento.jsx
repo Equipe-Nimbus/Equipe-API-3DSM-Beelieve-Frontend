@@ -7,10 +7,12 @@ import axios from "../../services/axios";
 
 import { PiGridNineFill } from 'react-icons/pi'
 import { GoGraph } from 'react-icons/go'
+import calendario from "../../assets/images/calendario.png"
 
 
-function Acompanhamento({ idProjeto }) {
+function Acompanhamento({ idProjeto, projetoIniciado }) {
   const [cronograma, setCronograma] = useState({})
+  const [cronogramaGrafico, setCronogramaGrafico] = useState({})
   const [visualizacaoAtual, setVisualizacaoAtual] = useState("Tabela")
   const mudarVisualizacao = (valor) => {
     const view = valor
@@ -21,7 +23,6 @@ function Acompanhamento({ idProjeto }) {
     try {
       await axios.get(`/cronograma/${idProjeto}`).then(async (response) => {
         let cronogramaResgatado = response.data;
-		
         let anoCronograma = Number(cronogramaResgatado.inicio_projeto.slice(0, 4));
         const mesesDoAno = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
         let dataAtual
@@ -33,14 +34,16 @@ function Acompanhamento({ idProjeto }) {
 		dataAtual = new Date(anoDataAtual, mesDataAtual)
 		
         cronogramaResgatado.lista_cronograma.forEach((mes) => { 
-            const nomeDoMes = mes.mes_cronograma
+            const nomeDoMes = mes.mes_cronograma.split(" ")[0]
             const indiceMes = mesesDoAno.indexOf(nomeDoMes)
             const data = new Date(anoCronograma, indiceMes)
             
-            mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+            if(mes.mes_cronograma.split(" ").length < 2 ) {
+              mes.mes_cronograma = `${mes.mes_cronograma} ${anoCronograma}`
+            }
 
             if(mes.mes_cronograma === `Dezembro ${anoCronograma}`){
-                anoCronograma++
+              anoCronograma++
             }
 
             if (data > dataAtual) {
@@ -56,9 +59,8 @@ function Acompanhamento({ idProjeto }) {
             }
         
         })
+		setCronograma(cronogramaResgatado);
 
-
-        setCronograma(cronogramaResgatado);
       });
     } catch (error) {
       console.error("Erro ao obter cronograma:", error);
@@ -72,9 +74,9 @@ function Acompanhamento({ idProjeto }) {
   
   return (
     <div>
-      <div className="mx-5 mb-2 flex items-center justify-between">
+      <div className="mx-5 mb-2 flex flex-col gap-2 items-center justify-between md:flex-row md:gap-0">
         <h3 className="text-xl font-semibold text-on-light">
-          Visualizar/Editar
+          Acompanhamento
         </h3>
         <div className="flex cursor-pointer">
           <div
@@ -112,14 +114,25 @@ function Acompanhamento({ idProjeto }) {
       </div>
       
       <hr className="border-n90"></hr>
+      {
+        projetoIniciado ? 
+          <>
+            {visualizacaoAtual === 'Tabela' && (
+              <TabelaProgresso cronograma={cronograma}/>
+            )}
       
-      {visualizacaoAtual === 'Tabela' && (
-        <TabelaProgresso cronograma={cronograma}/>
-      )}
-
-      {visualizacaoAtual === 'Gráfico' && (
-        <SCurveChart cronograma={cronograma}/>
-      )}
+            {visualizacaoAtual === 'Gráfico' && (
+              <SCurveChart cronograma={cronograma}/>
+            )}
+          </>
+          :
+          <div className="flex flex-col items-center">
+            <img src={calendario} alt="calendario" className="hidden md:inline w-1/5 opacity-80"/>
+            <p className="font-medium text-n40">A aba de acompanhamento estará disponível assim que o projeto for iniciado.</p>
+          </div>
+          
+      }
+      
     </div>
   )
 };

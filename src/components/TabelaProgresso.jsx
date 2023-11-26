@@ -46,7 +46,7 @@ function TabelaProgresso({cronograma}){
     }
 
     return (
-        <div className="mt-5 ml-5 flex justify-start">
+        <div className="mt-5 ml-5 flex justify-start overflow-x-auto">
         <table className="mt-5 text-left">
           <thead className="bg-primary98 p-10 text-base uppercase">
             <tr>
@@ -68,7 +68,7 @@ function TabelaProgresso({cronograma}){
           </tbody>
         </table>
 
-        <div className="max-w-6xl overflow-x-auto ">
+        <div className="max-w-6xl md:overflow-x-auto ">
           <table className="mt-5 text-left">
             <thead className="bg-primary98 p-10 text-base uppercase">
               <tr>{renderizarColunas()}</tr>

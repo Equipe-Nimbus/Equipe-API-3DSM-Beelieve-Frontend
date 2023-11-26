@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/authContext"
 import PropTypes from "prop-types"
 import Button from "./Button"
 
@@ -20,6 +21,8 @@ function VisaoGeral({
   camposValidados,
   setAtualizar,
 }) {
+  const { user } = useAuth()
+
   const [projetoNaoIniciado, setProjetoNaoIniciado] = useState(
     !DataProjetoIniciado,
   )
@@ -151,7 +154,7 @@ function VisaoGeral({
         .then((res) => {
           setProjetoNaoIniciado(false)
           setAtualizar(true)
-          Swal.fire("Projeto iniciado com sucesso!", "", "sucess")
+          Swal.fire("Projeto iniciado com sucesso!", "", "success")
         })
         .catch((error) => {
           console.log("error", error)
@@ -183,76 +186,77 @@ function VisaoGeral({
   useEffect(() => {
     setProjetoNaoIniciado(!DataProjetoIniciado)
   }, [DataProjetoIniciado])
-
+  
   return (
     <div className="m-5 rounded-md bg-bg100 p-4 drop-shadow-md">
       <h2 className="mb-1 text-xl font-medium text-on-light">Visão Geral</h2>
       <hr className="border-n90" />
 
-      <div className="my-3 flex justify-between">
-        <div className="flex max-w-2xl flex-col gap-2">
-          <h3 className="text-2xl font-medium text-complementary-20">
-            {nomeProjeto}
-          </h3>
-          <p className="text-n20">{descricaoProjeto}</p>
+      <div className={`my-3 block ${projetoNaoIniciado? "lg:flex lg:justify-between" : ""}`}>
+        <div>
+          <div className="flex max-w-2xl flex-col gap-2 mb-10">
+            <h3 className="text-2xl font-medium text-complementary-20 truncate">
+              {nomeProjeto}
+            </h3>
+            <p className="text-n20">{descricaoProjeto}</p>
+          </div>
+          <span className="text-n20 ">
+            <span className="font-semibold text-complementary-20 mr-2">
+              Líder do projeto:
+            </span>
+            <span>{liderProjeto? `${liderProjeto}` : "Não atribuído"}</span>
+          </span>
+          <br />
+          <span className="text-n20">
+            <span className="font-semibold text-complementary-20 mr-6">
+              Data de início:
+            </span>
+            <span>{DataProjetoIniciado? `${DataProjetoIniciado.slice(8, 10)}/${DataProjetoIniciado.slice(5, 7)}/${DataProjetoIniciado.slice(0, 4)}` : `Não iniciado`}</span>
+          </span>
+          <br />
         </div>
-        <div className="flex flex-col gap-5">
+        
+        <div className="flex flex-col gap-2 mt-5">
           {projetoNaoIniciado && (
             <>
-              <Button
-                texto="Iniciar projeto"
-                iconeOpcional={BsPlayFill}
-                iconeTamanho="20px"
-                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary"
-                onClick={handleIniciarProjetoClick}
-              />
-              <Button
-                texto="Excluir projeto"
-                iconeOpcional={BsPlayFill}
-                iconeTamanho="20px"
-                onClick={handleExcluirProjetoClick}
-                className="mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
-              />
+              { (user?.cargo === 'Gerente' || user?.cargo === 'Engenheiro Chefe') && 
+                <Button
+                  texto="Iniciar projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary50 p-2 text-lg font-semibold text-on-primary hover:bg-bg24"
+                  onClick={handleIniciarProjetoClick}
+                />
+              }
+              {
+                user?.cargo === 'Gerente' && 
+                <Button
+                  texto="Excluir projeto"
+                  iconeOpcional={BsPlayFill}
+                  iconeTamanho="20px"
+                  onClick={handleExcluirProjetoClick}
+                  className="w-fit mr-5 flex h-2/6 items-center gap-1 rounded-[10px] bg-primary51 p-2 text-lg font-semibold text-on-primary"
+                /> 
+              }             
             </>
           )}
           {!projetoNaoIniciado && (
-            <div className="mr-96 flex items-center gap-1">
-              <span className="text-2xl">
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-complementary-20 font-medium lg:text-xl">
                 Progresso:{" "}
-                <span className="text-2xl text-complementary-20">{`${progressoProjeto}%`}</span>{" "}
+                <span className="text-n20 font-normal lg:text-xl">{`${progressoProjeto}%`}</span>{" "}
               </span>
               <progress
                 value={progressoProjeto}
                 max={100}
-                className="h-2 rounded bg-complementary-20"
+                className="h-2 w-1/2 md:w-40"
               ></progress>
             </div>
           )}
         </div>
       </div>
-
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Líder do projeto:
-        </span>
-        <span>{liderProjeto? liderProjeto : "Não atribuído"}</span>
-      </span>
-      <br />
-      {/* <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Info Relevante:
-        </span>
-        <span>{}</span>
-      </span>
-      <br />
-      <span className="mt-2 inline-grid grid-cols-2 gap-2 text-n20">
-        <span className="font-semibold text-complementary-20">
-          Info Relevante:
-        </span>
-        <span>{}</span>
-      </span> */}
       <hr className="border-n90 my-4" />
-      <CriarExcel projeto={projeto}/>
+      <CriarExcel projeto={projeto} idProjeto={id} />
     </div>
   )
 }

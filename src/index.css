@@ -42,6 +42,10 @@ body {
   border-radius: 5px;
 }
 
+.tendencia::-webkit-progress-value {
+  background-color: #666666;
+}
+
 :disabled {
   background-color: #FFF;
 }
